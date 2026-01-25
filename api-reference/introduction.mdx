@@ -1,33 +1,62 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'API Introduction'
+description: 'Integrate SmartAlex AI voice agents into your applications'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## Welcome to the SmartAlex API
 
-## Welcome
+The SmartAlex API allows you to programmatically manage AI voice agents, campaigns, contacts, and call data.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
-
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+<CardGroup cols={2}>
+  <Card
+    title="Create Agents"
+    icon="robot"
+    href="/api-reference/agents"
+  >
+    Programmatically create and configure AI voice agents
+  </Card>
+  <Card
+    title="Manage Campaigns"
+    icon="megaphone"
+    href="/api-reference/campaigns"
+  >
+    Launch and monitor outbound calling campaigns
+  </Card>
+  <Card
+    title="Import Contacts"
+    icon="address-book"
+    href="/api-reference/contacts"
+  >
+    Bulk import and manage your contact database
+  </Card>
+  <Card
+    title="Call Analytics"
+    icon="chart-line"
+    href="/api-reference/calls"
+  >
+    Access call logs, transcripts, and sentiment data
+  </Card>
+</CardGroup>
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+All API endpoints require authentication using a Bearer token.
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+```bash
+curl -X GET "https://api.smartalex.ai/v1/agents" \
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
+
+Get your API key from the **Settings > API** page in your SmartAlex dashboard.
+
+## Rate Limits
+
+| Plan | Requests/minute |
+|------|-----------------|
+| Free | 60 |
+| Professional | 300 |
+| Enterprise | Custom |
+
+<Note>
+  Need higher limits? Contact us at support@smartalex.ai
+</Note>
