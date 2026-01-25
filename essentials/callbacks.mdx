@@ -1,0 +1,31 @@
+---
+title: "Callbacks"
+description: "Manage automatic retry calls and scheduled follow-ups"
+---
+
+## How Callbacks Work
+
+When a call doesn't connect, SmartAlex automatically schedules a callback:
+
+| Trigger | Action |
+|---------|--------|
+| **Voicemail** | Retry in 24 hours |
+| **No Answer** | Retry in 24 hours |
+| **Busy Signal** | Retry in 1 hour |
+| **Network Error** | Retry in 30 minutes |
+| **Invalid Number** | Marked failed (no retry) |
+
+## Managing Callbacks
+
+Navigate to **Callbacks** to see all pending callbacks:
+- **Due Today** - Calls scheduled for today
+- **Overdue** - Missed callback windows
+- **This Week** - Upcoming callbacks
+
+## Manual Callbacks
+
+Your AI agent can also schedule callbacks during a call when a customer requests to be called back at a specific time.
+
+<Note>
+  Callbacks are automatically deduplicated - you won't call the same person twice for the same campaign.
+</Note>
