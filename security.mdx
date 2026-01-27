@@ -1,0 +1,240 @@
+---
+title: "Security"
+description: "How SmartAlex protects your data"
+---
+
+## Overview
+
+SmartAlex is built with security as a priority. We implement industry-standard practices to protect your data, calls, and customer information.
+
+## Data Protection
+
+### Encryption
+
+| Data State | Protection |
+|------------|------------|
+| **In Transit** | TLS 1.3 encryption for all connections |
+| **At Rest** | AES-256 encryption for stored data |
+| **Recordings** | Encrypted storage with access controls |
+| **API Keys** | Hashed and never stored in plain text |
+
+### Data Centers
+
+SmartAlex infrastructure is hosted on secure cloud platforms with:
+- SOC 2 Type II certified data centers
+- Geographic redundancy
+- 24/7 monitoring
+- Physical security controls
+
+## Authentication & Access
+
+### Account Security
+
+| Feature | Description |
+|---------|-------------|
+| **Password Requirements** | Minimum 8 characters with complexity rules |
+| **Multi-Factor Authentication** | TOTP-based 2FA available |
+| **Session Management** | Automatic timeout and device tracking |
+| **API Key Rotation** | Generate new keys anytime |
+
+### Multi-Factor Authentication (MFA)
+
+Protect your account with MFA:
+
+<Steps>
+  <Step title="Go to Security Settings">
+    Navigate to **Settings** → **Security**
+  </Step>
+
+  <Step title="Enable MFA">
+    Click **Enable Multi-Factor Authentication**
+  </Step>
+
+  <Step title="Scan QR Code">
+    Use an authenticator app (Google Authenticator, Authy, 1Password)
+  </Step>
+
+  <Step title="Verify Code">
+    Enter the 6-digit code to confirm setup
+  </Step>
+
+  <Step title="Save Backup Codes">
+    Download backup codes for account recovery
+  </Step>
+</Steps>
+
+<Warning>
+  Store backup codes securely. They're required if you lose access to your authenticator app.
+</Warning>
+
+### Team Access Controls
+
+| Role | Permissions |
+|------|-------------|
+| **Owner** | Full access including billing and user management |
+| **Admin** | Full access except billing |
+| **Manager** | Manage agents, campaigns, and contacts |
+| **Viewer** | Read-only access to analytics |
+
+## Call Security
+
+### Recording Protection
+
+- Recordings are encrypted at rest
+- Access requires authentication
+- Recording URLs are temporary and expire
+- Optional recording deletion policies
+
+### Transcript Security
+
+- Transcripts are processed securely
+- No human review without consent
+- Data is not used to train models
+- Automatic PII detection available
+
+## Compliance
+
+### GDPR
+
+SmartAlex supports GDPR compliance:
+
+| Right | Support |
+|-------|---------|
+| **Right to Access** | Export all your data anytime |
+| **Right to Rectification** | Update contact information |
+| **Right to Erasure** | Delete accounts and data |
+| **Data Portability** | Export in standard formats |
+
+### TCPA Compliance
+
+For US calling regulations:
+
+- **DNC List Support** - Maintain Do Not Call lists
+- **Calling Hours** - Configure allowed calling times
+- **Consent Tracking** - Record consent for outbound calls
+- **Caller ID** - Proper caller identification
+
+### HIPAA
+
+For healthcare organizations:
+
+- Business Associate Agreement (BAA) available
+- PHI protection measures
+- Audit logging
+- Access controls
+
+<Note>
+  Contact sales for HIPAA-compliant deployments and BAA agreements.
+</Note>
+
+## Infrastructure Security
+
+### Network Security
+
+- Web Application Firewall (WAF)
+- DDoS protection
+- Rate limiting
+- IP allowlisting (enterprise)
+
+### Monitoring
+
+- 24/7 security monitoring
+- Intrusion detection systems
+- Automated threat response
+- Regular security audits
+
+### Incident Response
+
+In the event of a security incident:
+1. Immediate containment
+2. Customer notification within 72 hours
+3. Root cause analysis
+4. Preventive measures implementation
+
+## API Security
+
+### Authentication
+
+All API requests require authentication:
+
+```bash
+curl -X GET "https://api.getsmartalex.com/v1/agents" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+### Best Practices
+
+<Accordion title="Protect Your API Keys">
+- Never commit API keys to version control
+- Use environment variables
+- Rotate keys regularly
+- Use separate keys for development and production
+</Accordion>
+
+<Accordion title="Webhook Verification">
+Verify webhook signatures to ensure requests are from SmartAlex:
+
+```javascript
+const crypto = require('crypto');
+
+function verifySignature(payload, signature, secret) {
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(JSON.stringify(payload))
+    .digest('hex');
+
+  return signature === expected;
+}
+```
+</Accordion>
+
+<Accordion title="Rate Limiting">
+Implement rate limiting on your webhook endpoints to prevent abuse.
+</Accordion>
+
+## Vulnerability Reporting
+
+### Responsible Disclosure
+
+If you discover a security vulnerability:
+
+1. **Do not** publicly disclose the vulnerability
+2. Email [security@getsmartalex.com](mailto:security@getsmartalex.com)
+3. Include detailed information about the issue
+4. Allow reasonable time for resolution
+
+We appreciate security researchers and will:
+- Acknowledge receipt within 24 hours
+- Provide updates on remediation progress
+- Credit reporters (with permission) in security advisories
+
+## Security FAQ
+
+<Accordion title="Who has access to my call recordings?">
+Only authorized users in your organization can access recordings. SmartAlex staff do not access recordings unless specifically authorized for support purposes.
+</Accordion>
+
+<Accordion title="How long is data retained?">
+Data retention varies by plan:
+- **Professional**: 30 days for recordings
+- **Dental**: 90 days for recordings
+- **Real Estate**: 1 year for recordings
+
+Contacts and call metadata are retained until you delete them.
+</Accordion>
+
+<Accordion title="Can I delete my data?">
+Yes. You can:
+- Delete individual contacts and calls
+- Delete recordings
+- Export and delete all data
+- Delete your entire account
+</Accordion>
+
+<Accordion title="Is my data used to train AI models?">
+No. Your call data, recordings, and transcripts are not used to train any AI models. Your data remains private and is used only to provide the service.
+</Accordion>
+
+<Accordion title="Do you have SOC 2 certification?">
+SOC 2 Type II certification is in progress. Contact us for the current security assessment report.
+</Accordion>

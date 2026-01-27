@@ -1,0 +1,408 @@
+---
+title: 'Campaigns API'
+description: 'Launch and manage outbound calling campaigns'
+---
+
+## Overview
+
+The Campaigns API allows you to create, launch, and monitor outbound calling campaigns programmatically.
+
+## List Campaigns
+
+Get all campaigns in your account.
+
+<CodeGroup>
+```bash cURL
+curl -X GET "https://api.getsmartalex.com/v1/campaigns" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.getsmartalex.com/v1/campaigns', {
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY'
+  }
+});
+const data = await response.json();
+```
+</CodeGroup>
+
+### Query Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `status` | string | Filter by status: `draft`, `active`, `paused`, `completed` |
+| `agent_id` | string | Filter by assigned agent |
+| `page` | integer | Page number (default: 1) |
+| `per_page` | integer | Items per page (default: 20) |
+
+### Response
+
+```json
+{
+  "data": [
+    {
+      "id": "campaign_abc123",
+      "name": "January Outreach",
+      "agent_id": "agent_def456",
+      "status": "active",
+      "contacts_total": 500,
+      "contacts_called": 234,
+      "contacts_remaining": 266,
+      "created_at": "2024-01-15T10:30:00Z"
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "page": 1,
+    "per_page": 20
+  }
+}
+```
+
+## Get Campaign
+
+Retrieve a single campaign with detailed statistics.
+
+<CodeGroup>
+```bash cURL
+curl -X GET "https://api.getsmartalex.com/v1/campaigns/campaign_abc123" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.getsmartalex.com/v1/campaigns/campaign_abc123', {
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY'
+  }
+});
+const data = await response.json();
+```
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "data": {
+    "id": "campaign_abc123",
+    "name": "January Outreach",
+    "description": "Q1 lead generation campaign",
+    "agent_id": "agent_def456",
+    "status": "active",
+    "contacts_total": 500,
+    "contacts_called": 234,
+    "contacts_remaining": 266,
+    "contacts_connected": 156,
+    "contacts_voicemail": 45,
+    "contacts_failed": 33,
+    "settings": {
+      "calling_hours_start": "09:00",
+      "calling_hours_end": "17:00",
+      "timezone": "America/New_York",
+      "concurrent_calls": 3
+    },
+    "stats": {
+      "connect_rate": 0.667,
+      "average_duration": 145,
+      "total_cost": 12.50,
+      "sentiment": {
+        "positive": 89,
+        "neutral": 52,
+        "negative": 15
+      }
+    },
+    "created_at": "2024-01-15T10:30:00Z",
+    "started_at": "2024-01-15T11:00:00Z"
+  }
+}
+```
+
+## Create Campaign
+
+Create a new outbound calling campaign.
+
+<CodeGroup>
+```bash cURL
+curl -X POST "https://api.getsmartalex.com/v1/campaigns" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "February Outreach",
+    "description": "Follow-up campaign",
+    "agent_id": "agent_def456",
+    "settings": {
+      "calling_hours_start": "10:00",
+      "calling_hours_end": "16:00",
+      "timezone": "America/New_York",
+      "concurrent_calls": 2
+    }
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.getsmartalex.com/v1/campaigns', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: 'February Outreach',
+    description: 'Follow-up campaign',
+    agent_id: 'agent_def456',
+    settings: {
+      calling_hours_start: '10:00',
+      calling_hours_end: '16:00',
+      timezone: 'America/New_York',
+      concurrent_calls: 2
+    }
+  })
+});
+const data = await response.json();
+```
+</CodeGroup>
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `name` | string | Yes | Campaign name |
+| `description` | string | No | Campaign description |
+| `agent_id` | string | Yes | Agent to make calls |
+| `settings` | object | No | Campaign configuration |
+
+### Settings Object
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `calling_hours_start` | string | "09:00" | Start time (HH:MM) |
+| `calling_hours_end` | string | "17:00" | End time (HH:MM) |
+| `timezone` | string | "UTC" | IANA timezone |
+| `concurrent_calls` | integer | 1 | Simultaneous calls |
+| `max_retries` | integer | 3 | Retry attempts per contact |
+
+### Response
+
+```json
+{
+  "data": {
+    "id": "campaign_new789",
+    "name": "February Outreach",
+    "status": "draft",
+    "contacts_total": 0,
+    "created_at": "2024-01-16T09:00:00Z"
+  }
+}
+```
+
+## Add Contacts to Campaign
+
+Add contacts to a campaign for calling.
+
+<CodeGroup>
+```bash cURL
+curl -X POST "https://api.getsmartalex.com/v1/campaigns/campaign_abc123/contacts" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contacts": [
+      {
+        "phone": "+15551234567",
+        "first_name": "John",
+        "last_name": "Smith",
+        "email": "john@example.com"
+      },
+      {
+        "phone": "+15559876543",
+        "first_name": "Jane",
+        "last_name": "Doe"
+      }
+    ]
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.getsmartalex.com/v1/campaigns/campaign_abc123/contacts', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    contacts: [
+      {
+        phone: '+15551234567',
+        first_name: 'John',
+        last_name: 'Smith',
+        email: 'john@example.com'
+      },
+      {
+        phone: '+15559876543',
+        first_name: 'Jane',
+        last_name: 'Doe'
+      }
+    ]
+  })
+});
+const data = await response.json();
+```
+</CodeGroup>
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `contacts` | array | Yes | Array of contact objects |
+| `contacts[].phone` | string | Yes | Phone number (E.164 format) |
+| `contacts[].first_name` | string | No | First name |
+| `contacts[].last_name` | string | No | Last name |
+| `contacts[].email` | string | No | Email address |
+| `contacts[].company` | string | No | Company name |
+
+### Response
+
+```json
+{
+  "data": {
+    "added": 2,
+    "duplicates_skipped": 0,
+    "invalid_skipped": 0,
+    "campaign_total": 502
+  }
+}
+```
+
+## Start Campaign
+
+Start a campaign to begin making calls.
+
+<CodeGroup>
+```bash cURL
+curl -X POST "https://api.getsmartalex.com/v1/campaigns/campaign_abc123/start" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.getsmartalex.com/v1/campaigns/campaign_abc123/start', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY'
+  }
+});
+const data = await response.json();
+```
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "data": {
+    "id": "campaign_abc123",
+    "status": "active",
+    "started_at": "2024-01-16T10:00:00Z"
+  }
+}
+```
+
+## Pause Campaign
+
+Pause an active campaign.
+
+<CodeGroup>
+```bash cURL
+curl -X POST "https://api.getsmartalex.com/v1/campaigns/campaign_abc123/pause" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "data": {
+    "id": "campaign_abc123",
+    "status": "paused",
+    "paused_at": "2024-01-16T14:30:00Z"
+  }
+}
+```
+
+## Resume Campaign
+
+Resume a paused campaign.
+
+<CodeGroup>
+```bash cURL
+curl -X POST "https://api.getsmartalex.com/v1/campaigns/campaign_abc123/resume" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "data": {
+    "id": "campaign_abc123",
+    "status": "active",
+    "resumed_at": "2024-01-16T15:00:00Z"
+  }
+}
+```
+
+## Get Campaign Callbacks
+
+Get pending callbacks for a campaign.
+
+<CodeGroup>
+```bash cURL
+curl -X GET "https://api.getsmartalex.com/v1/campaigns/campaign_abc123/callbacks" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "data": [
+    {
+      "id": "callback_xyz789",
+      "contact": {
+        "phone": "+15551234567",
+        "first_name": "John"
+      },
+      "reason": "no_answer",
+      "retry_count": 1,
+      "scheduled_at": "2024-01-17T10:00:00Z"
+    }
+  ],
+  "meta": {
+    "total": 45,
+    "page": 1,
+    "per_page": 20
+  }
+}
+```
+
+## Campaign Status
+
+| Status | Description |
+|--------|-------------|
+| `draft` | Created but not started |
+| `active` | Currently making calls |
+| `paused` | Temporarily stopped |
+| `completed` | All contacts processed |
+| `cancelled` | Manually stopped |
+
+## Error Codes
+
+| Code | Description |
+|------|-------------|
+| `campaign_not_found` | Campaign ID doesn't exist |
+| `campaign_already_active` | Cannot start an active campaign |
+| `campaign_not_active` | Cannot pause a non-active campaign |
+| `agent_not_found` | Specified agent doesn't exist |
+| `no_contacts` | Campaign has no contacts to call |

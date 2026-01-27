@@ -5,58 +5,202 @@ description: 'Integrate SmartAlex AI voice agents into your applications'
 
 ## Welcome to the SmartAlex API
 
-The SmartAlex API allows you to programmatically manage AI voice agents, campaigns, contacts, and call data.
+The SmartAlex API allows you to programmatically manage AI voice agents, campaigns, contacts, and call data. Build custom integrations, automate workflows, and embed SmartAlex into your applications.
 
 <CardGroup cols={2}>
   <Card
-    title="Create Agents"
+    title="Agents"
     icon="robot"
     href="/api-reference/agents"
   >
-    Programmatically create and configure AI voice agents
+    Create, update, and manage AI voice agents
   </Card>
   <Card
-    title="Manage Campaigns"
+    title="Campaigns"
     icon="megaphone"
     href="/api-reference/campaigns"
   >
-    Launch and monitor outbound calling campaigns
+    Launch and control outbound calling campaigns
   </Card>
   <Card
-    title="Import Contacts"
+    title="Calls"
+    icon="phone"
+    href="/api-reference/calls"
+  >
+    Initiate calls and access call data
+  </Card>
+  <Card
+    title="Contacts"
     icon="address-book"
     href="/api-reference/contacts"
   >
-    Bulk import and manage your contact database
-  </Card>
-  <Card
-    title="Call Analytics"
-    icon="chart-line"
-    href="/api-reference/calls"
-  >
-    Access call logs, transcripts, and sentiment data
+    Import and manage your contact database
   </Card>
 </CardGroup>
 
+## Base URL
+
+All API requests should be made to:
+
+```
+https://api.getsmartalex.com/v1
+```
+
 ## Authentication
 
-All API endpoints require authentication using a Bearer token.
+All API endpoints require authentication using a Bearer token in the Authorization header.
 
 ```bash
-curl -X GET "https://api.smartalex.ai/v1/agents" \
+curl -X GET "https://api.getsmartalex.com/v1/agents" \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
-Get your API key from the **Settings > API** page in your SmartAlex dashboard.
+### Getting Your API Key
+
+1. Log in to your SmartAlex dashboard
+2. Navigate to **Settings** → **API**
+3. Click **Generate New Key**
+4. Copy and securely store the key
+
+<Warning>
+  API keys are shown only once when created. Store them securely - if lost, you'll need to generate a new key.
+</Warning>
+
+## Request Format
+
+### Headers
+
+All requests must include:
+
+| Header | Value |
+|--------|-------|
+| `Authorization` | `Bearer YOUR_API_KEY` |
+| `Content-Type` | `application/json` (for POST/PUT requests) |
+
+### Request Body
+
+POST and PUT requests accept JSON bodies:
+
+```bash
+curl -X POST "https://api.getsmartalex.com/v1/agents" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Alex",
+    "voice": "nova",
+    "prompt": "You are a friendly receptionist..."
+  }'
+```
+
+## Response Format
+
+All responses are JSON with a consistent structure:
+
+### Success Response
+
+```json
+{
+  "data": {
+    "id": "agent_abc123",
+    "name": "Alex",
+    "status": "ready"
+  }
+}
+```
+
+### List Response
+
+```json
+{
+  "data": [
+    { "id": "agent_abc123", "name": "Alex" },
+    { "id": "agent_def456", "name": "Sarah" }
+  ],
+  "meta": {
+    "total": 2,
+    "page": 1,
+    "per_page": 20
+  }
+}
+```
+
+### Error Response
+
+```json
+{
+  "error": {
+    "code": "invalid_request",
+    "message": "The 'name' field is required",
+    "status": 400
+  }
+}
+```
+
+## Error Codes
+
+| Status | Code | Description |
+|--------|------|-------------|
+| 400 | `invalid_request` | Malformed request or missing required fields |
+| 401 | `unauthorized` | Invalid or missing API key |
+| 403 | `forbidden` | API key doesn't have permission |
+| 404 | `not_found` | Resource doesn't exist |
+| 429 | `rate_limited` | Too many requests |
+| 500 | `server_error` | Internal server error |
 
 ## Rate Limits
 
-| Plan | Requests/minute |
-|------|-----------------|
-| Free | 60 |
-| Professional | 300 |
-| Enterprise | Custom |
+API requests are rate limited based on your plan:
+
+| Plan | Requests/minute | Requests/day |
+|------|-----------------|--------------|
+| Professional | 60 | 10,000 |
+| Dental | 300 | 50,000 |
+| Real Estate | 600 | 100,000 |
+
+Rate limit headers are included in every response:
+
+```
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 58
+X-RateLimit-Reset: 1640000000
+```
+
+When rate limited, you'll receive a `429` response:
+
+```json
+{
+  "error": {
+    "code": "rate_limited",
+    "message": "Rate limit exceeded. Retry after 60 seconds.",
+    "retry_after": 60
+  }
+}
+```
+
+## Pagination
+
+List endpoints support pagination:
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `page` | Page number | 1 |
+| `per_page` | Items per page | 20 |
+
+Example:
+
+```bash
+curl "https://api.getsmartalex.com/v1/contacts?page=2&per_page=50" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+## Webhooks
+
+Receive real-time notifications for events in your account. See [Webhooks](/api-reference/webhooks) for setup and event types.
+
+## SDKs & Libraries
+
+Official client libraries are coming soon. In the meantime, use any HTTP client to interact with the API.
 
 <Note>
-  Need higher limits? Contact us at support@smartalex.ai
+  Need help with the API? Contact us at [support@getsmartalex.com](mailto:support@getsmartalex.com)
 </Note>

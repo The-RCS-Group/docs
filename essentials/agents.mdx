@@ -5,42 +5,132 @@ description: "Create and configure your AI voice agents"
 
 ## What is an AI Agent?
 
-An AI Agent is your virtual receptionist or sales representative. Each agent has its own personality, voice, and behavior settings.
+An AI Agent is your virtual receptionist, sales representative, or customer service agent. Each agent has its own personality, voice, knowledge base, and behavior settings. Agents can handle both inbound calls and make outbound calls through campaigns.
 
 ## Creating an Agent
 
-Navigate to **Agents** in your dashboard and click **Create Agent**.
+Navigate to **Agents** in your dashboard and click **Create Agent**. The creation wizard guides you through three steps:
 
-### Configuration Options
+### Step 1: Describe
+
+Tell SmartAlex what your agent should do in natural language:
+
+```
+"You are a friendly receptionist for ABC Dental.
+Answer questions about our services, collect patient
+information, and schedule appointments."
+```
+
+The AI uses this to configure your agent's behavior automatically.
+
+### Step 2: Customize
+
+Fine-tune your agent's settings:
 
 | Setting | Description |
 |---------|-------------|
-| **Name** | Your agent's name (e.g., "Alex") |
-| **Voice** | Choose from 50+ natural voices |
-| **Language** | English, Spanish, French, and more |
-| **System Prompt** | Define what your agent should do |
-| **AI Model** | GPT-4, Claude, or Gemini |
+| **Name** | Your agent's name (e.g., "Alex", "Sarah") |
+| **Voice** | Choose from 50+ natural voices across multiple providers |
+| **Language** | Primary language (English, Spanish, French, German, and more) |
+| **Personality** | Preset templates for different industries |
+| **AI Model** | GPT-4o, Claude, or Gemini for conversation intelligence |
 
-### Agent Status
+### Step 3: Deploy
+
+Review your configuration and create the agent. The agent will be ready to take calls within seconds.
+
+## Agent Configuration
+
+After creation, you can further customize your agent:
+
+### Knowledge Base
+
+Upload documents or add text that your agent can reference during calls:
+- Business information
+- Product catalogs
+- FAQ content
+- Service descriptions
+
+### Custom Instructions
+
+Add specific behavioral rules:
+- How to handle certain questions
+- When to transfer calls
+- Information to always collect
+- Topics to avoid
+
+### Call Settings
+
+| Setting | Description |
+|---------|-------------|
+| **Call Slots** | How many concurrent calls (2-10+ based on plan) |
+| **Recording** | Enable/disable call recording |
+| **Voicemail** | What to do when agent can't answer |
+| **Transfer Number** | Number to transfer urgent calls to |
+
+## Agent Status
 
 Agents progress through these states:
-- **Draft** - Still being configured
-- **Creating** - Being provisioned
-- **Ready** - Live and ready to take calls
+
+| Status | Description |
+|--------|-------------|
+| **Draft** | Still being configured, not ready for calls |
+| **Creating** | Being provisioned by the voice provider |
+| **Ready** | Live and ready to take calls |
+| **Error** | Configuration issue that needs attention |
 
 ## Best Practices
 
-<Accordion title="Writing Effective System Prompts">
+<Accordion title="Writing Effective Prompts">
 Be specific about what your agent should do:
-- Collect customer information
-- Schedule appointments
-- Answer FAQs about your business
-- Qualify leads before transferring
+
+**Good example:**
+```
+You are Alex, a receptionist for Sunrise Dental.
+
+Your responsibilities:
+1. Greet callers warmly
+2. Answer questions about our services (cleanings, fillings, crowns)
+3. Collect: name, phone, reason for visit
+4. Schedule appointments (available Mon-Fri 9am-5pm)
+5. For emergencies, transfer to Dr. Smith at 555-0100
+```
+
+**Avoid vague instructions:**
+```
+Be helpful and answer questions. (Too vague)
+```
 </Accordion>
 
 <Accordion title="Choosing the Right Voice">
 Match your voice to your brand:
-- Professional services → Calm, authoritative voices
-- Retail/hospitality → Friendly, upbeat voices
-- Healthcare → Warm, reassuring voices
+
+| Business Type | Recommended Voice Style |
+|--------------|------------------------|
+| Professional services | Calm, authoritative |
+| Retail/hospitality | Friendly, upbeat |
+| Healthcare | Warm, reassuring |
+| Tech/startups | Modern, energetic |
 </Accordion>
+
+<Accordion title="Testing Before Going Live">
+Always use **Quick Test** before assigning a phone number:
+
+1. Click the Quick Test button on your agent
+2. Have a sample conversation
+3. Test edge cases (difficult questions, transfers)
+4. Review the transcript
+5. Adjust prompts as needed
+</Accordion>
+
+## Concurrent Call Slots
+
+Each plan includes a number of call slots - the maximum concurrent calls your agents can handle:
+
+| Plan | Call Slots |
+|------|-----------|
+| Professional | 2 |
+| Dental | 5 |
+| Real Estate | 10 |
+
+Additional slots can be purchased for $9.60/month each.

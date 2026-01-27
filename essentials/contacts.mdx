@@ -3,38 +3,150 @@ title: "Contacts"
 description: "Import and manage your contact database"
 ---
 
-## Importing Contacts
+## Overview
 
-Upload contacts via CSV with the following fields:
+Contacts are the people your AI agents call. SmartAlex maintains a central contact database that can be used across all campaigns.
+
+## Contact Fields
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `phone` | Yes | Phone number |
-| `first_name` | No | First name |
-| `last_name` | No | Last name |
+| `phone` | Yes | Phone number (E.164 or local format) |
+| `first_name` | No | Contact's first name |
+| `last_name` | No | Contact's last name |
 | `email` | No | Email address |
-| `company` | No | Company name |
+| `company` | No | Company or organization |
+| `title` | No | Job title |
 
-## Contact Management
+<Note>
+  Your AI agent can use contact fields during calls. For example: "Hi [first_name], I'm calling from..."
+</Note>
+
+## Importing Contacts
+
+### CSV Upload
+
+The fastest way to add contacts is via CSV upload:
+
+<Steps>
+  <Step title="Prepare your CSV">
+    Create a CSV file with headers matching the contact fields. At minimum, include a `phone` column.
+
+    ```csv
+    phone,first_name,last_name,email,company
+    +15551234567,John,Smith,john@example.com,Acme Corp
+    +15559876543,Jane,Doe,jane@example.com,Beta Inc
+    ```
+  </Step>
+
+  <Step title="Navigate to Contacts">
+    Go to **Contacts** in your dashboard.
+  </Step>
+
+  <Step title="Click Import">
+    Click the **Import** button and select your CSV file.
+  </Step>
+
+  <Step title="Map Columns">
+    Match your CSV columns to SmartAlex contact fields. The system will auto-detect common column names.
+  </Step>
+
+  <Step title="Review and Import">
+    Preview the import and confirm. Invalid phone numbers will be flagged.
+  </Step>
+</Steps>
+
+### Import Batch Tracking
+
+Each import creates a batch that you can track:
+- Number of contacts imported
+- Number of duplicates skipped
+- Number of invalid entries
+- Import timestamp
+
+## Contact Limits
+
+Your plan determines how many contacts you can store:
+
+| Plan | Contact Limit |
+|------|--------------|
+| Professional | 1,000 |
+| Dental | 5,000 |
+| Real Estate | 50,000 |
+
+Contact additional support if you need higher limits.
+
+## Managing Contacts
 
 ### Viewing Contacts
 
-Navigate to **Contacts** to see all your contacts. You can:
-- Search by name or phone
-- Filter by status (active, called, failed)
-- View call history per contact
-- Delete contacts
+The Contacts page shows all your contacts with:
+- Name and phone number
+- Email and company
+- Status (Active, DNC)
+- Last called date
+- Number of calls
 
-### Contact Status
+### Search and Filter
+
+Find contacts by:
+- Name or phone number search
+- Status filter (Active, DNC)
+- Campaign membership
+- Last contact date range
+
+### Individual Contact Actions
+
+| Action | Description |
+|--------|-------------|
+| **View Details** | See full contact info and call history |
+| **Edit** | Update contact information |
+| **Call Now** | Trigger an immediate call to this contact |
+| **Mark DNC** | Add to Do Not Call list |
+| **Delete** | Remove contact from database |
+
+### Bulk Actions
+
+Select multiple contacts to:
+- Add to a campaign
+- Mark as DNC
+- Export to CSV
+- Delete
+
+## Contact Status
 
 | Status | Description |
 |--------|-------------|
-| **Pending** | Not yet called |
-| **Calling** | Currently on a call |
-| **Completed** | Call finished successfully |
-| **Failed** | Call could not be completed |
-| **Callback** | Scheduled for retry |
+| **Active** | Available to be called |
+| **DNC** | Do Not Call - will not be dialed |
 
-## DNC (Do Not Call) List
+### Do Not Call (DNC)
 
-SmartAlex respects Do Not Call lists. Contacts can be flagged to prevent future calls.
+Contacts can be marked DNC:
+- Manually by you
+- Automatically if they request during a call
+- Via API integration
+
+DNC contacts:
+- Will not be called in any campaign
+- Are excluded from new campaign imports
+- Can be reactivated manually if needed
+
+## Call History
+
+Each contact's detail page shows their complete call history:
+- All inbound and outbound calls
+- Call outcomes and sentiment
+- Recordings and transcripts
+- Associated campaigns
+
+This helps you understand the full relationship with each contact.
+
+## Data Export
+
+Export your contacts to CSV:
+1. Apply any filters needed
+2. Click **Export**
+3. Download the CSV file
+
+Exported data includes all contact fields and call statistics.

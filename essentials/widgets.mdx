@@ -1,0 +1,204 @@
+---
+title: "Widgets"
+description: "Add click-to-call widgets to your website"
+---
+
+## Overview
+
+SmartAlex Widgets let your website visitors call your AI agent with one click. No phone required - calls happen directly in the browser.
+
+## Widget Types
+
+### Click-to-Call Button
+
+A customizable button that opens a calling interface:
+- Floating button (corner of screen)
+- Inline button (within page content)
+- Custom trigger (your own button/link)
+
+### Embedded Call Widget
+
+A full calling interface embedded in your page:
+- Shows agent avatar and name
+- Call controls (mute, end)
+- Call status indicator
+
+## Creating a Widget
+
+<Steps>
+  <Step title="Navigate to Widget Studio">
+    Go to **Widgets** in your dashboard.
+  </Step>
+
+  <Step title="Click Create Widget">
+    Click **Create Widget** to start the configuration wizard.
+  </Step>
+
+  <Step title="Select Agent">
+    Choose which AI agent will handle widget calls.
+  </Step>
+
+  <Step title="Customize Appearance">
+    Configure colors, position, and text to match your brand:
+    - Button color (hex code or picker)
+    - Button text (e.g., "Talk to Alex")
+    - Position (bottom-right, bottom-left, etc.)
+    - Icon style
+  </Step>
+
+  <Step title="Get Installation Code">
+    Copy the embed code to add to your website.
+  </Step>
+</Steps>
+
+## Customization Options
+
+### Appearance
+
+| Setting | Options |
+|---------|---------|
+| **Primary Color** | Any hex color (default: #010033) |
+| **Button Text** | Custom text or icon only |
+| **Position** | Bottom-right, bottom-left, custom |
+| **Size** | Small, medium, large |
+| **Border Radius** | Square to fully rounded |
+
+### Behavior
+
+| Setting | Description |
+|---------|-------------|
+| **Auto-open** | Automatically open on page load |
+| **Delay** | Wait before showing button (seconds) |
+| **Mobile Display** | Show/hide on mobile devices |
+| **Greeting Message** | Initial message in chat interface |
+
+## Installation
+
+### Basic Installation
+
+Add the widget script to your website's HTML:
+
+```html
+<!-- SmartAlex Widget -->
+<script
+  src="https://widget.getsmartalex.com/v1/widget.js"
+  data-widget-id="YOUR_WIDGET_ID">
+</script>
+```
+
+Place this code before the closing `</body>` tag.
+
+### Platform-Specific Guides
+
+<Accordion title="WordPress">
+1. Go to **Appearance** → **Theme Editor**
+2. Select `footer.php`
+3. Paste the widget code before `</body>`
+4. Click **Update File**
+
+Or use a plugin like "Insert Headers and Footers":
+1. Install and activate the plugin
+2. Go to **Settings** → **Insert Headers and Footers**
+3. Paste the code in the "Scripts in Footer" section
+</Accordion>
+
+<Accordion title="Shopify">
+1. Go to **Online Store** → **Themes**
+2. Click **Actions** → **Edit code**
+3. Find `theme.liquid`
+4. Paste the widget code before `</body>`
+5. Click **Save**
+</Accordion>
+
+<Accordion title="Wix">
+1. Go to your Wix Editor
+2. Click **Add** → **Embed Code** → **Custom Embeds**
+3. Select **Embed a Widget**
+4. Paste the widget code
+5. Position the widget and publish
+</Accordion>
+
+<Accordion title="Squarespace">
+1. Go to **Settings** → **Advanced** → **Code Injection**
+2. Paste the widget code in the **Footer** section
+3. Click **Save**
+</Accordion>
+
+<Accordion title="React / Next.js">
+Add to your main layout or app component:
+
+```jsx
+import { useEffect } from 'react';
+
+export default function Layout({ children }) {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://widget.getsmartalex.com/v1/widget.js';
+    script.setAttribute('data-widget-id', 'YOUR_WIDGET_ID');
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  return <>{children}</>;
+}
+```
+</Accordion>
+
+## Live Preview
+
+Widget Studio includes a live preview:
+- See changes in real-time
+- Test on different device sizes
+- Preview light and dark modes
+- Test the calling interface
+
+## Widget Analytics
+
+Track widget performance:
+
+| Metric | Description |
+|--------|-------------|
+| **Impressions** | Times widget was displayed |
+| **Clicks** | Times button was clicked |
+| **Calls Started** | Calls that connected |
+| **Calls Completed** | Successfully finished calls |
+| **Conversion Rate** | Clicks to completed calls |
+
+## Best Practices
+
+<Accordion title="Placement">
+- **Floating button**: Best for most sites, always visible
+- **Bottom-right**: Standard position users expect
+- **Avoid**: Covering important content or CTAs
+</Accordion>
+
+<Accordion title="Call-to-Action">
+- Use action-oriented text: "Talk to Us", "Get Help Now"
+- Keep it short (2-3 words)
+- Match your brand voice
+</Accordion>
+
+<Accordion title="Mobile Optimization">
+- Test on actual mobile devices
+- Ensure button isn't too small to tap
+- Consider hiding on mobile if calls don't make sense
+</Accordion>
+
+## Troubleshooting
+
+<Accordion title="Widget Not Appearing">
+- Check that the script is properly added to your page
+- Verify the widget ID is correct
+- Check browser console for JavaScript errors
+- Ensure the widget is not hidden by CSS
+</Accordion>
+
+<Accordion title="Calls Not Connecting">
+- Verify the widget's agent is active
+- Check that microphone permissions are granted
+- Test in an incognito window
+- Try a different browser
+</Accordion>

@@ -1,0 +1,273 @@
+---
+title: "Integrations"
+description: "Connect SmartAlex with your existing tools"
+---
+
+## Overview
+
+SmartAlex integrates with popular business tools to streamline your workflows. Connect your CRM, e-commerce platform, or custom applications.
+
+## Available Integrations
+
+<CardGroup cols={2}>
+  <Card title="Shopify" icon="shopify">
+    Sync customer data and trigger calls based on orders.
+  </Card>
+  <Card title="HubSpot" icon="hubspot">
+    Two-way sync of contacts and call activities.
+  </Card>
+  <Card title="Salesforce" icon="salesforce">
+    Enterprise CRM integration with full call logging.
+  </Card>
+  <Card title="API" icon="code">
+    Build custom integrations with our REST API.
+  </Card>
+</CardGroup>
+
+## Shopify Integration
+
+Connect SmartAlex to your Shopify store for automated customer outreach.
+
+### Features
+
+- **Order notifications** - Call customers after purchase
+- **Abandoned cart recovery** - Reach out to incomplete checkouts
+- **Customer sync** - Import Shopify customers as contacts
+- **Order data** - Access order details during calls
+
+### Setup
+
+<Steps>
+  <Step title="Install the App">
+    Visit the Shopify App Store and install SmartAlex.
+  </Step>
+
+  <Step title="Authorize Access">
+    Grant SmartAlex permission to access your store data.
+  </Step>
+
+  <Step title="Configure Triggers">
+    Set up which events trigger calls:
+    - New orders
+    - Abandoned carts (after X hours)
+    - Customer inquiries
+  </Step>
+
+  <Step title="Assign Agent">
+    Select which AI agent handles Shopify calls.
+  </Step>
+</Steps>
+
+### Order Information in Calls
+
+Your agent can access order details during calls:
+- Order number
+- Items purchased
+- Order total
+- Shipping status
+- Customer name and email
+
+## HubSpot Integration
+
+Sync contacts and log call activities directly to HubSpot CRM.
+
+### Features
+
+- **Contact sync** - Two-way sync of contacts
+- **Call logging** - Automatic call records in HubSpot
+- **Deal updates** - Update deals based on call outcomes
+- **Timeline activities** - Call summaries appear in contact timeline
+
+### Setup
+
+<Steps>
+  <Step title="Connect HubSpot">
+    Go to **Settings** → **Integrations** → **HubSpot** and click **Connect**.
+  </Step>
+
+  <Step title="Authorize">
+    Log in to HubSpot and grant SmartAlex access.
+  </Step>
+
+  <Step title="Configure Sync">
+    Choose sync settings:
+    - Sync direction (one-way or two-way)
+    - Field mappings
+    - Sync frequency
+  </Step>
+
+  <Step title="Enable Call Logging">
+    Turn on automatic call logging to create activities in HubSpot.
+  </Step>
+</Steps>
+
+### Synced Data
+
+| SmartAlex | HubSpot |
+|-----------|---------|
+| Contact phone | Phone |
+| Contact email | Email |
+| First name | First name |
+| Last name | Last name |
+| Company | Company |
+| Call record | Call activity |
+| Call summary | Activity notes |
+
+## Salesforce Integration
+
+Enterprise-grade integration with Salesforce CRM.
+
+### Features
+
+- **Lead & Contact sync** - Sync with Salesforce records
+- **Activity logging** - Create Task records for calls
+- **Custom objects** - Map to custom Salesforce objects
+- **Workflow triggers** - Trigger Salesforce workflows from call events
+
+### Setup
+
+<Steps>
+  <Step title="Connect Salesforce">
+    Go to **Settings** → **Integrations** → **Salesforce**.
+  </Step>
+
+  <Step title="Authorize with OAuth">
+    Log in to Salesforce and authorize the connection.
+  </Step>
+
+  <Step title="Map Objects">
+    Configure which Salesforce objects to sync:
+    - Leads
+    - Contacts
+    - Accounts
+    - Custom objects
+  </Step>
+
+  <Step title="Configure Activity Logging">
+    Set up how calls are logged:
+    - Task type
+    - Subject format
+    - Field mappings
+  </Step>
+</Steps>
+
+### Logged Call Data
+
+Each call creates a Salesforce Task with:
+- Call direction (inbound/outbound)
+- Duration
+- Outcome/status
+- AI-generated summary
+- Recording link (if enabled)
+- Sentiment analysis
+
+## Composio Connections
+
+Connect to 200+ apps through Composio's integration platform.
+
+### Available Connections
+
+- **Calendar apps** - Google Calendar, Outlook, Calendly
+- **Communication** - Slack, Microsoft Teams, Discord
+- **Project management** - Asana, Trello, Monday.com
+- **Email** - Gmail, Outlook, SendGrid
+- **And many more...**
+
+### How It Works
+
+1. Connect your Composio account
+2. Authorize the apps you want to connect
+3. Configure triggers and actions
+4. Your AI agent can now interact with connected apps
+
+### Example Use Cases
+
+| Trigger | Action |
+|---------|--------|
+| Call completed | Create Slack notification |
+| Appointment scheduled | Add Google Calendar event |
+| High-value lead identified | Create Asana task |
+| Customer complaint | Send email to support team |
+
+## API Integration
+
+Build custom integrations using our REST API.
+
+### What You Can Build
+
+- **Custom CRM sync** - Connect any CRM system
+- **Webhook receivers** - React to call events in real-time
+- **Automated campaigns** - Trigger campaigns from external systems
+- **Data pipelines** - Export call data to data warehouses
+
+### Resources
+
+<CardGroup cols={2}>
+  <Card title="API Reference" icon="code" href="/api-reference/introduction">
+    Full API documentation
+  </Card>
+  <Card title="Webhooks" icon="bell" href="/api-reference/webhooks">
+    Real-time event notifications
+  </Card>
+</CardGroup>
+
+### Example: Sync Contacts from Your Database
+
+```javascript
+// Sync contacts from your database to SmartAlex
+const contacts = await getContactsFromYourDatabase();
+
+for (const contact of contacts) {
+  await fetch('https://api.getsmartalex.com/v1/contacts', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer YOUR_API_KEY',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      phone: contact.phone,
+      first_name: contact.firstName,
+      last_name: contact.lastName,
+      email: contact.email,
+      metadata: {
+        external_id: contact.id
+      }
+    })
+  });
+}
+```
+
+### Example: React to Completed Calls
+
+```javascript
+// Webhook handler for completed calls
+app.post('/webhooks/smartalex', (req, res) => {
+  const event = req.body;
+
+  if (event.type === 'call.completed') {
+    const call = event.data.call;
+
+    // Update your CRM
+    updateCrmRecord(call.contact_id, {
+      lastCallDate: call.ended_at,
+      lastCallOutcome: call.status,
+      sentiment: call.sentiment
+    });
+
+    // Notify your team
+    if (call.sentiment === 'negative') {
+      sendSlackAlert(`Negative call with ${call.phone_number}`);
+    }
+  }
+
+  res.status(200).send('OK');
+});
+```
+
+## Request an Integration
+
+Don't see the integration you need? Let us know:
+
+<Card title="Request Integration" icon="envelope" href="mailto:support@getsmartalex.com?subject=Integration%20Request">
+  Tell us which tools you want to connect.
+</Card>

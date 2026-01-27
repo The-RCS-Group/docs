@@ -7,7 +7,7 @@
     "light": "#22C55E",
     "dark": "#010033"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/favicon.png",
   "navigation": {
     "tabs": [
       {
@@ -17,23 +17,47 @@
             "group": "Getting Started",
             "pages": [
               "index",
-              "quickstart"
+              "quickstart",
+              "pricing"
             ]
           },
           {
-            "group": "Core Concepts",
+            "group": "Core Features",
             "pages": [
+              "essentials/dashboard",
               "essentials/agents",
               "essentials/campaigns",
               "essentials/phone-numbers"
             ]
           },
           {
-            "group": "Features",
+            "group": "Call Management",
             "pages": [
               "essentials/call-logs",
               "essentials/callbacks",
-              "essentials/contacts"
+              "essentials/contacts",
+              "essentials/analytics"
+            ]
+          },
+          {
+            "group": "Tools",
+            "pages": [
+              "essentials/widgets"
+            ]
+          },
+          {
+            "group": "Account",
+            "pages": [
+              "account/settings",
+              "account/billing"
+            ]
+          },
+          {
+            "group": "Resources",
+            "pages": [
+              "integrations",
+              "security",
+              "faq"
             ]
           }
         ]
@@ -42,18 +66,39 @@
         "tab": "API Reference",
         "groups": [
           {
-            "group": "API Documentation",
+            "group": "Overview",
             "pages": [
               "api-reference/introduction"
             ]
           },
           {
-            "group": "Endpoints",
+            "group": "Agents",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/agents"
+            ]
+          },
+          {
+            "group": "Campaigns",
+            "pages": [
+              "api-reference/campaigns"
+            ]
+          },
+          {
+            "group": "Calls",
+            "pages": [
+              "api-reference/calls"
+            ]
+          },
+          {
+            "group": "Contacts",
+            "pages": [
+              "api-reference/contacts"
+            ]
+          },
+          {
+            "group": "Events",
+            "pages": [
+              "api-reference/webhooks"
             ]
           }
         ]
@@ -63,32 +108,36 @@
       "anchors": [
         {
           "anchor": "Dashboard",
-          "href": "https://app.smartalex.ai",
+          "href": "https://app.getsmartalex.com",
           "icon": "gauge"
         },
         {
           "anchor": "Support",
-          "href": "mailto:support@smartalex.ai",
+          "href": "mailto:support@getsmartalex.com",
           "icon": "headset"
         }
       ]
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png"
   },
   "navbar": {
     "links": [
       {
+        "label": "Pricing",
+        "href": "/pricing"
+      },
+      {
         "label": "Support",
-        "href": "mailto:support@smartalex.ai"
+        "href": "mailto:support@getsmartalex.com"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Get Started",
-      "href": "https://app.smartalex.ai"
+      "href": "https://getsmartalex.com/instant"
     }
   },
   "contextual": {
@@ -105,8 +154,64 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/smartalexai",
-      "linkedin": "https://linkedin.com/company/smartalex"
-    }
+      "x": "https://x.com/getsmartalex",
+      "linkedin": "https://linkedin.com/company/smartalex-ai"
+    },
+    "links": [
+      {
+        "title": "Product",
+        "items": [
+          {
+            "label": "Pricing",
+            "href": "/pricing"
+          },
+          {
+            "label": "Integrations",
+            "href": "/integrations"
+          },
+          {
+            "label": "API Reference",
+            "href": "/api-reference/introduction"
+          }
+        ]
+      },
+      {
+        "title": "Resources",
+        "items": [
+          {
+            "label": "Documentation",
+            "href": "/"
+          },
+          {
+            "label": "FAQ",
+            "href": "/faq"
+          },
+          {
+            "label": "Security",
+            "href": "/security"
+          }
+        ]
+      },
+      {
+        "title": "Company",
+        "items": [
+          {
+            "label": "Website",
+            "href": "https://getsmartalex.com"
+          },
+          {
+            "label": "Contact",
+            "href": "mailto:support@getsmartalex.com"
+          }
+        ]
+      }
+    ]
+  },
+  "seo": {
+    "indexHiddenPages": false
+  },
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true
   }
 }

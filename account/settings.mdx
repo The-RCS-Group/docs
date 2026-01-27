@@ -1,0 +1,187 @@
+---
+title: "Account Settings"
+description: "Manage your profile, security, and preferences"
+---
+
+## Overview
+
+Account Settings let you manage your SmartAlex profile, security options, and account preferences.
+
+## Profile Settings
+
+### Personal Information
+
+Update your account details:
+
+| Field | Description |
+|-------|-------------|
+| **Full Name** | Your display name |
+| **Email** | Login email (requires verification to change) |
+| **Phone** | Contact phone number |
+| **Timezone** | Your local timezone for scheduling |
+
+### Organization
+
+If you're part of a team:
+
+| Field | Description |
+|-------|-------------|
+| **Organization Name** | Your company or team name |
+| **Industry** | Your business type (for tailored features) |
+| **Website** | Company website URL |
+
+## Security
+
+### Password
+
+Change your password:
+1. Enter current password
+2. Enter new password (minimum 8 characters)
+3. Confirm new password
+4. Click **Update Password**
+
+<Note>
+  Password requirements:
+  - Minimum 8 characters
+  - At least one uppercase letter
+  - At least one number
+  - At least one special character
+</Note>
+
+### Multi-Factor Authentication (MFA)
+
+Add an extra layer of security:
+
+<Steps>
+  <Step title="Enable MFA">
+    Go to **Settings** → **Security** → **Enable MFA**
+  </Step>
+
+  <Step title="Scan QR Code">
+    Use an authenticator app (Google Authenticator, Authy, 1Password) to scan the QR code.
+  </Step>
+
+  <Step title="Enter Verification Code">
+    Enter the 6-digit code from your authenticator app.
+  </Step>
+
+  <Step title="Save Backup Codes">
+    Download and securely store your backup codes for account recovery.
+  </Step>
+</Steps>
+
+<Warning>
+  Keep your backup codes safe. If you lose access to your authenticator app and backup codes, you may be locked out of your account.
+</Warning>
+
+### Active Sessions
+
+View and manage devices logged into your account:
+- Device type and browser
+- Location (approximate)
+- Last active time
+- Revoke access if needed
+
+## Notifications
+
+Configure how SmartAlex communicates with you:
+
+### Email Notifications
+
+| Notification | Description |
+|--------------|-------------|
+| **Campaign Complete** | When a campaign finishes |
+| **Usage Alerts** | When approaching plan limits |
+| **Billing** | Payment receipts and reminders |
+| **Product Updates** | New features and announcements |
+
+### In-App Notifications
+
+Control which notifications appear in the dashboard:
+- System alerts
+- Campaign status updates
+- Callback reminders
+
+## Privacy
+
+### Data Management
+
+| Action | Description |
+|--------|-------------|
+| **Export Data** | Download all your account data (GDPR) |
+| **Delete Recordings** | Remove call recordings |
+| **Delete Account** | Permanently delete your account |
+
+<Warning>
+  Account deletion is permanent and cannot be undone. All data including agents, campaigns, contacts, and call history will be permanently deleted.
+</Warning>
+
+### GDPR Compliance
+
+SmartAlex supports GDPR data rights:
+- **Right to Access**: Export your data anytime
+- **Right to Rectification**: Update your information
+- **Right to Erasure**: Delete your account and data
+- **Data Portability**: Export in standard formats
+
+## Team Management
+
+### Team Members
+
+Invite team members to your organization:
+
+<Steps>
+  <Step title="Go to Team Settings">
+    Navigate to **Settings** → **Team**
+  </Step>
+
+  <Step title="Click Invite">
+    Enter the email address of the person you want to invite.
+  </Step>
+
+  <Step title="Select Role">
+    Choose their permission level:
+    - **Admin**: Full access including billing
+    - **Manager**: Manage agents and campaigns
+    - **Viewer**: Read-only access to analytics
+  </Step>
+
+  <Step title="Send Invitation">
+    The invitee receives an email to join your organization.
+  </Step>
+</Steps>
+
+### Team Limits
+
+Team member limits vary by plan:
+
+| Plan | Team Members |
+|------|-------------|
+| Professional | 3 |
+| Dental | 10 |
+| Real Estate | Unlimited |
+
+## API Access
+
+### API Keys
+
+Generate API keys for integration:
+
+1. Go to **Settings** → **API**
+2. Click **Generate New Key**
+3. Copy and securely store the key
+4. The key is only shown once
+
+<Warning>
+  Treat API keys like passwords. Never share them publicly or commit them to version control.
+</Warning>
+
+### Webhooks
+
+Configure webhook endpoints to receive real-time events:
+- Call completed
+- Campaign status changed
+- Contact updated
+- Callback scheduled
+
+See [API Webhooks](/api-reference/webhooks) for configuration details.

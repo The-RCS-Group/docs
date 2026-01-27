@@ -5,27 +5,96 @@ description: "Manage automatic retry calls and scheduled follow-ups"
 
 ## How Callbacks Work
 
-When a call doesn't connect, SmartAlex automatically schedules a callback:
+When a call doesn't connect, SmartAlex automatically schedules a callback. The system intelligently manages retry attempts to maximize connection rates without overwhelming contacts.
 
-| Trigger | Action |
-|---------|--------|
-| **Voicemail** | Retry in 24 hours |
-| **No Answer** | Retry in 24 hours |
-| **Busy Signal** | Retry in 1 hour |
-| **Network Error** | Retry in 30 minutes |
-| **Invalid Number** | Marked failed (no retry) |
+## Automatic Retry Logic
 
-## Managing Callbacks
-
-Navigate to **Callbacks** to see all pending callbacks:
-- **Due Today** - Calls scheduled for today
-- **Overdue** - Missed callback windows
-- **This Week** - Upcoming callbacks
-
-## Manual Callbacks
-
-Your AI agent can also schedule callbacks during a call when a customer requests to be called back at a specific time.
+| Trigger | Retry Delay | Max Retries |
+|---------|-------------|-------------|
+| **Voicemail** | 24 hours | 3 |
+| **No Answer** | 24 hours | 3 |
+| **Busy Signal** | 1 hour | 5 |
+| **Network Error** | 30 minutes | 3 |
+| **Invalid Number** | No retry | - |
+| **DNC Request** | No retry | - |
 
 <Note>
-  Callbacks are automatically deduplicated - you won't call the same person twice for the same campaign.
+  Retry counts are per campaign. A contact can be called again in a new campaign even after exhausting retries in a previous one.
 </Note>
+
+## Callback Queue
+
+Navigate to **Callbacks** to see all pending callbacks organized by urgency:
+
+### Time-Based Filters
+
+| Filter | Shows |
+|--------|-------|
+| **Overdue** | Callbacks past their scheduled time |
+| **Due Today** | Scheduled for today |
+| **This Week** | Upcoming this week |
+| **All Pending** | All unprocessed callbacks |
+
+### Callback Information
+
+Each callback shows:
+- Contact name and phone number
+- Original call outcome (voicemail, no-answer, etc.)
+- Retry attempt number (e.g., "Retry 2 of 3")
+- Scheduled callback time
+- Associated campaign
+- Assigned agent
+
+## Manual Actions
+
+For any pending callback, you can:
+
+| Action | Description |
+|--------|-------------|
+| **Call Now** | Immediately trigger the callback |
+| **Reschedule** | Change the callback time |
+| **Skip** | Skip this retry, move to next scheduled time |
+| **Cancel** | Cancel all future retries for this contact |
+| **Mark Complete** | Mark as handled (e.g., customer called back) |
+
+## Customer-Requested Callbacks
+
+During a call, your AI agent can schedule callbacks when a customer requests to be called back at a specific time.
+
+These appear in the callback queue with:
+- **Type**: Customer requested
+- **Scheduled time**: The time the customer specified
+- **Notes**: Any context from the conversation
+
+## Deduplication
+
+SmartAlex automatically prevents duplicate calls:
+
+- Only one active callback per contact per campaign
+- If a contact answers, all pending callbacks are cancelled
+- If a contact requests DNC, all callbacks are cancelled across all campaigns
+
+## Best Practices
+
+<Accordion title="Handling Overdue Callbacks">
+Check the Overdue queue daily:
+- Callbacks can become overdue if campaign was paused
+- Time-sensitive callbacks should be called immediately
+- Stale callbacks (days old) may not be worth retrying
+</Accordion>
+
+<Accordion title="Optimizing Callback Timing">
+Consider when callbacks are most likely to connect:
+- Avoid early morning or late evening
+- Business callbacks: during business hours
+- Consumer callbacks: late morning or early evening
+- Respect timezone of the contact
+</Accordion>
+
+<Accordion title="When to Cancel Callbacks">
+Cancel callbacks when:
+- Contact information is incorrect
+- Contact has been reached through other means
+- Campaign objective is no longer relevant
+- Contact requested not to be called
+</Accordion>

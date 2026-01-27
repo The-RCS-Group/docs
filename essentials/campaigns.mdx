@@ -1,33 +1,59 @@
 ---
 title: "Campaigns"
-description: "Run large-scale outbound calling campaigns"
+description: "Run large-scale outbound calling campaigns with AI"
 ---
 
 ## What is a Campaign?
 
 A Campaign lets you call hundreds or thousands of contacts using your AI agent. Perfect for:
-- Lead outreach
+
+- Lead outreach and qualification
 - Appointment reminders
-- Customer surveys
+- Customer surveys and feedback
 - Follow-up calls
+- Re-engagement campaigns
 
 ## Creating a Campaign
 
 <Steps>
   <Step title="Create Campaign">
-    Go to **Campaigns** and click **Create Campaign**. Give it a name and description.
+    Go to **Campaigns** and click **Create Campaign**.
+
+    Provide:
+    - Campaign name
+    - Description (optional)
+    - Objective (e.g., "Schedule appointments", "Qualify leads")
   </Step>
+
   <Step title="Select Agent">
-    Choose which AI agent will make the calls.
+    Choose which AI agent will make the calls. The agent's personality and knowledge will be used for all campaign calls.
+
+    <Note>
+      You can create a specialized agent just for campaigns with different behavior than your inbound agent.
+    </Note>
   </Step>
-  <Step title="Upload Contacts">
-    Import a CSV with phone numbers and contact details.
+
+  <Step title="Add Contacts">
+    Import contacts via:
+    - **CSV Upload** - Upload a file with phone numbers and contact details
+    - **Manual Entry** - Add individual contacts
+    - **Existing Contacts** - Select from your contact database
+
+    Required fields: `phone`
+
+    Optional fields: `first_name`, `last_name`, `email`, `company`, `title`
   </Step>
+
   <Step title="Configure Settings">
-    Set call timing, language, and campaign objectives.
+    Set campaign parameters:
+    - **Calling hours** - When the agent can make calls
+    - **Timezone** - Respect contact timezones
+    - **Retry settings** - How to handle unanswered calls
+    - **Concurrent calls** - How many calls at once (limited by plan)
   </Step>
+
   <Step title="Launch">
-    Start your campaign and monitor progress in real-time.
+    Click **Start Campaign** to begin calling. Monitor progress in real-time on the campaign dashboard.
   </Step>
 </Steps>
 
@@ -35,15 +61,69 @@ A Campaign lets you call hundreds or thousands of contacts using your AI agent. 
 
 | Status | Description |
 |--------|-------------|
-| **Draft** | Not yet started |
-| **Active** | Currently running |
-| **Paused** | Temporarily stopped |
-| **Completed** | All contacts called |
+| **Draft** | Not yet started, still configuring |
+| **Active** | Currently running, making calls |
+| **Paused** | Temporarily stopped, can be resumed |
+| **Completed** | All contacts called or exhausted retries |
+| **Cancelled** | Manually stopped, will not resume |
 
-## Automatic Callbacks
+## Automatic Retry Logic
 
-SmartAlex automatically schedules callbacks for:
-- Voicemail detections
-- No-answer calls
-- Busy signals
-- Network timeouts
+SmartAlex automatically schedules callbacks when calls don't connect:
+
+| Outcome | Retry Behavior |
+|---------|---------------|
+| **Voicemail** | Retry after 24 hours (up to 3 attempts) |
+| **No Answer** | Retry after 24 hours (up to 3 attempts) |
+| **Busy Signal** | Retry after 1 hour (up to 5 attempts) |
+| **Network Error** | Retry after 30 minutes (up to 3 attempts) |
+| **Invalid Number** | Marked as failed, no retry |
+| **DNC Request** | Added to Do Not Call list, no retry |
+
+## Real-Time Monitoring
+
+While a campaign is running, you can see:
+
+- **Progress** - Contacts called vs. remaining
+- **Connect rate** - Percentage of answered calls
+- **Sentiment breakdown** - Positive/neutral/negative outcomes
+- **Active calls** - Live calls in progress
+- **Estimated completion** - When the campaign will finish
+
+## Campaign Analytics
+
+After a campaign completes, view detailed analytics:
+
+| Metric | Description |
+|--------|-------------|
+| **Total calls** | Number of call attempts made |
+| **Connected calls** | Calls that were answered |
+| **Connect rate** | Percentage of answered calls |
+| **Average duration** | Average length of connected calls |
+| **Total cost** | Campaign calling costs |
+| **Sentiment** | Breakdown of call outcomes |
+
+## Best Practices
+
+<Accordion title="Optimal Calling Times">
+Best times for outbound calls:
+- **B2C**: Tuesday-Thursday, 10am-12pm or 2pm-5pm local time
+- **B2B**: Tuesday-Thursday, 9am-11am or 2pm-4pm local time
+- **Avoid**: Mondays, Fridays, weekends, holidays
+</Accordion>
+
+<Accordion title="Contact List Quality">
+Improve connect rates with clean data:
+- Verify phone numbers are valid
+- Remove duplicates
+- Check against DNC lists
+- Include contact names for personalization
+</Accordion>
+
+<Accordion title="Campaign Objectives">
+Be specific about what your agent should accomplish:
+- "Schedule a demo for next week"
+- "Confirm the appointment on [date]"
+- "Collect feedback about their recent purchase"
+- "Qualify interest level (1-10) and budget"
+</Accordion>
