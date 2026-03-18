@@ -61,6 +61,15 @@
             ]
           },
           {
+            "group": "Guides",
+            "pages": [
+              "guides/what-is-ai-voice-assistant",
+              "guides/what-is-ai-calling-platform",
+              "guides/what-is-mcp",
+              "guides/what-is-ai-receptionist"
+            ]
+          },
+          {
             "group": "Comparisons",
             "pages": [
               "comparisons/smartalex-vs-retell",

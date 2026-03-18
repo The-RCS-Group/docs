@@ -1,16 +1,23 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
+    "title": "SmartAlex API",
+    "description": "The SmartAlex API allows you to programmatically manage AI voice agents, campaigns, contacts, calls, deals, and webhooks. Build custom integrations, automate workflows, and embed SmartAlex into your applications.\n\n## Authentication\n\nAll API endpoints require a Bearer token (API key) in the Authorization header. API keys use the `sa_live_` prefix.\n\n```\nAuthorization: Bearer sa_live_your_api_key_here\n```\n\nGenerate API keys from **Settings > API** in your SmartAlex dashboard.\n\n## Rate Limits\n\nRequests are rate limited based on your plan:\n\n| Plan | Requests/minute | Requests/day |\n|------|-----------------|---------------|\n| Professional | 60 | 10,000 |\n| Dental | 300 | 50,000 |\n| Real Estate | 600 | 100,000 |\n\nRate limit headers are included in every response:\n- `X-RateLimit-Limit` — Maximum requests per window\n- `X-RateLimit-Remaining` — Requests remaining in current window\n- `X-RateLimit-Reset` — Unix timestamp when the window resets\n\n## Pagination\n\nList endpoints support pagination via `page` and `per_page` parameters in the request body. Default: page 1, 25 items per page (max 100).\n\n## Request Format\n\nAll requests are sent as JSON POST to the gateway endpoint. The request body includes `path`, `method`, and optional `body`, `params`, `page`, and `per_page` fields.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "SmartAlex Support",
+      "email": "support@getsmartalex.com",
+      "url": "https://docs.getsmartalex.com"
     },
-    "version": "1.0.0"
+    "license": {
+      "name": "Proprietary",
+      "url": "https://getsmartalex.com/terms"
+    }
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "https://api.getsmartalex.com/v1",
+      "description": "Production"
     }
   ],
   "security": [
@@ -18,106 +25,899 @@
       "bearerAuth": []
     }
   ],
+  "tags": [
+    {
+      "name": "Agents",
+      "description": "Create and manage AI voice agents"
+    },
+    {
+      "name": "Campaigns",
+      "description": "Launch and manage outbound calling campaigns"
+    },
+    {
+      "name": "Calls",
+      "description": "Initiate calls and access call data, recordings, and transcripts"
+    },
+    {
+      "name": "Contacts",
+      "description": "Import and manage your contact database"
+    },
+    {
+      "name": "Deals",
+      "description": "Manage deals in your sales pipeline"
+    },
+    {
+      "name": "Webhooks",
+      "description": "Configure real-time event notifications"
+    },
+    {
+      "name": "Platform",
+      "description": "Platform health and account status"
+    }
+  ],
   "paths": {
-    "/plants": {
+    "/agents": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
+        "operationId": "listAgents",
+        "tags": ["Agents"],
+        "summary": "List agents",
+        "description": "Returns all AI voice agents in your account. Agent data is sanitized to remove internal provider identifiers.",
         "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter agents by status",
+            "schema": {
+              "type": "string",
+              "enum": ["active", "inactive", "draft"]
+            }
+          },
           {
             "name": "limit",
             "in": "query",
-            "description": "The maximum number of results to return",
+            "description": "Maximum number of results to return",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "default": 50,
+              "maximum": 200
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "List of agents",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AgentSummary"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": "agent_01HP...",
+                      "name": "Sales Outreach Agent",
+                      "language": "en-US",
+                      "is_active": true,
+                      "voice_provider": "cloud",
+                      "created_at": "2026-02-15T08:00:00Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/agents/{agent_id}": {
+      "get": {
+        "operationId": "getAgent",
+        "tags": ["Agents"],
+        "summary": "Get agent",
+        "description": "Retrieve full details for a specific agent including prompt, voice settings, tools, and analytics.",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "required": true,
+            "description": "The agent ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Agent"
+                    }
+                  }
+                },
+                "example": {
+                  "data": {
+                    "id": "agent_01HP...",
+                    "name": "Sales Outreach Agent",
+                    "is_active": true,
+                    "mode": "advanced",
+                    "language": "en-US",
+                    "voice_provider": "cloud",
+                    "system_prompt": "You are a professional sales development representative...",
+                    "tools": ["transfer_call", "book_meeting", "send_sms"],
+                    "first_message": "Hi, this is Alex from SmartAlex. How are you today?",
+                    "max_duration_seconds": 300,
+                    "created_at": "2026-02-15T08:00:00Z",
+                    "updated_at": "2026-03-17T16:45:00Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/contacts": {
+      "get": {
+        "operationId": "listContacts",
+        "tags": ["Contacts"],
+        "summary": "List contacts",
+        "description": "Returns a paginated list of contacts in your account, ordered by creation date (newest first).",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by contact status",
+            "schema": {
+              "type": "string",
+              "enum": ["active", "dnc"]
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search by name, phone, or email",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "description": "Filter by tags (comma-separated)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "type": "integer",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of contacts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ContactSummary"
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                  }
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": "c_01HQ...",
+                      "first_name": "Sarah",
+                      "last_name": "Johnson",
+                      "email": "sarah@example.com",
+                      "phone": "+15551234567",
+                      "company": "Acme Corp",
+                      "tags": ["enterprise", "decision-maker"],
+                      "status": "active",
+                      "created_at": "2026-03-01T10:30:00Z",
+                      "updated_at": "2026-03-15T14:22:00Z"
+                    }
+                  ],
+                  "meta": {
+                    "total": 1250,
+                    "page": 1,
+                    "per_page": 25
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createContact",
+        "tags": ["Contacts"],
+        "summary": "Create contact",
+        "description": "Add a new contact to your database. Requires at least `first_name` and `last_name`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateContactRequest"
+              },
+              "example": {
+                "first_name": "John",
+                "last_name": "Smith",
+                "email": "john@acme.com",
+                "phone": "+15559876543",
+                "company": "Acme Corp",
+                "tags": ["enterprise"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Contact created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Contact"
+                    }
                   }
                 }
               }
             }
           },
           "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
+            "$ref": "#/components/responses/BadRequest"
           },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
           }
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+    "/contacts/{contact_id}": {
+      "get": {
+        "operationId": "getContact",
+        "tags": ["Contacts"],
+        "summary": "Get contact",
+        "description": "Retrieve full details for a specific contact including all fields, metadata, call history associations, and campaign memberships.",
         "parameters": [
           {
-            "name": "id",
+            "name": "contact_id",
             "in": "path",
-            "description": "ID of plant to delete",
             "required": true,
+            "description": "The contact ID",
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
+          "200": {
+            "description": "Contact details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Contact"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateContact",
+        "tags": ["Contacts"],
+        "summary": "Update contact",
+        "description": "Update an existing contact's information. Only included fields will be updated.",
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "description": "The contact ID to update",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateContactRequest"
+              },
+              "example": {
+                "email": "john.smith@newcompany.com",
+                "company": "New Company Inc",
+                "tags": ["enterprise", "qualified"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Contact"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "unexpected error",
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/contacts/import": {
+      "post": {
+        "operationId": "importContacts",
+        "tags": ["Contacts"],
+        "summary": "Import contacts (bulk)",
+        "description": "Import multiple contacts at once. Maximum 1000 contacts per request. Duplicate phone numbers can optionally be skipped.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportContactsRequest"
+              },
+              "example": {
+                "contacts": [
+                  {
+                    "first_name": "John",
+                    "last_name": "Smith",
+                    "phone": "+15551234567",
+                    "email": "john@example.com"
+                  },
+                  {
+                    "first_name": "Jane",
+                    "last_name": "Doe",
+                    "phone": "+15559876543"
+                  }
+                ],
+                "skip_duplicates": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Import results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportContactsResponse"
+                },
+                "example": {
+                  "data": {
+                    "imported": 2,
+                    "duplicates_skipped": 0,
+                    "invalid_skipped": 0,
+                    "errors": []
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/contacts/{contact_id}/dnc": {
+      "post": {
+        "operationId": "markContactDnc",
+        "tags": ["Contacts"],
+        "summary": "Mark contact as Do Not Call",
+        "description": "Add a contact to the Do Not Call list. The contact will not be dialed in any campaigns.",
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "description": "The contact ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact marked as DNC",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "dnc"
+                        },
+                        "dnc_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "removeContactDnc",
+        "tags": ["Contacts"],
+        "summary": "Remove contact from Do Not Call",
+        "description": "Remove a contact from the Do Not Call list, making them available for campaigns again.",
+        "parameters": [
+          {
+            "name": "contact_id",
+            "in": "path",
+            "required": true,
+            "description": "The contact ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact removed from DNC",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "active"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/campaigns": {
+      "get": {
+        "operationId": "listCampaigns",
+        "tags": ["Campaigns"],
+        "summary": "List campaigns",
+        "description": "Returns all campaigns in your account, ordered by creation date (newest first).",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by campaign status",
+            "schema": {
+              "type": "string",
+              "enum": ["draft", "active", "paused", "completed", "cancelled"]
+            }
+          },
+          {
+            "name": "agent_id",
+            "in": "query",
+            "description": "Filter by assigned agent ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of campaigns",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CampaignSummary"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": "camp_01HR...",
+                      "name": "Q1 Enterprise Outreach",
+                      "status": "active",
+                      "campaign_mode": "outbound",
+                      "agent_id": "agent_01HP...",
+                      "created_at": "2026-03-01T09:00:00Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createCampaign",
+        "tags": ["Campaigns"],
+        "summary": "Create campaign",
+        "description": "Create a new outbound calling campaign. The campaign starts in `draft` status. Use the start endpoint to begin calling.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCampaignRequest"
+              },
+              "example": {
+                "name": "February Outreach",
+                "campaign_mode": "outbound",
+                "agent_id": "agent_01HP..."
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Campaign created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Campaign"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/campaigns/{campaign_id}/contacts": {
+      "post": {
+        "operationId": "addCampaignContacts",
+        "tags": ["Campaigns"],
+        "summary": "Add contacts to campaign",
+        "description": "Add contacts to a campaign for calling. Contacts are provided as an array of objects with phone number and optional name/email fields. Duplicate phone numbers within the campaign are skipped.",
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "description": "The campaign ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCampaignContactsRequest"
+              },
+              "example": {
+                "contacts": [
+                  {
+                    "phone": "+15551234567",
+                    "first_name": "John",
+                    "last_name": "Smith",
+                    "email": "john@example.com"
+                  },
+                  {
+                    "phone": "+15559876543",
+                    "first_name": "Jane",
+                    "last_name": "Doe"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contacts added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "added": {
+                          "type": "integer",
+                          "description": "Number of contacts successfully added"
+                        },
+                        "duplicates_skipped": {
+                          "type": "integer",
+                          "description": "Number of duplicate contacts skipped"
+                        },
+                        "invalid_skipped": {
+                          "type": "integer",
+                          "description": "Number of invalid contacts skipped"
+                        },
+                        "campaign_total": {
+                          "type": "integer",
+                          "description": "Total contacts now in the campaign"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/campaigns/{campaign_id}/start": {
+      "post": {
+        "operationId": "startCampaign",
+        "tags": ["Campaigns"],
+        "summary": "Start campaign",
+        "description": "Start a campaign to begin making outbound calls. The campaign must have contacts and an assigned agent.",
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "description": "The campaign ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign started",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "active"
+                        },
+                        "started_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Campaign cannot be started (no contacts, no agent, or already active)",
             "content": {
               "application/json": {
                 "schema": {
@@ -125,28 +925,1511 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/campaigns/{campaign_id}/pause": {
+      "post": {
+        "operationId": "pauseCampaign",
+        "tags": ["Campaigns"],
+        "summary": "Pause campaign",
+        "description": "Pause an active campaign. Any in-progress calls will complete, but no new calls will be initiated.",
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "description": "The campaign ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign paused",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "paused"
+                        },
+                        "paused_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Campaign is not active and cannot be paused",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/campaigns/{campaign_id}/resume": {
+      "post": {
+        "operationId": "resumeCampaign",
+        "tags": ["Campaigns"],
+        "summary": "Resume campaign",
+        "description": "Resume a paused campaign to continue making calls.",
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "description": "The campaign ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign resumed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "active"
+                        },
+                        "resumed_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Campaign is not paused and cannot be resumed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/campaigns/{campaign_id}/callbacks": {
+      "get": {
+        "operationId": "getCampaignCallbacks",
+        "tags": ["Campaigns"],
+        "summary": "Get campaign callbacks",
+        "description": "Get pending callbacks for a campaign -- contacts who need to be called back.",
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "description": "The campaign ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of pending callbacks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Callback"
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/calls": {
+      "get": {
+        "operationId": "listCalls",
+        "tags": ["Calls"],
+        "summary": "List calls",
+        "description": "Returns a paginated list of call records with optional filtering by agent, campaign, direction, status, sentiment, and date range.",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "query",
+            "description": "Filter by agent ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "campaign_id",
+            "in": "query",
+            "description": "Filter by campaign ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "description": "Filter by call direction",
+            "schema": {
+              "type": "string",
+              "enum": ["inbound", "outbound", "web"]
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by call status",
+            "schema": {
+              "type": "string",
+              "enum": ["completed", "voicemail", "no_answer", "busy", "failed"]
+            }
+          },
+          {
+            "name": "sentiment",
+            "in": "query",
+            "description": "Filter by sentiment analysis result",
+            "schema": {
+              "type": "string",
+              "enum": ["positive", "neutral", "negative"]
+            }
+          },
+          {
+            "name": "from_date",
+            "in": "query",
+            "description": "Start date filter (ISO 8601)",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to_date",
+            "in": "query",
+            "description": "End date filter (ISO 8601)",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "type": "integer",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of calls",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CallSummary"
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                  }
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": "call_01HS...",
+                      "contact_id": "c_01HQ...",
+                      "agent_id": "agent_01HP...",
+                      "direction": "outbound",
+                      "call_status": "completed",
+                      "duration_seconds": 210,
+                      "sentiment": "positive",
+                      "cost": 0.45,
+                      "start_timestamp": "2026-03-17T14:30:00Z",
+                      "end_timestamp": "2026-03-17T14:33:30Z"
+                    }
+                  ],
+                  "meta": {
+                    "total": 150,
+                    "page": 1,
+                    "per_page": 25
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createCall",
+        "tags": ["Calls"],
+        "summary": "Create outbound call",
+        "description": "Initiate an outbound call to a phone number using a specified agent. The call is placed immediately.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCallRequest"
+              },
+              "example": {
+                "agent_id": "agent_01HP...",
+                "phone_number": "+15551234567",
+                "contact": {
+                  "first_name": "John",
+                  "last_name": "Smith"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Call initiated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "The call ID"
+                        },
+                        "direction": {
+                          "type": "string",
+                          "example": "outbound"
+                        },
+                        "agent_id": {
+                          "type": "string"
+                        },
+                        "phone_number": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "initiating"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/calls/{call_id}": {
+      "get": {
+        "operationId": "getCall",
+        "tags": ["Calls"],
+        "summary": "Get call",
+        "description": "Retrieve detailed information about a specific call including transcript, recording URL, analysis, sentiment, cost, and summary.",
+        "parameters": [
+          {
+            "name": "call_id",
+            "in": "path",
+            "required": true,
+            "description": "The call ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Call details with transcript",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Call"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/calls/{call_id}/end": {
+      "post": {
+        "operationId": "endCall",
+        "tags": ["Calls"],
+        "summary": "End call",
+        "description": "Terminate an active call. The call will be ended gracefully.",
+        "parameters": [
+          {
+            "name": "call_id",
+            "in": "path",
+            "required": true,
+            "description": "The call ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Call ended",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "completed"
+                        },
+                        "ended_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/calls/{call_id}/recording": {
+      "get": {
+        "operationId": "getCallRecording",
+        "tags": ["Calls"],
+        "summary": "Get call recording",
+        "description": "Get a temporary signed URL for the call recording. URLs expire after 1 hour.",
+        "parameters": [
+          {
+            "name": "call_id",
+            "in": "path",
+            "required": true,
+            "description": "The call ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recording URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "Temporary signed URL (expires in 1 hour)"
+                        },
+                        "duration": {
+                          "type": "integer",
+                          "description": "Recording duration in seconds"
+                        },
+                        "expires_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "When the URL expires"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/calls/{call_id}/transcript": {
+      "get": {
+        "operationId": "getCallTranscript",
+        "tags": ["Calls"],
+        "summary": "Get call transcript",
+        "description": "Get the full transcript for a completed call including speaker labels, timestamps, and AI-generated summary.",
+        "parameters": [
+          {
+            "name": "call_id",
+            "in": "path",
+            "required": true,
+            "description": "The call ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Call transcript",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "call_id": {
+                          "type": "string"
+                        },
+                        "transcript": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/TranscriptEntry"
+                          }
+                        },
+                        "summary": {
+                          "type": "string",
+                          "description": "AI-generated summary of the call"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/calls/web-token": {
+      "post": {
+        "operationId": "createWebCallToken",
+        "tags": ["Calls"],
+        "summary": "Create web call token",
+        "description": "Generate a token for initiating web-based calls through the SmartAlex widget or custom WebSocket integration.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebCallTokenRequest"
+              },
+              "example": {
+                "agent_id": "agent_01HP...",
+                "expires_in": 3600
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Web call token generated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "description": "Web call token"
+                        },
+                        "expires_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "When the token expires"
+                        },
+                        "websocket_url": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "WebSocket URL for connecting the call"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/deals": {
+      "get": {
+        "operationId": "listDeals",
+        "tags": ["Deals"],
+        "summary": "List deals",
+        "description": "Returns all deals in your pipeline, ordered by creation date (newest first). Optionally filter by pipeline stage.",
+        "parameters": [
+          {
+            "name": "stage",
+            "in": "query",
+            "description": "Filter by pipeline stage",
+            "schema": {
+              "type": "string",
+              "enum": ["lead", "qualified", "proposal", "negotiation", "closed_won", "closed_lost"]
+            }
+          },
+          {
+            "name": "min_value",
+            "in": "query",
+            "description": "Minimum deal value",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_value",
+            "in": "query",
+            "description": "Maximum deal value",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of deals",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DealSummary"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": "deal_01HS...",
+                      "deal_name": "Acme Corp Enterprise License",
+                      "stage": "negotiation",
+                      "deal_value": 48000,
+                      "commission_earned": 0,
+                      "close_date": "2026-04-15",
+                      "contact_id": "c_01HQ...",
+                      "assigned_user_id": null,
+                      "created_at": "2026-02-20T10:00:00Z",
+                      "updated_at": "2026-03-17T16:00:00Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createDeal",
+        "tags": ["Deals"],
+        "summary": "Create deal",
+        "description": "Create a new deal in your sales pipeline.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDealRequest"
+              },
+              "example": {
+                "deal_name": "GlobalTech Annual License",
+                "deal_value": 36000,
+                "stage": "qualified",
+                "contact_id": "c_01HQ..."
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Deal created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Deal"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/deals/{deal_id}": {
+      "get": {
+        "operationId": "getDeal",
+        "tags": ["Deals"],
+        "summary": "Get deal",
+        "description": "Retrieve full details for a specific deal including history and associated activities.",
+        "parameters": [
+          {
+            "name": "deal_id",
+            "in": "path",
+            "required": true,
+            "description": "The deal ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deal details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Deal"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateDeal",
+        "tags": ["Deals"],
+        "summary": "Update deal",
+        "description": "Update a deal's stage, value, or other details. Only included fields will be updated.",
+        "parameters": [
+          {
+            "name": "deal_id",
+            "in": "path",
+            "required": true,
+            "description": "The deal ID to update",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDealRequest"
+              },
+              "example": {
+                "stage": "closed_won",
+                "deal_value": 52000
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Deal updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Deal"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteDeal",
+        "tags": ["Deals"],
+        "summary": "Delete deal",
+        "description": "Permanently delete a deal from your pipeline. This action cannot be undone.",
+        "parameters": [
+          {
+            "name": "deal_id",
+            "in": "path",
+            "required": true,
+            "description": "The deal ID to delete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deal deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "deleted": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/webhooks": {
+      "get": {
+        "operationId": "listWebhooks",
+        "tags": ["Webhooks"],
+        "summary": "List webhooks",
+        "description": "Returns all configured webhook endpoints for your account.",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by webhook status",
+            "schema": {
+              "type": "string",
+              "enum": ["active", "inactive"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of webhooks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Webhook"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": "wh_01HR...",
+                      "url": "https://api.example.com/smartalex/events",
+                      "description": "CRM integration",
+                      "event_types": ["call.completed", "deal.stage_changed", "contact.created"],
+                      "is_active": true,
+                      "failure_count": 0,
+                      "last_delivered_at": "2026-03-18T11:45:00Z",
+                      "created_at": "2026-02-01T10:00:00Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createWebhook",
+        "tags": ["Webhooks"],
+        "summary": "Create webhook",
+        "description": "Create a new webhook endpoint to receive real-time event notifications. A signing secret is automatically generated and returned in the response (shown only once). The endpoint URL must use HTTPS.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebhookRequest"
+              },
+              "example": {
+                "url": "https://your-server.com/webhooks/smartalex",
+                "event_types": ["call.completed", "campaign.completed"],
+                "description": "Production CRM webhook"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Webhook created. The `secret` field is shown only once -- store it securely for signature verification.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/WebhookWithSecret"
+                    }
+                  }
+                },
+                "example": {
+                  "data": {
+                    "id": "wh_01HT...",
+                    "url": "https://your-server.com/webhooks/smartalex",
+                    "description": "Production CRM webhook",
+                    "event_types": ["call.completed", "campaign.completed"],
+                    "is_active": true,
+                    "secret": "a1b2c3d4e5f6...",
+                    "created_at": "2026-03-18T12:00:00Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/webhooks/{webhook_id}": {
+      "delete": {
+        "operationId": "deleteWebhook",
+        "tags": ["Webhooks"],
+        "summary": "Delete webhook",
+        "description": "Remove a webhook endpoint. Events will no longer be delivered to this URL.",
+        "parameters": [
+          {
+            "name": "webhook_id",
+            "in": "path",
+            "required": true,
+            "description": "The webhook ID to delete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Webhook deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "deleted": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/webhooks/{webhook_id}/test": {
+      "post": {
+        "operationId": "testWebhook",
+        "tags": ["Webhooks"],
+        "summary": "Test webhook",
+        "description": "Send a sample event payload to your webhook endpoint for testing. No actual event is created.",
+        "parameters": [
+          {
+            "name": "webhook_id",
+            "in": "path",
+            "required": true,
+            "description": "The webhook ID to test",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["event_type"],
+                "properties": {
+                  "event_type": {
+                    "type": "string",
+                    "description": "The event type to simulate",
+                    "enum": [
+                      "call.started",
+                      "call.completed",
+                      "call.failed",
+                      "contact.created",
+                      "contact.updated",
+                      "deal.created",
+                      "deal.stage_changed",
+                      "deal.closed",
+                      "campaign.started",
+                      "campaign.completed",
+                      "agent.status_changed"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Test event sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean"
+                        },
+                        "status_code": {
+                          "type": "integer",
+                          "description": "HTTP status code returned by your endpoint"
+                        },
+                        "response_time_ms": {
+                          "type": "integer",
+                          "description": "Response time in milliseconds"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/status": {
+      "get": {
+        "operationId": "getPlatformStatus",
+        "tags": ["Platform"],
+        "summary": "Get platform status",
+        "description": "Get platform health, operational status, and account usage statistics.",
+        "responses": {
+          "200": {
+            "description": "Platform status and usage statistics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/PlatformStatus"
+                    }
+                  }
+                },
+                "example": {
+                  "data": {
+                    "status": "operational",
+                    "version": "1.0.0",
+                    "stats": {
+                      "total_contacts": 1247,
+                      "total_campaigns": 5,
+                      "total_calls": 892,
+                      "total_deals": 23
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
           }
         }
       }
     }
   },
   "webhooks": {
-    "/plant/webhook": {
+    "call.completed": {
       "post": {
-        "description": "Information about a new plant added to the store",
+        "summary": "Call completed",
+        "description": "Fired when a call ends, regardless of outcome.",
+        "operationId": "callCompleted",
+        "tags": ["Webhook Events"],
         "requestBody": {
-          "description": "Plant added to the store",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/WebhookEvent"
+              },
+              "example": {
+                "id": "evt_xyz789",
+                "type": "call.completed",
+                "created_at": "2026-03-16T14:30:00Z",
+                "data": {
+                  "call": {
+                    "id": "call_01HS...",
+                    "direction": "inbound",
+                    "agent_id": "agent_01HP...",
+                    "phone_number": "+15551234567",
+                    "contact_id": "c_01HQ...",
+                    "status": "completed",
+                    "duration_seconds": 245,
+                    "sentiment": "positive",
+                    "cost": 0.45,
+                    "summary": "Customer scheduled appointment for next Tuesday."
+                  }
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
+            "description": "Return a 200 status to acknowledge receipt"
+          }
+        }
+      }
+    },
+    "campaign.completed": {
+      "post": {
+        "summary": "Campaign completed",
+        "description": "Fired when a campaign finishes processing all contacts.",
+        "operationId": "campaignCompleted",
+        "tags": ["Webhook Events"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookEvent"
+              },
+              "example": {
+                "id": "evt_abc456",
+                "type": "campaign.completed",
+                "created_at": "2026-03-16T18:00:00Z",
+                "data": {
+                  "campaign": {
+                    "id": "camp_01HR...",
+                    "name": "Q1 Enterprise Outreach",
+                    "contacts_total": 500,
+                    "contacts_called": 500,
+                    "contacts_connected": 312,
+                    "connect_rate": 0.624,
+                    "completed_at": "2026-03-16T18:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return a 200 status to acknowledge receipt"
+          }
+        }
+      }
+    },
+    "contact.created": {
+      "post": {
+        "summary": "Contact created",
+        "description": "Fired when a new contact is added to the database.",
+        "operationId": "contactCreated",
+        "tags": ["Webhook Events"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookEvent"
+              },
+              "example": {
+                "id": "evt_def789",
+                "type": "contact.created",
+                "created_at": "2026-03-16T10:00:00Z",
+                "data": {
+                  "contact": {
+                    "id": "c_01HT...",
+                    "first_name": "John",
+                    "last_name": "Smith",
+                    "email": "john@example.com",
+                    "phone": "+15551234567",
+                    "created_at": "2026-03-16T10:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return a 200 status to acknowledge receipt"
+          }
+        }
+      }
+    },
+    "deal.stage_changed": {
+      "post": {
+        "summary": "Deal stage changed",
+        "description": "Fired when a deal moves to a new pipeline stage.",
+        "operationId": "dealStageChanged",
+        "tags": ["Webhook Events"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookEvent"
+              },
+              "example": {
+                "id": "evt_ghi012",
+                "type": "deal.stage_changed",
+                "created_at": "2026-03-17T16:00:00Z",
+                "data": {
+                  "deal": {
+                    "id": "deal_01HS...",
+                    "deal_name": "Acme Corp Enterprise License",
+                    "previous_stage": "proposal",
+                    "new_stage": "negotiation",
+                    "deal_value": 48000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return a 200 status to acknowledge receipt"
           }
         }
       }
@@ -154,55 +2437,1345 @@
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "Agent": {
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
+          "id": {
+            "type": "string",
+            "description": "Unique agent identifier"
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          "name": {
+            "type": "string",
+            "description": "Agent display name"
+          },
+          "is_active": {
+            "type": "boolean",
+            "description": "Whether the agent is active and can take calls"
+          },
+          "mode": {
+            "type": "string",
+            "description": "Agent mode",
+            "enum": ["demo", "standard", "advanced", "vibe"]
+          },
+          "language": {
+            "type": "string",
+            "description": "Language code (e.g., en-US)"
+          },
+          "voice_provider": {
+            "type": "string",
+            "description": "Voice provider identifier",
+            "example": "cloud"
+          },
+          "system_prompt": {
+            "type": "string",
+            "description": "System prompt defining agent behavior"
+          },
+          "knowledge_base": {
+            "type": "string",
+            "nullable": true,
+            "description": "Additional context and knowledge for the agent"
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tools available to the agent (e.g., transfer_call, book_meeting, send_sms)"
+          },
+          "first_message": {
+            "type": "string",
+            "nullable": true,
+            "description": "Initial greeting message"
+          },
+          "max_duration_seconds": {
+            "type": "integer",
+            "description": "Maximum call duration in seconds"
+          },
+          "phone_numbers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Phone numbers assigned to this agent"
+          },
+          "settings": {
+            "type": "object",
+            "description": "Agent configuration settings",
+            "properties": {
+              "recording_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "voicemail_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "transfer_number": {
+                "type": "string",
+                "nullable": true,
+                "description": "Number for call transfers"
+              },
+              "max_call_duration": {
+                "type": "integer",
+                "default": 1800,
+                "description": "Max call length in seconds"
+              }
+            }
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
+      "AgentSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
           },
-          {
-            "required": [
-              "id"
-            ],
+          "name": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "voice_provider": {
+            "type": "string",
+            "example": "cloud"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Contact": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique contact identifier"
+          },
+          "first_name": {
+            "type": "string",
+            "description": "Contact's first name"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "Contact's last name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "nullable": true,
+            "description": "Email address"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Phone number in E.164 format"
+          },
+          "company": {
+            "type": "string",
+            "nullable": true,
+            "description": "Company name"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "description": "Tags assigned to the contact"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "dnc"],
+            "description": "Contact status"
+          },
+          "metadata": {
+            "type": "object",
+            "nullable": true,
+            "description": "Custom key-value data"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ContactSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "company": {
+            "type": "string",
+            "nullable": true
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "status": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateContactRequest": {
+        "type": "object",
+        "required": ["first_name", "last_name"],
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Contact's first name"
+          },
+          "last_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Contact's last name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address"
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 30,
+            "description": "Phone number in E.164 format (e.g., +15551234567)"
+          },
+          "company": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Company name"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tags to assign"
+          },
+          "status": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "Contact status (default: active)"
+          }
+        }
+      },
+      "UpdateContactRequest": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "last_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "company": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string",
+            "maxLength": 50
+          }
+        }
+      },
+      "ImportContactsRequest": {
+        "type": "object",
+        "required": ["contacts"],
+        "properties": {
+          "contacts": {
+            "type": "array",
+            "maxItems": 1000,
+            "items": {
+              "type": "object",
+              "required": ["first_name", "last_name"],
+              "properties": {
+                "first_name": {
+                  "type": "string"
+                },
+                "last_name": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "company": {
+                  "type": "string"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "description": "Array of contacts to import (max 1000)"
+          },
+          "skip_duplicates": {
+            "type": "boolean",
+            "default": true,
+            "description": "Skip contacts with duplicate phone numbers"
+          },
+          "update_existing": {
+            "type": "boolean",
+            "default": false,
+            "description": "Update existing contacts instead of skipping"
+          }
+        }
+      },
+      "ImportContactsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
             "type": "object",
             "properties": {
-              "id": {
-                "description": "Identification number of the plant",
+              "imported": {
                 "type": "integer",
-                "format": "int64"
+                "description": "Number of contacts successfully imported"
+              },
+              "duplicates_skipped": {
+                "type": "integer",
+                "description": "Number of duplicates skipped"
+              },
+              "invalid_skipped": {
+                "type": "integer",
+                "description": "Number of invalid entries skipped"
+              },
+              "errors": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Error messages for failed imports"
+              }
+            }
+          }
+        }
+      },
+      "Campaign": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique campaign identifier"
+          },
+          "name": {
+            "type": "string",
+            "description": "Campaign name"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "Campaign description"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["draft", "active", "paused", "completed", "cancelled"],
+            "description": "Current campaign status"
+          },
+          "campaign_mode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Campaign mode (e.g., outbound)"
+          },
+          "agent_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "ID of the agent assigned to this campaign"
+          },
+          "contacts_total": {
+            "type": "integer",
+            "description": "Total contacts in the campaign"
+          },
+          "contacts_called": {
+            "type": "integer",
+            "description": "Number of contacts already called"
+          },
+          "contacts_remaining": {
+            "type": "integer",
+            "description": "Number of contacts remaining"
+          },
+          "contacts_connected": {
+            "type": "integer",
+            "description": "Number of calls that connected"
+          },
+          "contacts_voicemail": {
+            "type": "integer",
+            "description": "Number of calls that went to voicemail"
+          },
+          "contacts_failed": {
+            "type": "integer",
+            "description": "Number of failed call attempts"
+          },
+          "settings": {
+            "$ref": "#/components/schemas/CampaignSettings"
+          },
+          "stats": {
+            "$ref": "#/components/schemas/CampaignStats"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "CampaignSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "campaign_mode": {
+            "type": "string",
+            "nullable": true
+          },
+          "agent_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CampaignSettings": {
+        "type": "object",
+        "properties": {
+          "calling_hours_start": {
+            "type": "string",
+            "default": "09:00",
+            "description": "Start time in HH:MM format"
+          },
+          "calling_hours_end": {
+            "type": "string",
+            "default": "17:00",
+            "description": "End time in HH:MM format"
+          },
+          "timezone": {
+            "type": "string",
+            "default": "UTC",
+            "description": "IANA timezone"
+          },
+          "concurrent_calls": {
+            "type": "integer",
+            "default": 1,
+            "description": "Maximum simultaneous calls"
+          },
+          "max_retries": {
+            "type": "integer",
+            "default": 3,
+            "description": "Retry attempts per contact"
+          }
+        }
+      },
+      "CampaignStats": {
+        "type": "object",
+        "properties": {
+          "connect_rate": {
+            "type": "number",
+            "format": "float",
+            "description": "Fraction of calls that connected (0.0 to 1.0)"
+          },
+          "average_duration": {
+            "type": "integer",
+            "description": "Average call duration in seconds"
+          },
+          "total_cost": {
+            "type": "number",
+            "format": "float",
+            "description": "Total campaign cost"
+          },
+          "sentiment": {
+            "type": "object",
+            "properties": {
+              "positive": {
+                "type": "integer"
+              },
+              "neutral": {
+                "type": "integer"
+              },
+              "negative": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "CreateCampaignRequest": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "Campaign name"
+          },
+          "campaign_mode": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "Campaign mode (e.g., outbound)"
+          },
+          "agent_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Agent ID to assign to the campaign"
+          }
+        }
+      },
+      "AddCampaignContactsRequest": {
+        "type": "object",
+        "required": ["contacts"],
+        "properties": {
+          "contacts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["phone"],
+              "properties": {
+                "phone": {
+                  "type": "string",
+                  "description": "Phone number in E.164 format"
+                },
+                "first_name": {
+                  "type": "string"
+                },
+                "last_name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "company": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Array of contacts to add to the campaign"
+          }
+        }
+      },
+      "Callback": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "object",
+            "properties": {
+              "phone": {
+                "type": "string"
+              },
+              "first_name": {
+                "type": "string"
+              }
+            }
+          },
+          "reason": {
+            "type": "string",
+            "description": "Reason for callback (e.g., no_answer, busy, callback_requested)"
+          },
+          "retry_count": {
+            "type": "integer"
+          },
+          "scheduled_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Call": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique call identifier"
+          },
+          "direction": {
+            "type": "string",
+            "enum": ["inbound", "outbound", "web"],
+            "description": "Call direction"
+          },
+          "agent_id": {
+            "type": "string",
+            "description": "Agent that handled the call"
+          },
+          "campaign_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Campaign the call belongs to (null for non-campaign calls)"
+          },
+          "contact_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Associated contact ID"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Phone number of the external party"
+          },
+          "call_status": {
+            "type": "string",
+            "enum": ["initiating", "ringing", "in_progress", "completed", "voicemail", "no_answer", "busy", "failed"],
+            "description": "Call status"
+          },
+          "duration_seconds": {
+            "type": "integer",
+            "description": "Call duration in seconds"
+          },
+          "sentiment": {
+            "type": "string",
+            "enum": ["positive", "neutral", "negative"],
+            "nullable": true,
+            "description": "AI-analyzed sentiment"
+          },
+          "cost": {
+            "type": "number",
+            "format": "float",
+            "description": "Call cost in USD"
+          },
+          "recording_url": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "URL to the call recording (temporary, expires after 1 hour)"
+          },
+          "transcript": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TranscriptEntry"
+            },
+            "description": "Full call transcript"
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true,
+            "description": "AI-generated call summary"
+          },
+          "analysis": {
+            "type": "object",
+            "nullable": true,
+            "description": "AI analysis of the call",
+            "properties": {
+              "sentiment": {
+                "type": "string"
+              },
+              "outcome": {
+                "type": "string",
+                "description": "Call outcome (e.g., meeting_booked, not_interested, callback_requested)"
+              },
+              "summary": {
+                "type": "string"
+              },
+              "key_topics": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "objections": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "next_steps": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "start_timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end_timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "CallSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "contact_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "agent_id": {
+            "type": "string"
+          },
+          "direction": {
+            "type": "string"
+          },
+          "call_status": {
+            "type": "string"
+          },
+          "duration_seconds": {
+            "type": "integer"
+          },
+          "sentiment": {
+            "type": "string",
+            "nullable": true
+          },
+          "cost": {
+            "type": "number",
+            "format": "float"
+          },
+          "start_timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end_timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "CreateCallRequest": {
+        "type": "object",
+        "required": ["agent_id", "phone_number"],
+        "properties": {
+          "agent_id": {
+            "type": "string",
+            "description": "Agent to make the call"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Number to call in E.164 format (e.g., +15551234567)"
+          },
+          "contact": {
+            "type": "object",
+            "description": "Contact information for personalization",
+            "properties": {
+              "first_name": {
+                "type": "string"
+              },
+              "last_name": {
+                "type": "string"
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Custom data to attach to the call"
+          }
+        }
+      },
+      "CreateWebCallTokenRequest": {
+        "type": "object",
+        "required": ["agent_id"],
+        "properties": {
+          "agent_id": {
+            "type": "string",
+            "description": "Agent to handle the web call"
+          },
+          "expires_in": {
+            "type": "integer",
+            "default": 3600,
+            "description": "Token validity in seconds"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Custom data for the session"
+          }
+        }
+      },
+      "TranscriptEntry": {
+        "type": "object",
+        "properties": {
+          "speaker": {
+            "type": "string",
+            "enum": ["agent", "caller"],
+            "description": "Who spoke this line"
+          },
+          "text": {
+            "type": "string",
+            "description": "What was said"
+          },
+          "timestamp": {
+            "type": "number",
+            "format": "float",
+            "description": "Seconds from call start"
+          }
+        }
+      },
+      "Deal": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique deal identifier"
+          },
+          "deal_name": {
+            "type": "string",
+            "description": "Deal name"
+          },
+          "stage": {
+            "type": "string",
+            "enum": ["lead", "qualified", "proposal", "negotiation", "closed_won", "closed_lost"],
+            "description": "Current pipeline stage"
+          },
+          "deal_value": {
+            "type": "number",
+            "format": "float",
+            "description": "Deal value in the account's currency"
+          },
+          "commission_earned": {
+            "type": "number",
+            "format": "float",
+            "nullable": true,
+            "description": "Commission earned on this deal"
+          },
+          "close_date": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "Expected or actual close date (YYYY-MM-DD)"
+          },
+          "contact_id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "Associated contact ID"
+          },
+          "assigned_user_id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "User assigned to the deal"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true,
+            "description": "Deal notes"
+          },
+          "activities": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/DealActivity"
+            },
+            "description": "Activity history for the deal"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DealSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "deal_name": {
+            "type": "string"
+          },
+          "stage": {
+            "type": "string"
+          },
+          "deal_value": {
+            "type": "number",
+            "format": "float"
+          },
+          "commission_earned": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "close_date": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "contact_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "assigned_user_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DealActivity": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["call", "email", "meeting", "note", "stage_change"],
+            "description": "Activity type"
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateDealRequest": {
+        "type": "object",
+        "required": ["deal_name"],
+        "properties": {
+          "deal_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "Deal name"
+          },
+          "stage": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "Pipeline stage (default: lead)",
+            "enum": ["lead", "qualified", "proposal", "negotiation", "closed_won", "closed_lost"]
+          },
+          "deal_value": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Deal value"
+          },
+          "contact_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Associated contact ID"
+          }
+        }
+      },
+      "UpdateDealRequest": {
+        "type": "object",
+        "properties": {
+          "deal_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "stage": {
+            "type": "string",
+            "maxLength": 50,
+            "enum": ["lead", "qualified", "proposal", "negotiation", "closed_won", "closed_lost"]
+          },
+          "deal_value": {
+            "type": "number",
+            "minimum": 0
+          },
+          "contact_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "Webhook": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique webhook identifier"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "HTTPS endpoint URL"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "Human-readable description"
+          },
+          "event_types": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "call.started",
+                "call.completed",
+                "call.failed",
+                "contact.created",
+                "contact.updated",
+                "contact.deleted",
+                "contact.dnc",
+                "deal.created",
+                "deal.stage_changed",
+                "deal.closed",
+                "campaign.started",
+                "campaign.paused",
+                "campaign.resumed",
+                "campaign.completed",
+                "agent.status_changed",
+                "callback.scheduled",
+                "callback.completed",
+                "callback.cancelled"
+              ]
+            },
+            "description": "Event types this webhook subscribes to"
+          },
+          "is_active": {
+            "type": "boolean",
+            "description": "Whether the webhook is active"
+          },
+          "failure_count": {
+            "type": "integer",
+            "description": "Number of consecutive delivery failures"
+          },
+          "last_delivered_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Last successful delivery time"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "WebhookWithSecret": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Webhook"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "secret": {
+                "type": "string",
+                "description": "HMAC signing secret for payload verification. Shown only once at creation time -- store it securely."
               }
             }
           }
         ]
       },
+      "CreateWebhookRequest": {
+        "type": "object",
+        "required": ["url", "event_types"],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "HTTPS endpoint to receive webhooks"
+          },
+          "event_types": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "enum": [
+                "call.started",
+                "call.completed",
+                "call.failed",
+                "contact.created",
+                "contact.updated",
+                "contact.deleted",
+                "contact.dnc",
+                "deal.created",
+                "deal.stage_changed",
+                "deal.closed",
+                "campaign.started",
+                "campaign.paused",
+                "campaign.resumed",
+                "campaign.completed",
+                "agent.status_changed",
+                "callback.scheduled",
+                "callback.completed",
+                "callback.cancelled"
+              ]
+            },
+            "description": "Event types to subscribe to"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "Human-readable description"
+          }
+        }
+      },
+      "WebhookEvent": {
+        "type": "object",
+        "description": "Webhook event payload delivered to your endpoint",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique event identifier (use for deduplication)"
+          },
+          "type": {
+            "type": "string",
+            "description": "Event type"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the event occurred"
+          },
+          "data": {
+            "type": "object",
+            "description": "Event-specific payload data"
+          }
+        }
+      },
+      "PlatformStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["operational", "degraded", "outage"],
+            "description": "Overall platform status"
+          },
+          "version": {
+            "type": "string",
+            "description": "API version"
+          },
+          "stats": {
+            "type": "object",
+            "properties": {
+              "total_contacts": {
+                "type": "integer",
+                "description": "Total contacts in your account"
+              },
+              "total_campaigns": {
+                "type": "integer",
+                "description": "Total campaigns"
+              },
+              "total_calls": {
+                "type": "integer",
+                "description": "Total call records"
+              },
+              "total_deals": {
+                "type": "integer",
+                "description": "Total deals in pipeline"
+              }
+            }
+          }
+        }
+      },
+      "PaginationMeta": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "description": "Total number of items"
+          },
+          "page": {
+            "type": "integer",
+            "description": "Current page number"
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Items per page"
+          }
+        }
+      },
       "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
         "type": "object",
         "properties": {
           "error": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "description": "Error message"
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Invalid request. Check the error message for details on which fields are invalid.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "error": "first_name: String must contain at least 1 character(s)"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Missing or invalid API key. Ensure your Authorization header uses `Bearer sa_live_...` format.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "error": "Missing or invalid API key. Use: Authorization: Bearer sa_live_xxx"
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "API key does not have the required permission for this operation. Write operations require the `write` permission.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "error": "API key does not have write permission"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "The requested resource was not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "error": "Contact not found"
+            }
+          }
+        }
+      },
+      "RateLimited": {
+        "description": "Rate limit exceeded. Check `X-RateLimit-Reset` header for when to retry. Limits vary by plan: Professional (60/min), Dental (300/min), Real Estate (600/min).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "error": "Rate limit exceeded. Retry after 60 seconds."
+            }
+          }
+        },
+        "headers": {
+          "X-RateLimit-Limit": {
+            "description": "Maximum requests per window",
+            "schema": {
+              "type": "integer"
+            }
           },
-          "message": {
-            "type": "string"
+          "X-RateLimit-Remaining": {
+            "description": "Requests remaining in current window",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          "X-RateLimit-Reset": {
+            "description": "Unix timestamp when the window resets",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "InternalError": {
+        "description": "Internal server error. If this persists, contact support@getsmartalex.com.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "error": "Internal server error"
+            }
           }
         }
       }
@@ -210,7 +3783,8 @@
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "description": "API key authentication. Generate keys from Settings > API in the SmartAlex dashboard. Keys use the `sa_live_` prefix."
       }
     }
   }
