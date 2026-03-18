@@ -59,6 +59,30 @@
               "security",
               "faq"
             ]
+          },
+          {
+            "group": "Comparisons",
+            "pages": [
+              "comparisons/smartalex-vs-retell",
+              "comparisons/smartalex-vs-vapi",
+              "comparisons/smartalex-vs-synthflow"
+            ]
+          },
+          {
+            "group": "Use Cases",
+            "pages": [
+              "use-cases/real-estate",
+              "use-cases/dental",
+              "use-cases/healthcare",
+              "use-cases/legal",
+              "use-cases/small-business"
+            ]
+          },
+          {
+            "group": "Glossary",
+            "pages": [
+              "glossary"
+            ]
           }
         ]
       },
@@ -102,6 +126,19 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "MCP",
+        "groups": [
+          {
+            "group": "MCP Integration",
+            "pages": [
+              "mcp/overview",
+              "mcp/getting-started",
+              "mcp/tools-reference"
+            ]
+          }
+        ]
       }
     ],
     "global": {
@@ -142,6 +179,7 @@
   },
   "contextual": {
     "options": [
+      "assistant",
       "copy",
       "view",
       "chatgpt",
@@ -208,7 +246,12 @@
     ]
   },
   "seo": {
-    "indexHiddenPages": false
+    "indexing": "all",
+    "metatags": {
+      "og:image": "https://getsmartalex.com/og-docs.png",
+      "og:title": "SmartAlex Documentation - AI Voice Assistant Platform",
+      "og:description": "Documentation for SmartAlex, the AI voice assistant platform for businesses. Build voice agents, run campaigns, manage contacts, and integrate via API."
+    }
   },
   "feedback": {
     "thumbsRating": true,

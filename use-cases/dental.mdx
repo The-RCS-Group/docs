@@ -1,0 +1,210 @@
+---
+title: "AI Voice Assistant for Dental Practices"
+description: "How dental practices use SmartAlex to handle appointment scheduling, patient inquiries, recall campaigns, and after-hours calls with AI voice agents."
+---
+
+# AI Voice Assistant for Dental Practices
+
+SmartAlex gives dental practices an AI voice agent that answers every patient call, books appointments, handles recall campaigns, and manages after-hours inquiries — so your front desk can focus on patients in the office instead of being tied to the phone.
+
+Dental practices lose an estimated 30-40% of new patient calls to voicemail or hold times. Each missed call represents $500-$1,200 in lifetime patient value. SmartAlex ensures every call is answered immediately with the same warmth and professionalism your patients expect from your team.
+
+## Why Dental Practices Choose SmartAlex
+
+<Columns>
+  <Card title="Zero Hold Time" icon="phone">
+    Every call answered in under 1 second. No hold music, no "please call back later," no patients hanging up and calling the practice down the street.
+  </Card>
+  <Card title="Appointment Scheduling" icon="calendar">
+    The AI books, reschedules, and confirms appointments by checking your practice management system for available slots in real time.
+  </Card>
+  <Card title="Recall Campaigns" icon="rotate">
+    Automated outbound calls remind patients about overdue cleanings, hygiene appointments, and follow-up treatments — filling your schedule without staff effort.
+  </Card>
+  <Card title="After-Hours Coverage" icon="moon">
+    Patients calling at 9pm with a toothache get a professional response, emergency triage, and appropriate routing — not voicemail.
+  </Card>
+</Columns>
+
+## Key Use Cases
+
+### 1. Appointment Scheduling and Management
+
+The most common reason patients call a dental practice is to book, change, or confirm an appointment. SmartAlex handles the entire flow:
+
+- **New appointments**: The AI checks availability, offers suitable time slots, and confirms the booking
+- **Rescheduling**: Patients can move their appointment to a new date and time without waiting on hold
+- **Cancellations**: The AI processes cancellations and immediately offers the open slot to patients on the waitlist
+- **Confirmations**: Outbound confirmation calls 48 hours before appointments reduce no-shows
+
+<Note>
+  Practices using AI appointment scheduling report a 25-35% reduction in no-show rates thanks to automated confirmation calls and easy rescheduling.
+</Note>
+
+### 2. New Patient Intake
+
+When a new patient calls, first impressions matter. The AI handles the intake process smoothly:
+
+<Steps>
+  <Step title="Welcome and qualify">
+    The AI welcomes the caller, asks how they heard about the practice, and identifies their primary dental concern.
+  </Step>
+  <Step title="Collect patient information">
+    Name, date of birth, contact details, insurance provider, and preferred appointment times are captured during the call.
+  </Step>
+  <Step title="Insurance verification">
+    The AI notes insurance details for your team to verify before the appointment and informs the patient about accepted plans.
+  </Step>
+  <Step title="Book first appointment">
+    A new patient appointment is scheduled based on the type of visit needed (cleaning, consultation, emergency) and doctor availability.
+  </Step>
+  <Step title="Pre-visit instructions">
+    The AI provides directions, parking information, what to bring (ID, insurance card), and arrives-early guidance.
+  </Step>
+</Steps>
+
+### 3. Recall and Hygiene Campaigns
+
+Keeping patients on a regular recall schedule is critical for both patient health and practice revenue. SmartAlex automates the entire process:
+
+- **6-month recall reminders**: Outbound calls to patients due for their biannual cleaning and exam
+- **Treatment follow-ups**: Contact patients who had treatment plans presented but did not schedule
+- **Overdue patients**: Reach out to patients who have gone 8+ months since their last visit
+- **Reactivation campaigns**: Re-engage patients who have not visited in 12-18 months with a friendly check-in call
+
+Each campaign call is personalized with the patient's name, last visit date, and recommended treatment, making the conversation feel personal rather than automated.
+
+### 4. Patient Inquiries and FAQ Handling
+
+Patients call with a wide range of questions that do not require clinical expertise:
+
+- **Office hours and location**: Address, parking, public transit options
+- **Insurance and payment**: Which plans are accepted, payment plan options, costs for common procedures
+- **Pre-procedure questions**: What to expect before a root canal, wisdom tooth extraction, or crown placement
+- **Post-procedure care**: Pain management, dietary restrictions, when to call back with concerns
+- **Services offered**: Teeth whitening, veneers, orthodontics, pediatric dentistry availability
+
+The AI answers these questions instantly using your practice's knowledge base, freeing your front desk to focus on in-office patients.
+
+### 5. After-Hours and Emergency Routing
+
+Dental emergencies do not wait for business hours. SmartAlex provides professional after-hours coverage:
+
+- **Emergency triage**: The AI assesses the urgency of the situation — severe pain, swelling, knocked-out tooth, broken crown
+- **Emergency routing**: True emergencies are transferred to the on-call dentist or directed to the nearest emergency dental clinic
+- **Non-urgent guidance**: For non-emergencies, the AI provides interim care advice and books the earliest available appointment
+- **Message taking**: Detailed messages are logged with all patient information for morning follow-up
+
+<Warning>
+  SmartAlex does not provide medical diagnoses. The AI triages based on symptom descriptions and routes appropriately. All clinical decisions remain with your dental professionals.
+</Warning>
+
+### 6. Insurance and Billing Questions
+
+Insurance inquiries are one of the most time-consuming call types for front desk staff:
+
+- Confirms whether the practice accepts the patient's insurance plan
+- Explains coverage for common procedures (cleanings, fillings, crowns, orthodontics)
+- Provides estimated out-of-pocket costs based on typical coverage
+- Explains payment plan options for uninsured or underinsured patients
+- Directs complex billing questions to your billing coordinator with a warm handoff
+
+## Sample Agent Prompt
+
+Here is an example system prompt for a dental practice AI voice agent:
+
+```text
+You are Maya, the AI receptionist for Bright Smile Dental. You are friendly,
+patient, and professional. You handle all inbound calls with a calm,
+reassuring tone — many callers are anxious about dental visits.
+
+Your primary responsibilities:
+1. Schedule, reschedule, and cancel appointments by checking the practice
+   calendar for availability.
+2. Collect new patient information: full name, date of birth, phone number,
+   email, insurance provider and member ID, and primary dental concern.
+3. Answer common questions about office hours (Mon-Fri 8am-5pm, Sat 9am-1pm),
+   location (123 Oak Street, Suite 200), accepted insurance plans, and
+   available services.
+4. Handle after-hours calls by assessing urgency and routing emergencies
+   to Dr. Chen (on-call dentist).
+5. Process recall campaign calls for patients due for their 6-month cleaning.
+
+Accepted insurance plans: Delta Dental, Cigna, MetLife, Aetna, Guardian,
+United Healthcare Dental.
+
+Emergency assessment questions:
+- "Are you experiencing severe pain or swelling?"
+- "Is there any bleeding that will not stop?"
+- "Have you had a tooth knocked out or broken?"
+- "Do you have difficulty breathing or swallowing?"
+
+For true emergencies (severe swelling, difficulty breathing, uncontrolled
+bleeding, knocked-out tooth), transfer immediately to the on-call dentist.
+
+For non-emergencies, provide comfort guidance:
+- "Apply a cold compress to reduce swelling"
+- "Over-the-counter pain medication can help manage discomfort"
+- "Rinse gently with warm salt water"
+Then book the earliest available appointment.
+
+Always be empathetic. Many patients are nervous. Use phrases like:
+- "I understand that can be uncomfortable"
+- "We will take great care of you"
+- "Dr. Chen and the team are wonderful — you are in good hands"
+```
+
+## ROI and Results
+
+<Columns>
+  <Card title="$8,000-15,000/mo in Captured Revenue" icon="dollar-sign">
+    By answering 100% of calls and converting inquiries to appointments, practices capture patients that would have called competitors.
+  </Card>
+  <Card title="30% Reduction in No-Shows" icon="calendar-check">
+    Automated confirmation and reminder calls significantly reduce missed appointments, protecting your schedule and revenue.
+  </Card>
+  <Card title="15+ Hours Saved Weekly" icon="clock">
+    Front desk staff spend dramatically less time on the phone, allowing them to deliver better in-office patient experiences.
+  </Card>
+  <Card title="90% Recall Compliance" icon="rotate">
+    Automated recall campaigns achieve far higher contact and rebooking rates than manual reminder calls or postcards.
+  </Card>
+</Columns>
+
+## Frequently Asked Questions
+
+<Accordion title="Can the AI access my practice management system?">
+  SmartAlex integrates with popular dental practice management systems to check appointment availability in real time. The AI can book directly into open slots based on appointment type, provider, and patient preferences. Setup is straightforward and does not require changes to your existing workflow.
+</Accordion>
+
+<Accordion title="How does the AI handle anxious or upset patients?">
+  The AI is configured with empathetic language patterns specific to dental care. It acknowledges patient concerns, uses reassuring phrases, and never rushes the conversation. For patients who are very distressed, the AI can transfer to a live team member immediately.
+</Accordion>
+
+<Accordion title="Can I run recall campaigns for specific patient segments?">
+  Yes. You can segment patients by last visit date, treatment type, insurance status, or any other criteria in your database. SmartAlex Campaign Manager lets you create targeted campaigns — for example, calling only patients who are 7+ months overdue for a cleaning.
+</Accordion>
+
+<Accordion title="Does the AI handle multiple dentists and hygienists?">
+  Absolutely. The AI manages scheduling across your entire provider team, respecting each provider's hours, appointment types, and scheduling preferences. A cleaning request goes to hygienist availability; a crown consultation goes to the dentist.
+</Accordion>
+
+<Accordion title="What about HIPAA compliance?">
+  SmartAlex takes data security seriously. All call data is encrypted in transit and at rest. The platform does not store protected health information (PHI) beyond what is necessary for call handling, and access controls ensure only authorized practice staff can view patient data. We recommend consulting your compliance officer for specific HIPAA requirements.
+</Accordion>
+
+<Accordion title="How quickly can we get started?">
+  Most dental practices are live within 24-48 hours. Configuration includes setting up your appointment types, office hours, insurance plans, and emergency routing rules. No technical expertise is required.
+</Accordion>
+
+<Accordion title="Can patients book specific procedures?">
+  Yes. The AI can differentiate between appointment types — cleanings, exams, fillings, consultations, emergency visits — and book the appropriate time slot with the correct provider. Each appointment type can have its own duration and scheduling rules.
+</Accordion>
+
+## Get Started
+
+SmartAlex is built for dental practices that want to capture every new patient call, reduce no-shows, and free their front desk from phone overload. Whether you are a solo practitioner or a multi-location group practice, the platform scales with you.
+
+<Card title="Try SmartAlex for Your Dental Practice" icon="rocket" href="https://getsmartalex.com">
+  Start your free trial and have your AI receptionist answering calls within 24 hours.
+</Card>

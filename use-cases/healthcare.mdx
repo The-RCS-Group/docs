@@ -1,0 +1,231 @@
+---
+title: "AI Voice Assistant for Healthcare"
+description: "How healthcare providers use SmartAlex to manage patient calls, appointment scheduling, prescription refill requests, and follow-up care coordination."
+---
+
+# AI Voice Assistant for Healthcare
+
+SmartAlex gives healthcare providers an AI voice agent that handles patient calls around the clock — scheduling appointments, processing prescription refill requests, routing urgent clinical concerns, and running follow-up care campaigns — so clinical and administrative staff can focus on delivering care.
+
+Healthcare practices face a unique challenge: high call volumes with wide-ranging complexity. From a patient checking office hours to someone reporting post-surgical complications, every call requires the right response. SmartAlex triages, routes, and resolves patient calls with clinical-grade reliability.
+
+## Why Healthcare Providers Choose SmartAlex
+
+<Columns>
+  <Card title="Reduce Patient Wait Times" icon="phone">
+    Patients reach a responsive AI in under 1 second instead of waiting on hold for 8-12 minutes — the industry average for medical practices.
+  </Card>
+  <Card title="Clinical Triage Routing" icon="stethoscope">
+    The AI assesses symptom urgency and routes appropriately — emergencies to on-call providers, routine matters to scheduling, billing questions to the business office.
+  </Card>
+  <Card title="Prescription Refill Processing" icon="prescription">
+    Patients request refills by providing their medication name, pharmacy, and date of birth. The request is routed to the clinical team for approval.
+  </Card>
+  <Card title="Care Follow-Up Campaigns" icon="heart-pulse">
+    Automated outbound calls for post-discharge check-ins, chronic disease management reminders, and preventive care scheduling.
+  </Card>
+</Columns>
+
+## Key Use Cases
+
+### 1. Appointment Scheduling and Management
+
+Scheduling is the highest-volume call type for most healthcare practices. SmartAlex handles the full lifecycle:
+
+- **New patient appointments**: Collects demographics, insurance information, referral details, and chief complaint before booking
+- **Established patient scheduling**: Verifies patient identity, checks provider availability, and books the appropriate appointment type
+- **Rescheduling and cancellations**: Processes changes and backfills cancelled slots from the waitlist
+- **Multi-provider scheduling**: Routes to the correct provider based on specialty, condition type, or patient preference
+- **Pre-visit instructions**: Delivers fasting requirements, what to bring, arrival time guidance, and telehealth login instructions
+
+<Note>
+  Healthcare practices using SmartAlex report handling 60-70% of scheduling calls without any human involvement, freeing front desk staff to assist in-office patients.
+</Note>
+
+### 2. Clinical Triage and Urgent Call Routing
+
+Not every call is equal. The AI assesses urgency and routes accordingly:
+
+<Steps>
+  <Step title="Symptom assessment">
+    The AI asks structured questions about the patient's symptoms, duration, severity, and any red-flag indicators.
+  </Step>
+  <Step title="Urgency classification">
+    Based on responses, the call is classified as emergency, urgent, or routine. This classification follows your practice's triage protocols.
+  </Step>
+  <Step title="Appropriate routing">
+    Emergencies transfer to the on-call provider or direct the patient to call 911. Urgent matters go to the triage nurse queue. Routine calls proceed to scheduling or message-taking.
+  </Step>
+  <Step title="Documentation">
+    The full triage conversation is logged with timestamps, symptom details, and routing decisions for clinical review.
+  </Step>
+</Steps>
+
+<Warning>
+  SmartAlex does not provide medical diagnoses or clinical advice. The AI follows your practice's triage protocols to route calls appropriately. All clinical decisions remain with your licensed providers.
+</Warning>
+
+### 3. Prescription Refill Requests
+
+Prescription refill calls are repetitive and high-volume. The AI streamlines the process:
+
+- Verifies patient identity (name, date of birth, medical record number)
+- Captures medication name, dosage, and quantity
+- Confirms preferred pharmacy
+- Routes the refill request to the prescribing provider for review and approval
+- Informs the patient of expected turnaround time
+
+This eliminates the back-and-forth phone tag between patients, front desk staff, and clinical teams that typically delays refills by 24-48 hours.
+
+### 4. Lab Results and Test Notifications
+
+Outbound campaigns notify patients about lab results and next steps:
+
+- **Normal results**: The AI calls to confirm normal findings and remind the patient of their next recommended screening date
+- **Action required**: For results requiring follow-up, the AI schedules an appointment with the appropriate provider
+- **Pending results**: Patients calling to check on pending results receive an estimated timeline and are reassured that the provider's office will contact them when results are ready
+
+### 5. Follow-Up Care Campaigns
+
+Proactive outreach improves patient outcomes and practice revenue:
+
+- **Post-discharge check-ins**: Call patients 48-72 hours after a procedure or hospital discharge to assess recovery and medication compliance
+- **Chronic disease management**: Regular check-in calls for patients with diabetes, hypertension, asthma, or other chronic conditions
+- **Preventive care reminders**: Annual physicals, mammograms, colonoscopies, flu shots, and other age/risk-appropriate screenings
+- **Missed appointment follow-up**: Contact patients who missed appointments to reschedule and assess whether the missed visit indicates a barrier to care
+- **Post-visit surveys**: Gather patient satisfaction feedback and identify issues before they become complaints
+
+### 6. Insurance and Billing Inquiries
+
+Administrative calls that do not require clinical expertise:
+
+- Verify whether the practice accepts the patient's insurance plan
+- Explain co-pay and deductible information for common visit types
+- Provide account balance information and payment options
+- Set up payment plans for outstanding balances
+- Route complex billing disputes to the billing department with context
+
+### 7. Multi-Location and Specialty Routing
+
+For healthcare organizations with multiple locations or specialties:
+
+- Route calls to the correct location based on the patient's address or preference
+- Direct specialty referral inquiries to the appropriate department (cardiology, orthopedics, dermatology)
+- Handle cross-location appointment transfers when a patient's preferred location is fully booked
+- Maintain consistent patient experience across all locations with unified AI configuration
+
+## Sample Agent Prompt
+
+Here is an example system prompt for a healthcare practice AI voice agent:
+
+```text
+You are Alex, the AI assistant for Meridian Health Partners, a multi-specialty
+medical practice. You are professional, empathetic, and efficient. Patient
+privacy and clinical safety are your highest priorities.
+
+Your primary responsibilities:
+1. Schedule, reschedule, and cancel patient appointments across all providers
+   and locations.
+2. Process prescription refill requests by collecting patient name, DOB,
+   medication name, dosage, and preferred pharmacy.
+3. Triage incoming calls based on urgency:
+   - EMERGENCY (chest pain, difficulty breathing, stroke symptoms, severe
+     bleeding): Direct patient to call 911 immediately
+   - URGENT (high fever, severe pain, worsening symptoms): Transfer to
+     triage nurse line
+   - ROUTINE (scheduling, refills, billing, general questions): Handle
+     directly or take a message
+4. Answer questions about office hours, locations, accepted insurance plans,
+   and available services.
+5. Handle lab result inquiries by checking status and providing expected
+   timelines.
+
+Locations:
+- Main Campus: 500 Medical Center Drive (Mon-Fri 7am-6pm, Sat 8am-12pm)
+- Eastside Clinic: 200 Commerce Blvd (Mon-Fri 8am-5pm)
+- Pediatrics: 150 Children's Way (Mon-Fri 8am-5pm)
+
+Patient verification (required for clinical requests):
+- Full name
+- Date of birth
+- Last four digits of phone number on file
+
+Accepted insurance: Blue Cross Blue Shield, Aetna, Cigna, UnitedHealthcare,
+Medicare, Medicaid, Humana, Tricare.
+
+Tone guidelines:
+- Always be patient and empathetic
+- Never rush a patient describing symptoms
+- Use clear, non-medical language when possible
+- If a patient seems distressed, acknowledge their concern before proceeding
+- Never provide medical advice, diagnoses, or treatment recommendations
+```
+
+## ROI and Results
+
+<Columns>
+  <Card title="45% Fewer Abandoned Calls" icon="phone-missed">
+    Instant AI response eliminates hold times that cause patients to hang up. More calls answered means fewer patients lost to competing practices.
+  </Card>
+  <Card title="20+ Staff Hours Saved Weekly" icon="clock">
+    Automating scheduling, refill requests, and FAQ calls frees administrative staff for in-office patient care and complex case management.
+  </Card>
+  <Card title="28% Improvement in Recall Rates" icon="calendar-check">
+    Automated preventive care campaigns achieve significantly higher contact rates than manual outreach or mailed reminders.
+  </Card>
+  <Card title="Higher Patient Satisfaction" icon="thumbs-up">
+    Patients rate their experience higher when calls are answered immediately and resolved without being transferred multiple times.
+  </Card>
+</Columns>
+
+## Compliance and Security Considerations
+
+<Note>
+  SmartAlex provides enterprise-grade security features including encryption in transit and at rest, role-based access controls, and audit logging. Healthcare organizations should evaluate the platform against their specific compliance requirements (HIPAA, HITECH, state regulations) with their compliance and legal teams. SmartAlex can support BAA execution for covered entities.
+</Note>
+
+Key security features relevant to healthcare:
+
+- **Encryption**: All call data and patient information encrypted in transit (TLS 1.3) and at rest (AES-256)
+- **Access controls**: Role-based permissions ensure only authorized staff access patient call data
+- **Audit logging**: Complete audit trail of all call interactions, data access, and system changes
+- **Data retention policies**: Configurable retention periods aligned with regulatory requirements
+- **Secure integrations**: API connections to practice management systems use authenticated, encrypted channels
+
+## Frequently Asked Questions
+
+<Accordion title="Does SmartAlex replace our clinical triage staff?">
+  No. SmartAlex handles the initial call intake and routing, but clinical triage decisions are made by your licensed clinical staff. The AI follows your practice's triage protocols to identify urgency and route calls appropriately. Think of it as a highly capable front-desk assistant that ensures clinical staff only receive calls that truly need their expertise.
+</Accordion>
+
+<Accordion title="Can the AI integrate with our EHR system?">
+  SmartAlex integrates with major EHR and practice management systems for appointment scheduling and patient verification. The depth of integration depends on your EHR's API capabilities. Common integrations include real-time schedule checking, appointment booking, and patient demographic lookup.
+</Accordion>
+
+<Accordion title="How does the AI handle patients who speak different languages?">
+  SmartAlex supports multiple languages and can be configured for the specific languages your patient population needs. The AI detects language preference early in the conversation and switches accordingly.
+</Accordion>
+
+<Accordion title="Can we customize the triage protocol?">
+  Yes. The triage routing rules are fully configurable to match your practice's clinical protocols. You define which symptoms route to the triage nurse, which trigger a 911 recommendation, and which can be handled as routine calls. Protocols can be updated at any time.
+</Accordion>
+
+<Accordion title="What happens during a system outage?">
+  SmartAlex is built on redundant infrastructure with automatic failover. In the unlikely event of a complete outage, calls fall back to your existing phone system routing (voicemail, answering service, or direct lines) based on your configuration.
+</Accordion>
+
+<Accordion title="Can the AI handle referral coordination?">
+  Yes. The AI can collect referral information from referring providers, verify insurance authorization requirements, and schedule the initial specialist appointment. Referral documents can be received via fax-to-digital integration for the clinical team to review.
+</Accordion>
+
+<Accordion title="How do we handle after-hours urgent calls?">
+  You define your after-hours protocol. Common configurations include: transferring urgent calls to the on-call provider's phone, routing to a nurse triage line, or directing patients to your partner urgent care facility. Non-urgent after-hours calls are logged for morning follow-up.
+</Accordion>
+
+## Get Started
+
+SmartAlex is built for healthcare organizations that need to handle high call volumes without compromising patient experience or clinical safety. From solo practices to multi-location health systems, the platform scales to meet your needs.
+
+<Card title="Try SmartAlex for Healthcare" icon="rocket" href="https://getsmartalex.com">
+  Start your free trial and experience AI-powered patient call management within 48 hours.
+</Card>

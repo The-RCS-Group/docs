@@ -1,0 +1,299 @@
+---
+title: "MCP Getting Started"
+description: "Connect SmartAlex to Claude, Cursor, VS Code, or any MCP-compatible AI assistant in under 2 minutes. Manage voice agents and campaigns through natural conversation."
+---
+
+# Getting Started with SmartAlex MCP
+
+Connect SmartAlex to your AI assistant in under 2 minutes. Once connected, you can manage voice agents, campaigns, contacts, and deals through natural conversation.
+
+## Prerequisites
+
+- A SmartAlex account at [getsmartalex.com](https://getsmartalex.com)
+- An API key (generate one from **Settings > API Keys** in your dashboard)
+- Node.js 18+ (for local installation only)
+
+---
+
+## Quick Install
+
+### Cloud Connection (Recommended)
+
+No installation required. Connect directly to SmartAlex's hosted MCP endpoint:
+
+```bash
+# Claude Code
+claude mcp add --transport http smartalex https://mcp.getsmartalex.com
+```
+
+### Local Installation
+
+Run locally via npx (no global install needed):
+
+```bash
+SMARTALEX_API_KEY=sa_live_your_key_here npx @smartalex/mcp-server
+```
+
+Or install globally:
+
+```bash
+npm install -g @smartalex/mcp-server
+```
+
+---
+
+## Client Configuration
+
+### Claude Code
+
+**Cloud (recommended):**
+
+```bash
+claude mcp add --transport http smartalex https://mcp.getsmartalex.com
+```
+
+Then set your API key when prompted, or pass it as a header:
+
+```bash
+claude mcp add --transport http \
+  --header "Authorization: Bearer sa_live_your_key_here" \
+  smartalex https://mcp.getsmartalex.com
+```
+
+**Local:**
+
+```bash
+claude mcp add smartalex -- npx @smartalex/mcp-server
+```
+
+Set your API key as an environment variable:
+
+```bash
+export SMARTALEX_API_KEY=sa_live_your_key_here
+```
+
+### Claude Desktop
+
+Add to your Claude Desktop configuration file:
+
+**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "smartalex": {
+      "command": "npx",
+      "args": ["@smartalex/mcp-server"],
+      "env": {
+        "SMARTALEX_API_KEY": "sa_live_your_key_here"
+      }
+    }
+  }
+}
+```
+
+Restart Claude Desktop after saving the configuration.
+
+### Cursor
+
+Add to `.cursor/mcp.json` in your project root (or global config):
+
+```json
+{
+  "mcpServers": {
+    "smartalex": {
+      "command": "npx",
+      "args": ["@smartalex/mcp-server"],
+      "env": {
+        "SMARTALEX_API_KEY": "sa_live_your_key_here"
+      }
+    }
+  }
+}
+```
+
+Restart Cursor after saving.
+
+### VS Code (GitHub Copilot)
+
+Add to your VS Code settings (`.vscode/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "smartalex": {
+      "command": "npx",
+      "args": ["@smartalex/mcp-server"],
+      "env": {
+        "SMARTALEX_API_KEY": "sa_live_your_key_here"
+      }
+    }
+  }
+}
+```
+
+### ChatGPT
+
+ChatGPT supports MCP via HTTP transport. Use the cloud endpoint:
+
+```
+https://mcp.getsmartalex.com
+```
+
+Configure your API key in the ChatGPT MCP settings when adding the server.
+
+---
+
+## Authentication Setup
+
+### Getting Your API Key
+
+1. Log in to [getsmartalex.com](https://getsmartalex.com)
+2. Go to **Settings > API Keys**
+3. Click **Generate New Key**
+4. Choose your environment:
+   - **Production** keys start with `sa_live_`
+   - **Test** keys start with `sa_test_`
+5. Copy the key immediately — it won't be shown again
+
+### Environment Variables
+
+Set your API key as an environment variable:
+
+```bash
+# macOS/Linux — add to ~/.zshrc or ~/.bashrc
+export SMARTALEX_API_KEY=sa_live_your_key_here
+
+# Windows PowerShell
+$env:SMARTALEX_API_KEY = "sa_live_your_key_here"
+```
+
+### OAuth 2.0 (Advanced)
+
+For applications requiring delegated access:
+
+```
+Authorization URL: https://getsmartalex.com/oauth/authorize
+Token URL:         https://getsmartalex.com/oauth/token
+Scopes:            contacts:read contacts:write agents:read campaigns:read
+                   campaigns:write calls:read deals:read deals:write
+                   webhooks:read webhooks:write platform:read
+```
+
+---
+
+## Your First Tool Call
+
+Once connected, try asking your AI assistant:
+
+> "List my SmartAlex contacts"
+
+The assistant will use the `list_contacts` tool and return your contacts:
+
+```
+Assistant: I found 47 contacts in your SmartAlex account. Here are the most recent:
+
+1. Sarah Johnson — sarah@example.com — +1 (555) 123-4567 — Tag: enterprise
+2. Michael Chen — michael@chen.co — +1 (555) 234-5678 — Tag: smb
+3. Lisa Park — lisa.park@corp.io — +1 (555) 345-6789 — Tag: enterprise
+...
+```
+
+### More Examples
+
+**Check platform health:**
+> "What's the status of my SmartAlex platform?"
+
+**Analyze recent calls:**
+> "Show me calls from the last 7 days and summarize the outcomes"
+
+**Create a contact:**
+> "Add a new contact: John Smith, john@acme.com, +1 555 987 6543"
+
+**Review your pipeline:**
+> "Show me all deals in the pipeline sorted by value"
+
+**Design a campaign:**
+> "Help me design an outbound campaign for my enterprise contacts"
+
+This last example uses the `campaign-strategy` prompt to guide a multi-step conversation.
+
+---
+
+## Cloud vs Local
+
+| Feature | Cloud | Local |
+|---------|-------|-------|
+| **Setup** | No installation | Requires Node.js 18+ |
+| **Transport** | HTTP | stdio |
+| **Latency** | ~50ms (edge-hosted) | ~10ms + API round-trip |
+| **Updates** | Automatic | `npm update` required |
+| **Offline use** | No | No (still needs API) |
+| **Best for** | ChatGPT, quick setup | Claude Code, Cursor, VS Code |
+
+**Recommendation:** Use cloud for the fastest setup. Use local if you want to pin a specific version or your organization requires local-only tool execution.
+
+---
+
+## Troubleshooting
+
+### "Connection refused" or "Server not found"
+
+**Cloud:** Verify the endpoint URL is exactly `https://mcp.getsmartalex.com`. Check your network allows outbound HTTPS.
+
+**Local:** Ensure Node.js 18+ is installed:
+
+```bash
+node --version  # Should be v18.0.0 or higher
+```
+
+### "Authentication failed" or "Invalid API key"
+
+- Verify your key starts with `sa_live_` (production) or `sa_test_` (test)
+- Regenerate the key from **Settings > API Keys** if expired
+- Check the environment variable is set correctly:
+
+```bash
+echo $SMARTALEX_API_KEY  # Should print your key
+```
+
+### "Tool not found" or tools not appearing
+
+- Restart your AI client after configuration changes
+- For Claude Desktop: fully quit and reopen (not just close the window)
+- For Cursor: use the command palette > "Reload Window"
+- Verify the server is running:
+
+```bash
+npx @smartalex/mcp-server --health
+```
+
+### Rate Limiting
+
+The SmartAlex MCP server respects your account's API rate limits:
+
+| Plan | Requests/minute | Requests/day |
+|------|-----------------|--------------|
+| Starter | 60 | 5,000 |
+| Professional | 300 | 50,000 |
+| Enterprise | 1,000 | Unlimited |
+
+If you hit rate limits, the server returns a `429` status with a `Retry-After` header. Most AI clients handle this automatically.
+
+### Debug Mode
+
+Run the local server with debug logging to diagnose issues:
+
+```bash
+SMARTALEX_DEBUG=true SMARTALEX_API_KEY=sa_live_xxx npx @smartalex/mcp-server
+```
+
+This outputs detailed request/response logs to stderr.
+
+---
+
+## Next Steps
+
+- [Tools Reference](/mcp/tools-reference) — Complete reference for all 18 tools with parameters and examples
+- [MCP Overview](/mcp/overview) — Architecture, resources, prompts, and workflows

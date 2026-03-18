@@ -1,0 +1,246 @@
+---
+title: "AI Voice Assistant for Law Firms"
+description: "How law firms use SmartAlex to handle client intake, consultation scheduling, case status inquiries, and after-hours call coverage with AI voice agents."
+---
+
+# AI Voice Assistant for Law Firms
+
+SmartAlex gives law firms an AI voice agent that captures every potential client call, conducts structured intake interviews, schedules consultations, and provides case status updates — so attorneys spend their time practicing law instead of managing phone calls.
+
+Law firms live and die by responsiveness. Studies show that 35-50% of potential clients hire the first firm that responds to their inquiry. When your phones ring during depositions, court appearances, or after hours, SmartAlex ensures every caller gets an immediate, professional response that moves them toward becoming a client.
+
+## Why Law Firms Choose SmartAlex
+
+<Columns>
+  <Card title="Win the Speed-to-Response Race" icon="bolt">
+    Answer every call in under 1 second. While competing firms send callers to voicemail, your AI is already qualifying the lead and booking a consultation.
+  </Card>
+  <Card title="Structured Client Intake" icon="clipboard">
+    The AI conducts a thorough intake interview — collecting case details, contact information, and conflict check data — before the attorney ever picks up the phone.
+  </Card>
+  <Card title="After-Hours Coverage" icon="moon">
+    Legal emergencies do not follow business hours. The AI handles calls nights, weekends, and holidays with the same professionalism as your best receptionist.
+  </Card>
+  <Card title="Case Status Updates" icon="file-text">
+    Existing clients calling for status updates get immediate answers from the AI, reducing interruptions to attorney workflow.
+  </Card>
+</Columns>
+
+## Key Use Cases
+
+### 1. New Client Intake
+
+The intake process is critical for law firms. A well-conducted intake captures essential case information and creates a strong first impression. The AI handles this systematically:
+
+<Steps>
+  <Step title="Initial qualification">
+    The AI determines the practice area (personal injury, family law, criminal defense, estate planning, business law) and assesses whether the matter falls within the firm's areas of practice.
+  </Step>
+  <Step title="Case details collection">
+    Structured questions gather the key facts: what happened, when it happened, who is involved, any deadlines or court dates, and whether the caller has spoken with other attorneys.
+  </Step>
+  <Step title="Contact information">
+    Full name, phone number, email address, and preferred contact method are captured and verified.
+  </Step>
+  <Step title="Conflict check data">
+    The AI collects names of all parties involved so the firm can run a conflict check before the initial consultation.
+  </Step>
+  <Step title="Consultation scheduling">
+    Qualified leads are offered available consultation slots. The AI books the appointment and sends confirmation details.
+  </Step>
+</Steps>
+
+<Note>
+  Law firms using structured AI intake report that attorneys arrive at initial consultations better prepared, reducing consultation time by 20-30% while increasing conversion rates because the client feels heard from the first interaction.
+</Note>
+
+### 2. Consultation Scheduling
+
+SmartAlex manages the consultation calendar efficiently:
+
+- **Attorney availability**: The AI checks each attorney's calendar and offers available slots based on practice area and case type
+- **Consultation types**: Differentiates between free initial consultations, paid consultations, and follow-up meetings
+- **Virtual vs. in-person**: Offers the client their preference and provides the appropriate details (office address or video link)
+- **Rescheduling**: Handles changes without disrupting the attorney's schedule
+- **Confirmation and reminders**: Automated calls 24 hours before the consultation reduce no-shows
+
+### 3. Case Status Inquiries
+
+Existing clients frequently call to check on their case. These calls are important for client satisfaction but disruptive to attorney productivity:
+
+- The AI verifies the caller's identity and pulls up their case information
+- Provides general status updates based on the information available (case stage, next scheduled event, pending items)
+- For matters requiring attorney input, takes a detailed message and schedules a callback
+- Tracks which clients are calling frequently, helping attorneys identify clients who may need proactive outreach
+
+### 4. After-Hours and Emergency Coverage
+
+Legal emergencies can happen anytime — an arrest, a protective order situation, or a business-critical deadline:
+
+- **Emergency routing**: True legal emergencies (arrest, restraining order, bail) transfer to the on-call attorney
+- **Urgent intake**: After-hours callers with time-sensitive matters (approaching statute of limitations, upcoming court dates) receive priority intake processing
+- **Standard after-hours**: General inquiries are handled with full intake, and the caller is assured of a next-business-day callback
+- **Weekend and holiday coverage**: Consistent professional response regardless of when the call comes in
+
+<Warning>
+  SmartAlex does not provide legal advice. The AI collects information and routes calls appropriately. All legal guidance must come from licensed attorneys at your firm.
+</Warning>
+
+### 5. Follow-Up and Nurture Campaigns
+
+Not every potential client is ready to retain an attorney immediately. SmartAlex keeps your firm top of mind:
+
+- **Post-consultation follow-up**: Call potential clients who attended a consultation but have not yet signed a retainer
+- **Referral thank-you calls**: Thank referral sources and provide updates on referred clients (with appropriate permissions)
+- **Case milestone updates**: Proactive outbound calls to inform clients of significant case developments
+- **Payment reminders**: Professional follow-up on outstanding invoices and payment plan reminders
+- **Review requests**: After case resolution, request client testimonials and online reviews
+
+### 6. Conflict Checks and Screening
+
+Before accepting a new client, firms must verify no conflicts of interest exist:
+
+- The AI collects all party names, company names, and related entities during intake
+- This data is formatted and ready for the firm's conflict check system
+- If the firm maintains a do-not-accept list, the AI can screen against it in real time
+- Cases involving opposing parties already represented by the firm are flagged immediately
+
+### 7. Multi-Practice Area Routing
+
+For firms with multiple practice areas, the AI routes calls to the right team:
+
+- **Personal injury**: Accident details, injury severity, insurance information, treatment status
+- **Family law**: Matter type (divorce, custody, adoption), current situation, children involved, urgency
+- **Criminal defense**: Charge type, arrest status, court date, bail situation
+- **Estate planning**: Estate size, existing documents, family situation, goals
+- **Business law**: Entity type, matter type (formation, litigation, contracts), industry, revenue
+
+Each practice area has customized intake questions and routing rules.
+
+## Sample Agent Prompt
+
+Here is an example system prompt for a law firm AI voice agent:
+
+```text
+You are James, the AI intake specialist for Morrison & Associates, a full-service
+law firm. You are professional, articulate, and reassuring. You understand that
+people calling a law firm are often stressed or in difficult situations.
+
+Your primary responsibilities:
+1. Conduct structured intake interviews for new potential clients, collecting
+   case details, contact information, and conflict check data.
+2. Schedule consultations with the appropriate attorney based on practice area
+   and case type.
+3. Provide case status updates to existing clients after verifying their
+   identity (full name + case number or date of birth).
+4. Handle after-hours calls by assessing urgency and routing emergencies to
+   the on-call attorney.
+5. Answer general firm questions about location, hours, practice areas, and
+   consultation fees.
+
+Practice areas and intake leads:
+- Personal Injury (Sarah Morrison) — auto accidents, slip and fall, medical
+  malpractice, product liability
+- Family Law (David Chen) — divorce, child custody, adoption, prenuptial
+  agreements
+- Criminal Defense (Rachel Torres) — DUI, drug charges, white collar crime,
+  assault
+- Estate Planning (Michael Park) — wills, trusts, probate, power of attorney
+- Business Law (Sarah Morrison) — formation, contracts, litigation, employment
+
+Intake questions for ALL practice areas:
+- "Can you briefly describe your legal situation?"
+- "When did this occur, or when did you first become aware of the issue?"
+- "Are there any upcoming deadlines or court dates I should be aware of?"
+- "Have you spoken with any other attorneys about this matter?"
+- "What is the best way and time to reach you?"
+
+For personal injury, also ask:
+- "Were you injured? What type of injuries?"
+- "Have you received medical treatment?"
+- "Was a police report filed?"
+- "Do you have the other party's insurance information?"
+
+For criminal defense, also ask:
+- "Have you been arrested or charged?"
+- "Do you have a court date scheduled?"
+- "Are you currently in custody or out on bail?"
+
+Emergency routing (after hours):
+- Arrest or in custody → Transfer to on-call attorney immediately
+- Restraining order needed → Transfer to on-call attorney
+- All other matters → Complete intake, assure next-business-day callback
+
+Office information:
+- Address: 200 Legal Center Parkway, Suite 400
+- Hours: Monday-Friday 8:30am-5:30pm
+- Free initial consultation for personal injury and criminal defense
+- $250 consultation fee for family law and estate planning
+
+CRITICAL: Never provide legal advice, case assessments, or predictions about
+case outcomes. You collect information and schedule — legal guidance comes
+only from the attorneys.
+
+Tone: Professional but warm. Acknowledge the difficulty of the caller's
+situation. Use phrases like:
+- "I understand this is a stressful situation"
+- "You have reached the right place — our attorneys handle these matters
+  regularly"
+- "Let me get some details so we can have the right attorney prepared for
+  your consultation"
+```
+
+## ROI and Results
+
+<Columns>
+  <Card title="40% More Retained Clients" icon="chart-line">
+    Faster response times and professional intake convert more callers into paying clients. The first firm to respond wins the case.
+  </Card>
+  <Card title="$150,000+ Annual Revenue Recovery" icon="dollar-sign">
+    For mid-size firms, capturing after-hours and missed calls translates directly to cases and revenue that would otherwise go to competitors.
+  </Card>
+  <Card title="25 Hours Saved Per Attorney Weekly" icon="clock">
+    Attorneys spend less time on intake calls, status inquiries, and phone tag — reclaiming billable hours for case work.
+  </Card>
+  <Card title="68% Reduction in Client Complaints" icon="thumbs-up">
+    Immediate call response and proactive status updates address the top client complaint at law firms: lack of communication.
+  </Card>
+</Columns>
+
+## Frequently Asked Questions
+
+<Accordion title="Does the AI provide legal advice to callers?">
+  No. SmartAlex is explicitly configured to never provide legal advice, case assessments, or predictions about outcomes. The AI collects information, schedules consultations, and routes calls to attorneys. A clear disclaimer is part of every interaction when a caller asks for legal guidance.
+</Accordion>
+
+<Accordion title="How does the AI handle sensitive or emotional callers?">
+  The AI is configured with empathetic response patterns appropriate for legal settings. It acknowledges the difficulty of the caller's situation, uses reassuring language, and never rushes the conversation. For callers in crisis (domestic violence, active threat), the AI follows your firm's crisis protocol, which may include immediate transfer to the on-call attorney or directing them to emergency services.
+</Accordion>
+
+<Accordion title="Can the AI handle intake for multiple practice areas?">
+  Yes. The AI is configured with practice-area-specific intake scripts and questions. When a caller describes their situation, the AI identifies the relevant practice area and follows the appropriate intake flow, then routes to the correct attorney or team.
+</Accordion>
+
+<Accordion title="Is attorney-client privilege protected?">
+  SmartAlex processes call data with encryption in transit and at rest. However, communications with an AI intake system may not be protected by attorney-client privilege in all jurisdictions. We recommend consulting with your firm's ethics counsel on appropriate disclaimers for your jurisdiction.
+</Accordion>
+
+<Accordion title="Can the AI check for conflicts of interest?">
+  The AI collects all party names and entity names during intake, formatted for your firm's conflict check process. For firms that maintain a digital conflict database, the AI can screen against a do-not-accept list in real time. Full conflict clearance remains the responsibility of your attorneys.
+</Accordion>
+
+<Accordion title="How does billing and payment reminder campaigns work?">
+  SmartAlex can run outbound campaigns to remind clients of outstanding balances, upcoming payment plan installments, or retainer replenishment needs. The AI handles these calls with professionalism and sensitivity, offering to connect the caller with your billing department for questions or to set up payment arrangements.
+</Accordion>
+
+<Accordion title="Can we customize intake forms by practice area and attorney?">
+  Yes. Each practice area can have its own set of intake questions, qualifying criteria, and routing rules. Individual attorneys can have specific preferences for the types of cases they accept, preferred appointment slots, and consultation formats (in-person vs. virtual).
+</Accordion>
+
+## Get Started
+
+SmartAlex is built for law firms that understand the cost of a missed call: a lost client. Whether you are a solo practitioner, a boutique firm, or a multi-office practice, SmartAlex ensures every potential client gets an immediate, professional response.
+
+<Card title="Try SmartAlex for Your Law Firm" icon="rocket" href="https://getsmartalex.com">
+  Start your free trial and have your AI intake specialist answering calls within 24 hours.
+</Card>

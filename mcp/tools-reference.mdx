@@ -1,0 +1,891 @@
+---
+title: "MCP Tools Reference"
+description: "Complete reference for all 18 SmartAlex MCP tools. Manage contacts, agents, campaigns, calls, deals, and webhooks from any MCP-compatible AI assistant."
+---
+
+# MCP Tools Reference
+
+Complete reference for all 18 SmartAlex MCP tools, organized by domain. Each tool includes its description, parameters, and example usage.
+
+---
+
+## Contacts
+
+### list_contacts
+
+List and search contacts with filters.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `query` | string | No | Search by name, email, or phone number |
+| `tags` | string[] | No | Filter by one or more tags |
+| `created_after` | string | No | ISO 8601 date — only contacts created after this date |
+| `created_before` | string | No | ISO 8601 date — only contacts created before this date |
+| `limit` | number | No | Maximum results to return (default: 50, max: 200) |
+| `offset` | number | No | Pagination offset (default: 0) |
+
+**Example usage:**
+
+```
+"List all contacts tagged 'enterprise' created in the last 30 days"
+```
+
+**Example response:**
+
+```json
+{
+  "contacts": [
+    {
+      "id": "c_01HQ...",
+      "first_name": "Sarah",
+      "last_name": "Johnson",
+      "email": "sarah@example.com",
+      "phone": "+15551234567",
+      "tags": ["enterprise", "decision-maker"],
+      "created_at": "2026-03-01T10:30:00Z",
+      "updated_at": "2026-03-15T14:22:00Z"
+    }
+  ],
+  "total": 12,
+  "limit": 50,
+  "offset": 0
+}
+```
+
+---
+
+### get_contact
+
+Get a specific contact by ID with full details.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `contact_id` | string | Yes | The contact ID |
+
+**Example usage:**
+
+```
+"Get the full details for contact c_01HQ..."
+```
+
+**Example response:**
+
+```json
+{
+  "id": "c_01HQ...",
+  "first_name": "Sarah",
+  "last_name": "Johnson",
+  "email": "sarah@example.com",
+  "phone": "+15551234567",
+  "company": "Acme Corp",
+  "job_title": "VP of Operations",
+  "tags": ["enterprise", "decision-maker"],
+  "custom_fields": {
+    "industry": "Manufacturing",
+    "employee_count": "500-1000"
+  },
+  "notes": "Met at SaaStr 2026. Interested in outbound AI calling.",
+  "call_count": 3,
+  "last_called_at": "2026-03-10T09:15:00Z",
+  "campaigns": ["camp_01HR..."],
+  "deals": ["deal_01HS..."],
+  "created_at": "2026-03-01T10:30:00Z",
+  "updated_at": "2026-03-15T14:22:00Z"
+}
+```
+
+---
+
+### create_contact
+
+Create a new contact.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `first_name` | string | Yes | Contact's first name |
+| `last_name` | string | Yes | Contact's last name |
+| `email` | string | No | Email address |
+| `phone` | string | No | Phone number in E.164 format (e.g., +15551234567) |
+| `company` | string | No | Company name |
+| `job_title` | string | No | Job title |
+| `tags` | string[] | No | Tags to assign |
+| `custom_fields` | object | No | Key-value pairs for custom fields |
+| `notes` | string | No | Free-text notes |
+
+**Example usage:**
+
+```
+"Create a contact: John Smith at Acme Corp, john@acme.com, +1 555 987 6543, tag as enterprise"
+```
+
+**Example response:**
+
+```json
+{
+  "id": "c_01HT...",
+  "first_name": "John",
+  "last_name": "Smith",
+  "email": "john@acme.com",
+  "phone": "+15559876543",
+  "company": "Acme Corp",
+  "tags": ["enterprise"],
+  "created_at": "2026-03-18T12:00:00Z"
+}
+```
+
+---
+
+### update_contact
+
+Update contact details.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `contact_id` | string | Yes | The contact ID to update |
+| `first_name` | string | No | Updated first name |
+| `last_name` | string | No | Updated last name |
+| `email` | string | No | Updated email address |
+| `phone` | string | No | Updated phone number in E.164 format |
+| `company` | string | No | Updated company name |
+| `job_title` | string | No | Updated job title |
+| `tags` | string[] | No | Replace all tags (use `add_tags`/`remove_tags` for incremental) |
+| `add_tags` | string[] | No | Tags to add without replacing existing |
+| `remove_tags` | string[] | No | Tags to remove |
+| `custom_fields` | object | No | Custom fields to update (merged with existing) |
+| `notes` | string | No | Updated notes (replaces existing) |
+
+**Example usage:**
+
+```
+"Update contact c_01HQ... — add the tag 'qualified' and set job title to 'CTO'"
+```
+
+**Example response:**
+
+```json
+{
+  "id": "c_01HQ...",
+  "first_name": "Sarah",
+  "last_name": "Johnson",
+  "job_title": "CTO",
+  "tags": ["enterprise", "decision-maker", "qualified"],
+  "updated_at": "2026-03-18T12:05:00Z"
+}
+```
+
+---
+
+## Agents
+
+### list_agents
+
+List all voice agents with status and configuration summary.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `status` | string | No | Filter by status: `active`, `inactive`, `draft` |
+| `limit` | number | No | Maximum results (default: 50) |
+
+**Example usage:**
+
+```
+"Show me all active voice agents"
+```
+
+**Example response:**
+
+```json
+{
+  "agents": [
+    {
+      "id": "agent_01HP...",
+      "name": "Sales Outreach Agent",
+      "status": "active",
+      "mode": "advanced",
+      "voice": "alloy",
+      "language": "en-US",
+      "calls_today": 42,
+      "avg_duration_seconds": 185,
+      "created_at": "2026-02-15T08:00:00Z"
+    },
+    {
+      "id": "agent_01HQ...",
+      "name": "Customer Support Agent",
+      "status": "active",
+      "mode": "standard",
+      "voice": "nova",
+      "language": "en-US",
+      "calls_today": 18,
+      "avg_duration_seconds": 240,
+      "created_at": "2026-02-20T10:30:00Z"
+    }
+  ],
+  "total": 2
+}
+```
+
+---
+
+### get_agent
+
+Get full agent details including prompt, voice settings, and tools.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `agent_id` | string | Yes | The agent ID |
+
+**Example usage:**
+
+```
+"Get the full configuration for my Sales Outreach Agent"
+```
+
+**Example response:**
+
+```json
+{
+  "id": "agent_01HP...",
+  "name": "Sales Outreach Agent",
+  "status": "active",
+  "mode": "advanced",
+  "voice": {
+    "provider": "cartesia",
+    "voice_id": "alloy",
+    "speed": 1.0,
+    "emotion": "friendly"
+  },
+  "language": "en-US",
+  "system_prompt": "You are a professional sales development representative...",
+  "tools": ["transfer_call", "book_meeting", "send_sms"],
+  "first_message": "Hi, this is Alex from SmartAlex. How are you today?",
+  "max_duration_seconds": 300,
+  "analytics": {
+    "total_calls": 1247,
+    "avg_duration_seconds": 185,
+    "positive_sentiment_rate": 0.72,
+    "transfer_rate": 0.15
+  },
+  "created_at": "2026-02-15T08:00:00Z",
+  "updated_at": "2026-03-17T16:45:00Z"
+}
+```
+
+---
+
+## Campaigns
+
+### list_campaigns
+
+List campaigns with status filters.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `status` | string | No | Filter by status: `active`, `paused`, `completed`, `draft` |
+| `created_after` | string | No | ISO 8601 date filter |
+| `limit` | number | No | Maximum results (default: 50) |
+| `offset` | number | No | Pagination offset |
+
+**Example usage:**
+
+```
+"Show me all active campaigns"
+```
+
+**Example response:**
+
+```json
+{
+  "campaigns": [
+    {
+      "id": "camp_01HR...",
+      "name": "Q1 Enterprise Outreach",
+      "status": "active",
+      "agent_id": "agent_01HP...",
+      "total_contacts": 250,
+      "contacted": 142,
+      "remaining": 108,
+      "positive_outcomes": 38,
+      "started_at": "2026-03-01T09:00:00Z"
+    }
+  ],
+  "total": 1
+}
+```
+
+---
+
+### get_campaign
+
+Get campaign details and analytics.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `campaign_id` | string | Yes | The campaign ID |
+
+**Example usage:**
+
+```
+"Get detailed analytics for the Q1 Enterprise Outreach campaign"
+```
+
+**Example response:**
+
+```json
+{
+  "id": "camp_01HR...",
+  "name": "Q1 Enterprise Outreach",
+  "status": "active",
+  "agent_id": "agent_01HP...",
+  "agent_name": "Sales Outreach Agent",
+  "schedule": {
+    "timezone": "America/New_York",
+    "days": ["monday", "tuesday", "wednesday", "thursday", "friday"],
+    "start_time": "09:00",
+    "end_time": "17:00"
+  },
+  "contacts": {
+    "total": 250,
+    "contacted": 142,
+    "remaining": 108,
+    "answered": 98,
+    "voicemail": 31,
+    "no_answer": 13
+  },
+  "outcomes": {
+    "positive": 38,
+    "neutral": 42,
+    "negative": 18,
+    "callback_requested": 12
+  },
+  "analytics": {
+    "answer_rate": 0.69,
+    "positive_rate": 0.39,
+    "avg_call_duration_seconds": 165,
+    "total_talk_time_minutes": 391
+  },
+  "started_at": "2026-03-01T09:00:00Z",
+  "updated_at": "2026-03-18T11:30:00Z"
+}
+```
+
+---
+
+## Calls
+
+### list_calls
+
+List recent calls with filters.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `agent_id` | string | No | Filter by agent |
+| `campaign_id` | string | No | Filter by campaign |
+| `direction` | string | No | Filter by direction: `inbound`, `outbound` |
+| `status` | string | No | Filter by status: `completed`, `missed`, `voicemail`, `failed` |
+| `date_from` | string | No | ISO 8601 start date |
+| `date_to` | string | No | ISO 8601 end date |
+| `limit` | number | No | Maximum results (default: 50, max: 200) |
+| `offset` | number | No | Pagination offset |
+
+**Example usage:**
+
+```
+"Show me all calls from the last 7 days that resulted in a positive outcome"
+```
+
+**Example response:**
+
+```json
+{
+  "calls": [
+    {
+      "id": "call_01HS...",
+      "direction": "outbound",
+      "status": "completed",
+      "agent_id": "agent_01HP...",
+      "agent_name": "Sales Outreach Agent",
+      "contact_id": "c_01HQ...",
+      "contact_name": "Sarah Johnson",
+      "phone": "+15551234567",
+      "duration_seconds": 210,
+      "sentiment": "positive",
+      "outcome": "meeting_booked",
+      "started_at": "2026-03-17T14:30:00Z",
+      "ended_at": "2026-03-17T14:33:30Z"
+    }
+  ],
+  "total": 38,
+  "limit": 50,
+  "offset": 0
+}
+```
+
+---
+
+### get_call
+
+Get full call details including transcript, recording, and analysis.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `call_id` | string | Yes | The call ID |
+
+**Example usage:**
+
+```
+"Get the transcript and analysis for call call_01HS..."
+```
+
+**Example response:**
+
+```json
+{
+  "id": "call_01HS...",
+  "direction": "outbound",
+  "status": "completed",
+  "agent_id": "agent_01HP...",
+  "agent_name": "Sales Outreach Agent",
+  "contact_id": "c_01HQ...",
+  "contact_name": "Sarah Johnson",
+  "phone": "+15551234567",
+  "duration_seconds": 210,
+  "recording_url": "https://storage.getsmartalex.com/recordings/call_01HS....wav",
+  "transcript": [
+    {
+      "role": "agent",
+      "content": "Hi Sarah, this is Alex from SmartAlex. How are you today?",
+      "timestamp": 0.0
+    },
+    {
+      "role": "user",
+      "content": "Hi Alex, I'm doing well. I was actually expecting your call.",
+      "timestamp": 3.2
+    },
+    {
+      "role": "agent",
+      "content": "Great to hear! I wanted to follow up on the demo we discussed last week...",
+      "timestamp": 6.5
+    }
+  ],
+  "analysis": {
+    "sentiment": "positive",
+    "outcome": "meeting_booked",
+    "summary": "Productive call. Sarah confirmed interest in the enterprise plan. Meeting booked for March 20 at 2pm EST.",
+    "key_topics": ["pricing", "enterprise features", "implementation timeline"],
+    "objections": [],
+    "next_steps": ["Send enterprise pricing sheet", "Calendar invite for March 20"]
+  },
+  "started_at": "2026-03-17T14:30:00Z",
+  "ended_at": "2026-03-17T14:33:30Z"
+}
+```
+
+---
+
+## Deals
+
+### list_deals
+
+List deals in pipeline with filters.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `stage` | string | No | Filter by stage: `lead`, `qualified`, `proposal`, `negotiation`, `closed_won`, `closed_lost` |
+| `min_value` | number | No | Minimum deal value |
+| `max_value` | number | No | Maximum deal value |
+| `owner_id` | string | No | Filter by deal owner |
+| `created_after` | string | No | ISO 8601 date filter |
+| `limit` | number | No | Maximum results (default: 50) |
+| `offset` | number | No | Pagination offset |
+
+**Example usage:**
+
+```
+"Show me all deals in the negotiation stage worth over $10,000"
+```
+
+**Example response:**
+
+```json
+{
+  "deals": [
+    {
+      "id": "deal_01HS...",
+      "name": "Acme Corp Enterprise License",
+      "stage": "negotiation",
+      "value": 48000,
+      "currency": "USD",
+      "contact_id": "c_01HQ...",
+      "contact_name": "Sarah Johnson",
+      "company": "Acme Corp",
+      "probability": 0.75,
+      "expected_close_date": "2026-04-15",
+      "created_at": "2026-02-20T10:00:00Z",
+      "updated_at": "2026-03-17T16:00:00Z"
+    }
+  ],
+  "total": 3,
+  "pipeline_summary": {
+    "total_value": 127000,
+    "weighted_value": 89250,
+    "deal_count": 3
+  }
+}
+```
+
+---
+
+### get_deal
+
+Get deal details including history and activities.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `deal_id` | string | Yes | The deal ID |
+
+**Example usage:**
+
+```
+"Get the full details and history for the Acme Corp deal"
+```
+
+**Example response:**
+
+```json
+{
+  "id": "deal_01HS...",
+  "name": "Acme Corp Enterprise License",
+  "stage": "negotiation",
+  "value": 48000,
+  "currency": "USD",
+  "probability": 0.75,
+  "expected_close_date": "2026-04-15",
+  "contact": {
+    "id": "c_01HQ...",
+    "name": "Sarah Johnson",
+    "email": "sarah@example.com",
+    "company": "Acme Corp"
+  },
+  "activities": [
+    {
+      "type": "call",
+      "description": "Demo call — positive response, requested pricing",
+      "date": "2026-03-10T14:00:00Z"
+    },
+    {
+      "type": "email",
+      "description": "Sent enterprise pricing sheet",
+      "date": "2026-03-11T09:00:00Z"
+    },
+    {
+      "type": "stage_change",
+      "description": "Moved from proposal to negotiation",
+      "date": "2026-03-15T11:00:00Z"
+    }
+  ],
+  "notes": "Strong fit. Decision expected by mid-April. Budget approved.",
+  "created_at": "2026-02-20T10:00:00Z",
+  "updated_at": "2026-03-17T16:00:00Z"
+}
+```
+
+---
+
+### create_deal
+
+Create a new deal in the pipeline.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `name` | string | Yes | Deal name |
+| `value` | number | Yes | Deal value |
+| `currency` | string | No | Currency code (default: `USD`) |
+| `stage` | string | No | Pipeline stage (default: `lead`) |
+| `contact_id` | string | No | Associated contact ID |
+| `company` | string | No | Company name |
+| `expected_close_date` | string | No | Expected close date (YYYY-MM-DD) |
+| `probability` | number | No | Win probability 0.0 to 1.0 |
+| `notes` | string | No | Deal notes |
+
+**Example usage:**
+
+```
+"Create a deal: GlobalTech Annual License, $36,000, qualified stage, expected close June 2026"
+```
+
+**Example response:**
+
+```json
+{
+  "id": "deal_01HT...",
+  "name": "GlobalTech Annual License",
+  "stage": "qualified",
+  "value": 36000,
+  "currency": "USD",
+  "expected_close_date": "2026-06-30",
+  "created_at": "2026-03-18T12:00:00Z"
+}
+```
+
+---
+
+### update_deal
+
+Update deal status, stage, value, or details.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `deal_id` | string | Yes | The deal ID to update |
+| `name` | string | No | Updated deal name |
+| `value` | number | No | Updated deal value |
+| `currency` | string | No | Updated currency |
+| `stage` | string | No | Updated stage |
+| `probability` | number | No | Updated win probability |
+| `expected_close_date` | string | No | Updated expected close date |
+| `contact_id` | string | No | Updated associated contact |
+| `notes` | string | No | Updated notes |
+
+**Example usage:**
+
+```
+"Move the Acme Corp deal to closed_won and update the value to $52,000"
+```
+
+**Example response:**
+
+```json
+{
+  "id": "deal_01HS...",
+  "name": "Acme Corp Enterprise License",
+  "stage": "closed_won",
+  "value": 52000,
+  "currency": "USD",
+  "updated_at": "2026-03-18T12:10:00Z"
+}
+```
+
+---
+
+## Webhooks
+
+### list_webhooks
+
+List all configured webhook endpoints.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `status` | string | No | Filter by status: `active`, `inactive` |
+
+**Example usage:**
+
+```
+"Show me all active webhooks"
+```
+
+**Example response:**
+
+```json
+{
+  "webhooks": [
+    {
+      "id": "wh_01HR...",
+      "url": "https://api.example.com/smartalex/events",
+      "events": ["call.completed", "deal.stage_changed", "contact.created"],
+      "status": "active",
+      "last_triggered_at": "2026-03-18T11:45:00Z",
+      "success_rate": 0.99,
+      "created_at": "2026-02-01T10:00:00Z"
+    }
+  ],
+  "total": 1
+}
+```
+
+---
+
+### create_webhook
+
+Create a new webhook endpoint for specific events.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `url` | string | Yes | The webhook endpoint URL (must be HTTPS) |
+| `events` | string[] | Yes | Event types to subscribe to |
+| `secret` | string | No | Signing secret for payload verification |
+| `description` | string | No | Human-readable description |
+
+**Available events:**
+
+| Event | Description |
+|-------|-------------|
+| `call.started` | A call has started |
+| `call.completed` | A call has ended |
+| `call.failed` | A call failed to connect |
+| `contact.created` | A new contact was created |
+| `contact.updated` | A contact was updated |
+| `deal.created` | A new deal was created |
+| `deal.stage_changed` | A deal moved to a new stage |
+| `deal.closed` | A deal was closed (won or lost) |
+| `campaign.started` | A campaign was activated |
+| `campaign.completed` | A campaign finished all contacts |
+| `agent.status_changed` | An agent's status changed |
+
+**Example usage:**
+
+```
+"Create a webhook to https://api.mycrm.com/events for call.completed and deal.stage_changed events"
+```
+
+**Example response:**
+
+```json
+{
+  "id": "wh_01HT...",
+  "url": "https://api.mycrm.com/events",
+  "events": ["call.completed", "deal.stage_changed"],
+  "status": "active",
+  "secret": "whsec_abc123...",
+  "created_at": "2026-03-18T12:00:00Z"
+}
+```
+
+---
+
+### delete_webhook
+
+Remove a webhook endpoint.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `webhook_id` | string | Yes | The webhook ID to delete |
+
+**Example usage:**
+
+```
+"Delete webhook wh_01HR..."
+```
+
+**Example response:**
+
+```json
+{
+  "deleted": true,
+  "id": "wh_01HR..."
+}
+```
+
+---
+
+## Platform
+
+### get_platform_status
+
+Get platform health, usage statistics, and account summary.
+
+**Parameters:**
+
+None required.
+
+**Example usage:**
+
+```
+"What's the status of my SmartAlex platform?"
+```
+
+**Example response:**
+
+```json
+{
+  "status": "operational",
+  "uptime_percent": 99.97,
+  "version": "2.14.0",
+  "account": {
+    "plan": "professional",
+    "tenant_id": "tenant_01HP..."
+  },
+  "usage": {
+    "agents_active": 2,
+    "agents_limit": 10,
+    "campaigns_active": 1,
+    "contacts_total": 1247,
+    "calls_this_month": 892,
+    "minutes_this_month": 2450,
+    "minutes_limit": 5000
+  },
+  "services": {
+    "voice": "operational",
+    "api": "operational",
+    "database": "operational",
+    "storage": "operational"
+  },
+  "checked_at": "2026-03-18T12:00:00Z"
+}
+```
+
+---
+
+## Error Responses
+
+All tools return consistent error responses:
+
+```json
+{
+  "error": {
+    "code": "not_found",
+    "message": "Contact with ID c_01HX... was not found",
+    "status": 404
+  }
+}
+```
+
+**Common error codes:**
+
+| Code | Status | Description |
+|------|--------|-------------|
+| `bad_request` | 400 | Invalid parameters |
+| `unauthorized` | 401 | Missing or invalid API key |
+| `forbidden` | 403 | Insufficient permissions |
+| `not_found` | 404 | Resource not found |
+| `rate_limited` | 429 | Too many requests — check `Retry-After` header |
+| `internal_error` | 500 | Server error — retry or contact support |
+
+---
+
+## Related Pages
+
+- [MCP Overview](/mcp/overview) — Architecture, resources, prompts, and workflows
+- [Getting Started](/mcp/getting-started) — Connect SmartAlex to your AI assistant in 2 minutes

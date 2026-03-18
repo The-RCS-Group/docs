@@ -1,0 +1,194 @@
+---
+title: "MCP Server Overview"
+description: "SmartAlex MCP server lets AI assistants like Claude, ChatGPT, Cursor, and VS Code manage voice agents, campaigns, contacts, and analytics through the Model Context Protocol."
+---
+
+# MCP Server Overview
+
+SmartAlex provides a fully-featured [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that lets AI assistants manage your entire voice agent platform through natural conversation.
+
+## What is MCP?
+
+The Model Context Protocol is an open standard that connects AI assistants to external tools, data sources, and services. Instead of switching between dashboards, you can ask your AI assistant to manage contacts, launch campaigns, analyze calls, and track deals — all through conversation.
+
+MCP is supported by Claude, Claude Code, Cursor, VS Code (GitHub Copilot), ChatGPT, and a growing ecosystem of AI clients.
+
+## What SmartAlex's MCP Server Does
+
+The SmartAlex MCP server exposes **18 tools**, **7 resources**, **5 prompts**, and **7 workflows** — giving AI assistants full operational access to your SmartAlex workspace.
+
+With it, you can:
+
+- **Manage contacts** — search, create, update, and organize your contact database
+- **Configure voice agents** — inspect agent settings, prompts, and performance
+- **Run campaigns** — list active campaigns, review analytics, and track progress
+- **Analyze calls** — pull call logs, transcripts, recordings, and sentiment data
+- **Track deals** — manage your sales pipeline from lead to close
+- **Set up webhooks** — create event-driven integrations with external systems
+- **Monitor the platform** — check health, usage stats, and system status
+
+---
+
+## Tools (18)
+
+SmartAlex exposes 18 tools organized across 7 domains.
+
+### Contacts (4 tools)
+
+| Tool | Description |
+|------|-------------|
+| `list_contacts` | List and search contacts with filters (name, email, phone, tags) |
+| `get_contact` | Get a specific contact by ID with full details |
+| `create_contact` | Create a new contact with name, phone, email, and custom fields |
+| `update_contact` | Update contact details, tags, or custom fields |
+
+### Agents (2 tools)
+
+| Tool | Description |
+|------|-------------|
+| `list_agents` | List all voice agents with status and configuration summary |
+| `get_agent` | Get full agent details including prompt, voice settings, and tools |
+
+### Campaigns (2 tools)
+
+| Tool | Description |
+|------|-------------|
+| `list_campaigns` | List campaigns with status filters (active, paused, completed) |
+| `get_campaign` | Get campaign details including analytics, contact lists, and progress |
+
+### Calls (2 tools)
+
+| Tool | Description |
+|------|-------------|
+| `list_calls` | List recent calls with filters (date range, agent, status, direction) |
+| `get_call` | Get call details including transcript, recording URL, and sentiment |
+
+### Deals (4 tools)
+
+| Tool | Description |
+|------|-------------|
+| `list_deals` | List deals in pipeline with stage and value filters |
+| `get_deal` | Get deal details including history, contacts, and activities |
+| `create_deal` | Create a new deal with value, stage, and associated contacts |
+| `update_deal` | Update deal status, stage, value, or custom fields |
+
+### Webhooks (3 tools)
+
+| Tool | Description |
+|------|-------------|
+| `list_webhooks` | List all configured webhook endpoints |
+| `create_webhook` | Create a new webhook for specific event types |
+| `delete_webhook` | Remove a webhook endpoint |
+
+### Platform (1 tool)
+
+| Tool | Description |
+|------|-------------|
+| `get_platform_status` | Get platform health, usage stats, and account summary |
+
+---
+
+## Resources (7)
+
+Resources provide read-only data that AI assistants can access for context without making explicit tool calls.
+
+| Resource | URI | Description |
+|----------|-----|-------------|
+| Platform Status | `smartalex://platform-status` | Current platform health, uptime, and version info |
+| Agents | `smartalex://agents` | Summary of all configured voice agents |
+| Active Campaigns | `smartalex://campaigns-active` | Currently running campaigns with progress |
+| Recent Calls | `smartalex://calls-recent` | Last 50 calls with summary metrics |
+| Deals Pipeline | `smartalex://deals-pipeline` | Current pipeline stages and deal values |
+| Contact Stats | `smartalex://contacts-stats` | Contact database statistics and segmentation |
+| Workflows | `smartalex://workflows` | Available automation workflows and their status |
+
+---
+
+## Prompts (5)
+
+Prompts are pre-built conversation templates that guide AI assistants through complex multi-step tasks.
+
+| Prompt | Description |
+|--------|-------------|
+| `campaign-strategy` | Design a campaign strategy based on your contact segments, agent capabilities, and business goals |
+| `lead-qualification` | Analyze and score leads using call transcripts, contact history, and engagement signals |
+| `agent-design` | Design a new voice agent with optimal prompt engineering, voice selection, and tool configuration |
+| `call-analysis` | Deep analysis of call outcomes — sentiment trends, objection patterns, and conversion insights |
+| `pipeline-review` | Review your sales pipeline — identify bottlenecks, at-risk deals, and forecast accuracy |
+
+---
+
+## Supported AI Clients
+
+SmartAlex MCP server works with any MCP-compatible client:
+
+| Client | Transport | Status |
+|--------|-----------|--------|
+| **Claude Code** | HTTP (cloud) or stdio (local) | Fully supported |
+| **Claude Desktop** | stdio (local) | Fully supported |
+| **Cursor** | stdio (local) | Fully supported |
+| **VS Code (GitHub Copilot)** | stdio (local) | Fully supported |
+| **ChatGPT** | HTTP (cloud) | Supported via cloud endpoint |
+| **Custom clients** | HTTP or stdio | Any MCP-compatible client works |
+
+---
+
+## Authentication
+
+SmartAlex MCP server supports two authentication methods:
+
+### API Keys
+
+API keys use a prefixed format for easy identification:
+
+- **Production:** `sa_live_` prefix (e.g., `sa_live_abc123...`)
+- **Test/Staging:** `sa_test_` prefix (e.g., `sa_test_xyz789...`)
+
+Generate API keys from your SmartAlex dashboard under **Settings > API Keys**.
+
+### OAuth 2.0
+
+For applications that need delegated access, SmartAlex supports the full OAuth 2.0 authorization code flow with PKCE.
+
+---
+
+## Workflows (7)
+
+The MCP server includes 7 pre-built workflows that chain multiple tools together for common operations:
+
+1. **Contact Import & Enrich** — Bulk import contacts and enrich with available data
+2. **Campaign Launch** — Create campaign, assign contacts, configure agent, and launch
+3. **Call Follow-up** — Analyze call outcomes and trigger appropriate follow-up actions
+4. **Deal Progression** — Move deals through pipeline stages based on call outcomes
+5. **Lead Scoring** — Score and prioritize leads based on engagement and fit signals
+6. **Webhook Setup** — Configure webhooks for real-time event notifications
+7. **Performance Report** — Generate cross-domain performance reports
+
+---
+
+## Architecture
+
+The SmartAlex MCP server can run in two modes:
+
+### Local (stdio)
+
+```
+AI Client <--stdio--> @smartalex/mcp-server <--HTTPS--> SmartAlex API
+```
+
+Install locally via npm/npx. The server communicates with your AI client over stdio and authenticates to SmartAlex's API with your API key.
+
+### Cloud (HTTP)
+
+```
+AI Client <--HTTPS--> mcp.getsmartalex.com <--internal--> SmartAlex API
+```
+
+Connect directly to SmartAlex's hosted MCP endpoint. No local installation required. Ideal for ChatGPT and other cloud-native clients.
+
+---
+
+## Next Steps
+
+- [Getting Started](/mcp/getting-started) — Connect SmartAlex to your AI assistant in under 2 minutes
+- [Tools Reference](/mcp/tools-reference) — Complete reference for all 18 tools with parameters and examples

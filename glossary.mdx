@@ -1,0 +1,346 @@
+---
+title: "AI Voice Assistant Glossary"
+description: "Comprehensive glossary of AI voice assistant, conversational AI, and voice automation terminology. Covers agents, campaigns, telephony, speech synthesis, and platform concepts."
+---
+
+A comprehensive reference of terms used in AI voice assistants, conversational AI, telephony, and the SmartAlex platform. Each definition is self-contained so you can quickly understand any concept without additional context.
+
+---
+
+## A
+
+### A/B Testing
+
+A method of comparing two or more variations of an AI agent's configuration — such as greeting messages, voice settings, or prompt instructions — to determine which version performs better. Metrics like call duration, transfer rate, and customer satisfaction are tracked to identify the winning variant, enabling data-driven optimization of agent behavior.
+
+### AI Agent
+
+A software entity powered by a large language model that can autonomously handle conversations, make decisions, and execute tasks. In voice assistant platforms, an AI agent manages phone calls end-to-end: greeting callers, understanding intent, answering questions from a knowledge base, collecting information, scheduling appointments, and transferring to humans when necessary.
+
+### AI Voice Assistant
+
+An AI-powered system that conducts natural spoken conversations over the phone or through web-based interfaces. Unlike traditional IVR systems that rely on rigid menus, AI voice assistants use speech recognition, language models, and text-to-speech to hold fluid, human-like dialogues. They can handle both inbound and outbound calls autonomously.
+
+### Answering Service
+
+A service that answers phone calls on behalf of a business. Traditional answering services use human operators; AI-powered answering services use voice assistants to greet callers, take messages, answer FAQs, schedule appointments, and route urgent calls — available 24/7 without staffing constraints or per-minute operator fees.
+
+### API Key
+
+A unique identifier used to authenticate requests to an API (Application Programming Interface). In voice assistant platforms, API keys grant programmatic access to create agents, trigger calls, retrieve call logs, and manage contacts. API keys should be kept secret and rotated periodically to maintain security.
+
+### ASR (Automatic Speech Recognition)
+
+The technology that converts spoken audio into written text in real time. Also called speech-to-text (STT), ASR is the first step in a voice assistant pipeline: the caller speaks, ASR transcribes the words, and the language model processes the text to generate a response. Accuracy depends on factors like accent, background noise, and vocabulary.
+
+---
+
+## B
+
+### Bearer Token
+
+An access token included in the `Authorization` header of API requests to prove the caller's identity. Bearer tokens are typically short-lived and issued after authentication. In voice platforms, they are used to securely access APIs without transmitting passwords, following the OAuth 2.0 standard.
+
+### Bot Detection
+
+The ability to identify whether a call is answered by a human or an automated system such as a voicemail greeting or IVR menu. Voice assistant platforms use bot detection to decide whether to deliver a message, leave a voicemail, or retry the call later — improving campaign efficiency by focusing live conversations on real recipients.
+
+### Business Hours Routing
+
+A call handling strategy that routes calls differently based on the time of day and day of the week. During business hours, calls may be transferred to staff; outside business hours, an AI agent can handle them autonomously — taking messages, scheduling callbacks, or answering common questions without human intervention.
+
+---
+
+## C
+
+### Call Analytics
+
+Data and metrics collected from phone calls to measure performance and identify trends. Typical analytics include call volume, average duration, outcome distribution (answered, missed, voicemail), sentiment scores, transfer rates, and peak calling times. Dashboards visualize these metrics to help businesses optimize their phone operations.
+
+### Call Recording
+
+The capture and storage of audio from phone conversations for quality assurance, compliance, training, or dispute resolution. Recordings are typically encrypted at rest and in transit, with access controls to ensure only authorized users can listen. Many jurisdictions require caller consent before recording.
+
+### Call Routing
+
+The process of directing an incoming or outgoing call to the appropriate destination. Routing decisions can be based on the caller's phone number, the time of day, the caller's spoken intent, agent availability, or custom business rules. Intelligent call routing reduces wait times and connects callers with the right resource faster.
+
+### Call Slots
+
+The maximum number of simultaneous calls an AI agent or phone number can handle at any given time. Call slots determine concurrency limits — if all slots are occupied, additional callers may hear a busy signal or be queued. Capacity planning ensures enough slots are available during peak periods.
+
+### Call Transfer
+
+The act of moving an active call from an AI agent to a human operator or another phone number. Transfers can be "cold" (the call is passed without context) or "warm/hot" (the AI briefs the human before connecting the caller). Effective transfers preserve conversation context so callers do not have to repeat themselves.
+
+### Campaign
+
+An organized set of outbound calls executed by an AI agent against a list of contacts. Campaigns are configured with a target contact list, an assigned agent, calling schedule, retry rules, and concurrency limits. They are used for appointment reminders, lead qualification, surveys, follow-ups, and other systematic outreach.
+
+### Concurrent Calls
+
+The number of phone calls being handled simultaneously at any point in time. Voice platforms impose concurrency limits based on plan tier, available phone numbers, and infrastructure capacity. Monitoring concurrent calls prevents overloading and ensures call quality remains consistent during high-volume campaigns.
+
+### Contact
+
+A record representing an individual or organization in the platform's database. Contacts store details such as name, phone number, email, tags, notes, and call history. They serve as the foundation for campaigns, call logs, and CRM functionality — linking every interaction back to a specific person.
+
+### Conversational AI
+
+The branch of artificial intelligence focused on enabling natural, human-like dialogue between machines and people. It combines natural language processing, language models, dialogue management, and speech technologies to hold multi-turn conversations that feel intuitive. Voice assistants, chatbots, and virtual agents are all applications of conversational AI.
+
+### CRM (Customer Relationship Management)
+
+Software used to manage a business's interactions with current and potential customers. CRM systems store contact records, communication history, deal stages, and notes. Voice assistant platforms often integrate with CRMs to log calls automatically, update contact records, and trigger follow-up workflows after conversations.
+
+---
+
+## D
+
+### DTMF (Dual-Tone Multi-Frequency)
+
+The signaling system used when a caller presses keys on a phone keypad. Each key produces a unique pair of audio tones that the system decodes. DTMF is used in IVR menus ("Press 1 for sales"), entering PINs, and navigating automated phone systems. AI voice assistants can detect and respond to DTMF input alongside spoken commands.
+
+### Dynamic Voice Speed
+
+The ability to adjust how fast or slow an AI agent speaks during a conversation. Dynamic speed control adapts to context — speaking more slowly when conveying important details like phone numbers and addresses, and at a natural pace during general conversation. This improves comprehension and makes the AI sound more human.
+
+---
+
+## E
+
+### Edge Function
+
+A serverless function that runs at the network edge, close to the user, to minimize latency. In voice platforms, edge functions handle tasks like webhook processing, data validation, third-party API calls, and real-time event handling. They execute on demand, scale automatically, and incur costs only when invoked.
+
+### Embedding
+
+A numerical vector representation of text, audio, or other data that captures its semantic meaning. Embeddings enable similarity search — for example, matching a caller's question to the most relevant entry in a knowledge base. They are foundational to retrieval-augmented generation (RAG) and semantic search systems used by AI agents.
+
+### Endpoint
+
+A specific URL or URI that an API exposes for interaction. Each endpoint corresponds to a resource or action — for example, `/api/agents` to list agents or `/api/calls` to retrieve call logs. Developers send HTTP requests to endpoints to read data, create resources, or trigger operations within the platform.
+
+---
+
+## F
+
+### Follow-up Campaign
+
+An outbound calling campaign that automatically targets contacts based on outcomes from a previous campaign or inbound call. For example, if a caller requested a callback, a follow-up campaign can schedule and execute that return call. Follow-up campaigns close the loop on unresolved conversations and improve conversion rates.
+
+### Function Calling
+
+A capability that allows a large language model to invoke predefined functions or tools during a conversation. When an AI agent needs to perform an action — such as checking appointment availability, looking up an account, or sending an SMS — it generates a structured function call that the platform executes and returns results from, keeping the conversation flowing naturally.
+
+---
+
+## G
+
+### Greeting Message
+
+The initial spoken message an AI agent delivers when answering or initiating a call. A well-crafted greeting sets the tone, identifies the business, and signals to the caller that they are speaking with an AI assistant. Greetings can be personalized with the caller's name, the time of day, or the reason for the call.
+
+---
+
+## H
+
+### Hold Music
+
+Audio played to a caller while they wait during a call transfer or while the system processes a request. Hold music reduces perceived wait time and reassures callers that they have not been disconnected. AI voice platforms allow businesses to upload custom hold music or use default tracks.
+
+### Hot Transfer
+
+A call transfer method where the AI agent remains on the line while connecting the caller to a human operator and provides a spoken summary of the conversation so far. This ensures the human has full context before the AI disconnects. Hot transfers deliver a smoother caller experience compared to cold transfers.
+
+---
+
+## I
+
+### Inbound Call
+
+A phone call initiated by an external party to a business's phone number. The AI agent answers inbound calls, greets the caller, determines their intent, and handles the conversation — whether that means answering questions, booking appointments, or transferring to a human. Inbound call handling is a core use case for AI voice assistants.
+
+### Intent Detection
+
+The process of identifying what a caller wants to accomplish from their spoken words. An AI agent analyzes the caller's utterances to classify their intent — such as "schedule an appointment," "speak to a manager," or "check my order status." Accurate intent detection drives the conversation down the correct path and triggers the appropriate actions.
+
+### IVR (Interactive Voice Response)
+
+A traditional telephony system that uses pre-recorded menus and keypad inputs to route callers. Callers navigate by pressing numbers ("Press 1 for billing, 2 for support") or speaking simple keywords. AI voice assistants are replacing rigid IVR trees with natural conversation, allowing callers to state their needs in their own words.
+
+---
+
+## K
+
+### Knowledge Base
+
+A structured collection of documents, FAQs, product details, and business information that an AI agent references during conversations. When a caller asks a question, the agent searches the knowledge base to retrieve accurate answers. Knowledge bases can be built from uploaded documents, website content, or manually authored entries.
+
+---
+
+## L
+
+### Large Language Model (LLM)
+
+A neural network trained on vast amounts of text data that can understand and generate human language. LLMs power the conversational intelligence of AI voice assistants — interpreting caller intent, generating contextually appropriate responses, making decisions about next steps, and maintaining coherent multi-turn dialogue. Examples include GPT-4, Claude, and Gemini.
+
+### Latency
+
+The time delay between a caller finishing their sentence and the AI agent beginning its response. Low latency is critical for natural-sounding conversation — delays above 800 milliseconds feel unnatural and frustrate callers. Voice platforms optimize latency through streaming speech recognition, fast model inference, and edge-deployed text-to-speech.
+
+### Lead Qualification
+
+The process of evaluating whether a prospect is a good fit for a product or service based on predefined criteria. AI agents qualify leads during phone conversations by asking discovery questions about budget, timeline, authority, and needs — then scoring and routing qualified leads to sales teams for follow-up.
+
+---
+
+## M
+
+### MCP (Model Context Protocol)
+
+An open standard that allows AI models to interact with external tools, data sources, and services through a unified protocol. MCP enables an AI agent to access live databases, call APIs, read files, and perform actions in third-party systems — extending the agent's capabilities beyond its training data into real-time, actionable intelligence.
+
+### Multi-tenant
+
+A software architecture where a single instance of the application serves multiple independent organizations (tenants), each with isolated data and configurations. Multi-tenant platforms ensure that one business's agents, contacts, call recordings, and billing are completely separated from another's, even though they share the same underlying infrastructure.
+
+---
+
+## N
+
+### Natural Language Processing (NLP)
+
+A field of AI focused on enabling computers to understand, interpret, and generate human language. NLP encompasses tasks like tokenization, part-of-speech tagging, named entity recognition, and sentiment analysis. In voice assistants, NLP transforms raw transcribed text into structured data the system can act upon.
+
+### Natural Language Understanding (NLU)
+
+A subset of NLP specifically concerned with comprehending the meaning and intent behind human language. NLU goes beyond word recognition to grasp context, resolve ambiguity, and extract entities (dates, names, amounts). It is the component that lets an AI agent understand "I need to reschedule my Tuesday appointment" as an intent with a specific time reference.
+
+---
+
+## O
+
+### OAuth 2.0
+
+An industry-standard authorization framework that allows applications to access resources on behalf of a user without exposing their password. OAuth 2.0 is used to connect voice platforms with third-party services like calendars, CRMs, and email — granting scoped, revocable access through short-lived tokens rather than permanent credentials.
+
+### Outbound Call
+
+A phone call initiated by the platform to an external phone number. AI agents make outbound calls for appointment reminders, lead qualification, surveys, payment follow-ups, and marketing campaigns. Outbound calls require compliance with local telecommunications regulations, including consent requirements and do-not-call list adherence.
+
+### Outbound Campaign
+
+A structured series of outbound calls managed through the platform. An outbound campaign defines the contact list, assigned AI agent, schedule, concurrency limits, retry strategy, and success criteria. The platform handles dialing, tracks outcomes per contact, and reports aggregate campaign performance through analytics dashboards.
+
+---
+
+## P
+
+### Phone Number
+
+A telephony resource provisioned through the platform that can make and receive calls. Phone numbers can be local, toll-free, or international, and are assigned to AI agents. Each number has its own call routing rules, concurrency limits, and regional compliance settings. Businesses can port existing numbers or provision new ones.
+
+### Prompt Engineering
+
+The practice of designing and refining the instructions given to a large language model to control its behavior, tone, and outputs. For voice assistants, prompt engineering shapes how the agent greets callers, handles objections, asks questions, and responds to edge cases. Well-engineered prompts are the primary lever for tuning agent quality.
+
+---
+
+## R
+
+### RAG (Retrieval-Augmented Generation)
+
+A technique that enhances an LLM's responses by first retrieving relevant documents from a knowledge base, then providing those documents as context when generating an answer. RAG allows AI agents to give accurate, up-to-date responses grounded in a business's actual data — rather than relying solely on the model's training knowledge, which may be outdated or generic.
+
+### Rate Limiting
+
+A mechanism that restricts the number of API requests or calls a user or system can make within a given time window. Rate limits protect platform infrastructure from abuse, ensure fair usage across tenants, and prevent runaway automation from generating excessive costs. Exceeding a rate limit typically returns an HTTP 429 status code.
+
+### Real-time Transcription
+
+The conversion of spoken audio into written text as the conversation happens, with minimal delay. Real-time transcription enables AI agents to process caller speech immediately, powers live transcript displays for human supervisors, and provides the text input that the language model needs to generate its next response.
+
+---
+
+## S
+
+### Sentiment Analysis
+
+The automated detection of emotional tone — positive, negative, or neutral — in spoken or written language. Voice platforms apply sentiment analysis to call transcripts to gauge caller satisfaction, flag frustrated callers for human follow-up, and measure overall service quality across campaigns and agents.
+
+### SIP (Session Initiation Protocol)
+
+A signaling protocol used to establish, manage, and terminate voice and video communication sessions over IP networks. SIP is the backbone of modern internet telephony, handling call setup, teardown, and transfer. Voice platforms use SIP trunking to connect AI agents to the public telephone network (PSTN).
+
+### Speech Synthesis
+
+The artificial generation of human-sounding speech from text. Also known as text-to-speech (TTS), speech synthesis is the final stage of a voice assistant pipeline: the language model generates a text response, and the synthesis engine converts it to audio that is played to the caller. Modern systems produce highly natural voices with controllable speed, pitch, and emotion.
+
+### Speech-to-Text (STT)
+
+See [ASR (Automatic Speech Recognition)](#asr-automatic-speech-recognition). STT is the common alternative name for the technology that converts spoken audio into written text, serving as the input layer for AI voice assistants.
+
+---
+
+## T
+
+### Telephony
+
+The technology and infrastructure that enables voice communication over distances. In the context of AI voice assistants, telephony encompasses phone number provisioning, call routing, SIP trunking, PSTN connectivity, call recording, and DTMF handling — the complete stack that connects an AI agent to real phone calls.
+
+### Tenant
+
+A single organization or business account within a multi-tenant platform. Each tenant has isolated data, users, agents, phone numbers, billing, and configurations. Tenant boundaries ensure that one business cannot access another's resources, providing security and privacy equivalent to dedicated infrastructure.
+
+### Token
+
+In the context of language models, a token is a unit of text (roughly a word or word fragment) that the model processes. LLM pricing and context windows are measured in tokens. In authentication contexts, a token is a credential (like a JWT or bearer token) used to verify identity and authorize API access. The meaning depends on the context.
+
+### Transcript
+
+A written record of everything spoken during a phone call, by both the AI agent and the caller. Transcripts are generated through real-time speech recognition and stored alongside call recordings. They are used for quality review, compliance auditing, training data extraction, search, and feeding analytics like sentiment analysis.
+
+### Transfer Number
+
+A phone number designated as the destination when an AI agent transfers a call to a human. Transfer numbers can be configured per agent, per intent, or per time of day — routing callers to the right department or person. Multiple transfer numbers can be set up to handle different escalation scenarios.
+
+### TTS (Text-to-Speech)
+
+See [Speech Synthesis](#speech-synthesis). TTS is the technology that converts written text generated by the language model into spoken audio delivered to the caller. Modern TTS engines support multiple voices, languages, emotions, and dynamic speed adjustments for natural-sounding conversation.
+
+---
+
+## V
+
+### Voice Agent
+
+An AI-powered agent specifically designed to operate over voice channels — phone calls, web-based audio, or VoIP. Voice agents combine speech recognition, language understanding, dialogue management, and speech synthesis into a unified system that can hold natural phone conversations, replacing or augmenting human call center operators.
+
+### Voice Cloning
+
+The process of creating a synthetic replica of a specific person's voice using AI. A short sample of the target voice is analyzed to capture its unique characteristics — timbre, cadence, accent, and intonation. The resulting voice model can then generate new speech in that voice from any text input, enabling businesses to use branded or familiar voices for their AI agents.
+
+### Voice Provider
+
+A third-party service that supplies the underlying voice AI infrastructure — including speech recognition, text-to-speech, and real-time audio streaming. Voice providers handle the low-level audio processing pipeline so that platform developers can focus on conversation design, business logic, and user experience rather than building speech technology from scratch.
+
+### Voicemail Detection
+
+The ability to automatically determine whether an outbound call has been answered by a person or a voicemail system. When voicemail is detected, the AI agent can leave a pre-recorded or dynamically generated message instead of attempting a live conversation. Accurate voicemail detection improves campaign efficiency and prevents wasted agent time.
+
+---
+
+## W
+
+### Wallet
+
+A prepaid balance associated with a tenant account, used to pay for platform usage such as outbound calls, inbound call minutes, phone number fees, and AI processing costs. Wallet-based billing gives businesses real-time spending visibility and control — usage deducts from the wallet balance, and the account pauses when the balance reaches zero.
+
+### Webhook
+
+An HTTP callback that delivers real-time event notifications from the platform to an external URL. When a specific event occurs — such as a call ending, a campaign completing, or a voicemail being received — the platform sends an HTTP POST request with event details to the configured webhook URL, enabling automated workflows and integrations.
+
+### Widget
+
+An embeddable user interface component that can be added to a website or web application. Voice assistant widgets typically provide a click-to-call button, a chat interface, or a combined voice-and-text experience that connects website visitors directly to an AI agent — capturing leads and answering questions without requiring visitors to dial a phone number.
