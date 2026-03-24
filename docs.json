@@ -144,7 +144,8 @@
             "pages": [
               "mcp/overview",
               "mcp/getting-started",
-              "mcp/tools-reference"
+              "mcp/tools-reference",
+              "mcp/errors"
             ]
           }
         ]

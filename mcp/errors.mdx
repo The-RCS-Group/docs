@@ -1,0 +1,261 @@
+---
+title: "MCP Error Reference"
+description: "Error codes, HTTP status codes, and troubleshooting guide for the SmartAlex MCP server."
+---
+
+# MCP Error Reference
+
+When a tool call fails, the SmartAlex MCP server returns an error in the tool response content. This page covers all error codes, their causes, and how to resolve them.
+
+---
+
+## HTTP Status Codes
+
+| Status | Meaning | When it happens |
+|--------|---------|-----------------|
+| 200 | Success | Request processed successfully |
+| 201 | Created | Resource created (contacts, deals, webhooks, campaigns) |
+| 400 | Bad Request | Invalid parameters, missing required fields, or malformed UUID |
+| 401 | Unauthorized | Missing or invalid API key / OAuth token |
+| 403 | Forbidden | Valid auth but insufficient permissions (RBAC) |
+| 404 | Not Found | Resource doesn't exist or belongs to a different tenant |
+| 429 | Too Many Requests | Rate limit exceeded |
+| 500 | Internal Error | Server-side error |
+
+---
+
+## Authentication Errors
+
+### 401 — Authorization required
+
+```json
+{
+  "error": "Authorization required"
+}
+```
+
+**Cause:** No `Authorization` header was provided.
+
+**Fix:**
+- **API key:** Ensure `SMARTALEX_API_KEY` environment variable is set
+- **OAuth:** Reconnect the MCP server to trigger OAuth authentication
+- **Cloud:** Check that your AI client is sending the Bearer token
+
+### 401 — Invalid or expired token
+
+```json
+{
+  "error": "Invalid or expired token."
+}
+```
+
+**Cause:** The API key or OAuth token is invalid, expired, or deactivated.
+
+**Fix:**
+- Regenerate your API key from **Settings > API Keys**
+- For OAuth, re-authenticate by reconnecting the MCP server
+- Check that the key starts with `sa_live_` (production) or `sa_test_` (test)
+
+---
+
+## Permission Errors
+
+### 403 — Insufficient permissions
+
+```json
+{
+  "error": "Insufficient permissions"
+}
+```
+
+**Cause:** Your user account doesn't have permission for this operation. SmartAlex uses role-based access control (RBAC) — your admin may have restricted access to certain features.
+
+**Fix:**
+- Ask your workspace admin to grant the required page permission
+- API keys inherit permissions from the user who created them
+
+### 403 — User principal required
+
+```json
+{
+  "error": "User principal required for this operation"
+}
+```
+
+**Cause:** The request reached a permission-gated route but no user identity was provided. This can happen if an API key was created without a `created_by` user.
+
+**Fix:**
+- Regenerate the API key from a user account with appropriate permissions
+
+### 403 — API key does not have write permission
+
+```json
+{
+  "error": "API key does not have write permission"
+}
+```
+
+**Cause:** The API key only has `read` permission but the operation requires `write`.
+
+**Fix:**
+- Generate a new API key with both `read` and `write` permissions from **Settings > API Keys**
+
+---
+
+## Validation Errors
+
+### 400 — Invalid parameters
+
+```json
+{
+  "error": "Invalid request body: first_name is required"
+}
+```
+
+**Cause:** A required parameter is missing or a parameter has an invalid value.
+
+**Common cases:**
+- `first_name` is required for `smartalex_create_contact`
+- `deal_name` is required for `smartalex_create_deal`
+- `url` and `event_types` are required for `smartalex_create_webhook`
+- `id` must be a valid UUID for all get/update/delete operations
+- `stage` must be one of: `lead`, `qualified`, `showing`, `offer`, `under_contract`, `closed_won`, `closed_lost`
+
+### 400 — Invalid UUID
+
+```json
+{
+  "error": "Invalid UUID format"
+}
+```
+
+**Cause:** An `id` parameter was provided but isn't a valid UUID.
+
+**Fix:** UUIDs follow the format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` (e.g., `a1b2c3d4-e5f6-7890-abcd-ef1234567890`).
+
+---
+
+## Resource Errors
+
+### 404 — Not found
+
+```json
+{
+  "error": "Contact not found"
+}
+```
+
+**Cause:** The requested resource doesn't exist, or it belongs to a different tenant and is not accessible.
+
+**Fix:**
+- Verify the UUID is correct
+- Use the corresponding `list_` tool to find valid IDs
+- Resources are tenant-scoped — you can only access your own data
+
+---
+
+## Rate Limiting
+
+### 429 — Too many requests
+
+```json
+{
+  "error": "Too many requests",
+  "message": "Rate limit exceeded. Please try again in 45 seconds.",
+  "retryAfter": 45
+}
+```
+
+**Response headers:**
+
+| Header | Description |
+|--------|-------------|
+| `Retry-After` | Seconds to wait before retrying |
+| `X-RateLimit-Limit` | Maximum requests per window |
+| `X-RateLimit-Remaining` | Requests remaining in current window |
+| `X-RateLimit-Reset` | Seconds until the rate limit window resets |
+
+**Rate limits:**
+
+| Transport | Limit | Keyed by |
+|-----------|-------|----------|
+| Cloud (authenticated) | 100 requests/min | Tenant ID |
+| Public (onboarding) | 30 requests/min | IP address |
+
+**Fix:** Wait for the `Retry-After` duration and retry. Most AI clients handle 429 responses automatically with exponential backoff.
+
+---
+
+## Server Errors
+
+### 500 — Internal server error
+
+```json
+{
+  "error": "Internal server error"
+}
+```
+
+**Cause:** An unexpected error occurred on the server.
+
+**Fix:**
+- Retry the request — transient errors often resolve on the next attempt
+- If persistent, contact support at support@getsmartalex.com with the request details
+
+---
+
+## MCP Protocol Errors
+
+These errors come from the MCP SDK transport layer, not from SmartAlex tools.
+
+### 406 — Not Acceptable
+
+```json
+{
+  "jsonrpc": "2.0",
+  "error": {
+    "code": -32000,
+    "message": "Not Acceptable: Client must accept both application/json and text/event-stream"
+  }
+}
+```
+
+**Cause:** The HTTP client isn't sending the correct `Accept` headers for MCP Streamable HTTP transport.
+
+**Fix:** This typically means the client is making raw HTTP requests instead of using an MCP client library. Use a proper MCP client (Claude, Cursor, etc.) or set `Accept: application/json, text/event-stream` in your HTTP headers.
+
+---
+
+## Gateway Errors
+
+### Gateway returned non-JSON
+
+```
+Gateway error: <!DOCTYPE html>...
+```
+
+**Cause:** The SmartAlex API gateway returned an HTML error page instead of JSON. Usually indicates the gateway is temporarily unavailable.
+
+**Fix:** Retry after a few seconds. If persistent, the gateway may be experiencing an outage.
+
+### No route found
+
+```json
+{
+  "error": "No route found for GET /unknown-path"
+}
+```
+
+**Cause:** The MCP tool tried to call a gateway route that doesn't exist. This indicates a version mismatch between the MCP server and the API gateway.
+
+**Fix:**
+- **Local:** Update to the latest version: `npx @smartalex/mcp-server@latest`
+- **Cloud:** This resolves automatically — contact support if it persists
+
+---
+
+## Related Pages
+
+- [Getting Started](/mcp/getting-started) — Setup and troubleshooting
+- [Tools Reference](/mcp/tools-reference) — All 18 tools with parameters
+- [MCP Overview](/mcp/overview) — Architecture and authentication

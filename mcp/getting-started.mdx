@@ -19,11 +19,11 @@ Connect SmartAlex to your AI assistant in under 2 minutes. Once connected, you c
 
 ### Cloud Connection (Recommended)
 
-No installation required. Connect directly to SmartAlex's hosted MCP endpoint:
+No installation required. Connect directly to SmartAlex's hosted MCP endpoint using OAuth:
 
 ```bash
-# Claude Code
-claude mcp add --transport http smartalex https://mcp.getsmartalex.com
+# Claude Code — connects via HTTP, authenticates via OAuth
+claude mcp add --transport http smartalex https://api.getsmartalex.com/functions/v1/mcp-server
 ```
 
 ### Local Installation
@@ -31,14 +31,10 @@ claude mcp add --transport http smartalex https://mcp.getsmartalex.com
 Run locally via npx (no global install needed):
 
 ```bash
-SMARTALEX_API_KEY=sa_live_your_key_here npx @smartalex/mcp-server
+npx @smartalex/mcp-server
 ```
 
-Or install globally:
-
-```bash
-npm install -g @smartalex/mcp-server
-```
+Requires `SMARTALEX_API_KEY` environment variable to be set.
 
 ---
 
@@ -49,16 +45,10 @@ npm install -g @smartalex/mcp-server
 **Cloud (recommended):**
 
 ```bash
-claude mcp add --transport http smartalex https://mcp.getsmartalex.com
+claude mcp add --transport http smartalex https://api.getsmartalex.com/functions/v1/mcp-server
 ```
 
-Then set your API key when prompted, or pass it as a header:
-
-```bash
-claude mcp add --transport http \
-  --header "Authorization: Bearer sa_live_your_key_here" \
-  smartalex https://mcp.getsmartalex.com
-```
+Claude Code will prompt you to authenticate via OAuth in your browser.
 
 **Local:**
 
@@ -66,7 +56,7 @@ claude mcp add --transport http \
 claude mcp add smartalex -- npx @smartalex/mcp-server
 ```
 
-Set your API key as an environment variable:
+Set your API key first:
 
 ```bash
 export SMARTALEX_API_KEY=sa_live_your_key_here
@@ -93,7 +83,7 @@ Add to your Claude Desktop configuration file:
 }
 ```
 
-Restart Claude Desktop after saving the configuration.
+Restart Claude Desktop after saving.
 
 ### Cursor
 
@@ -117,7 +107,7 @@ Restart Cursor after saving.
 
 ### VS Code (GitHub Copilot)
 
-Add to your VS Code settings (`.vscode/mcp.json`):
+Add to `.vscode/mcp.json` in your project:
 
 ```json
 {
@@ -135,13 +125,29 @@ Add to your VS Code settings (`.vscode/mcp.json`):
 
 ### ChatGPT
 
-ChatGPT supports MCP via HTTP transport. Use the cloud endpoint:
+ChatGPT connects to SmartAlex via the cloud MCP endpoint using OAuth. Add the SmartAlex MCP server in ChatGPT's MCP settings with:
 
 ```
-https://mcp.getsmartalex.com
+https://api.getsmartalex.com/functions/v1/mcp-server
 ```
 
-Configure your API key in the ChatGPT MCP settings when adding the server.
+### Windows Note
+
+On Windows, use `cmd` as the command wrapper:
+
+```json
+{
+  "mcpServers": {
+    "smartalex": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@smartalex/mcp-server"],
+      "env": {
+        "SMARTALEX_API_KEY": "sa_live_your_key_here"
+      }
+    }
+  }
+}
+```
 
 ---
 
@@ -159,7 +165,9 @@ Configure your API key in the ChatGPT MCP settings when adding the server.
 
 ### Environment Variables
 
-Set your API key as an environment variable:
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `SMARTALEX_API_KEY` | Yes (local) | Your API key from the dashboard |
 
 ```bash
 # macOS/Linux — add to ~/.zshrc or ~/.bashrc
@@ -169,17 +177,9 @@ export SMARTALEX_API_KEY=sa_live_your_key_here
 $env:SMARTALEX_API_KEY = "sa_live_your_key_here"
 ```
 
-### OAuth 2.0 (Advanced)
+### OAuth 2.0 (Cloud)
 
-For applications requiring delegated access:
-
-```
-Authorization URL: https://getsmartalex.com/oauth/authorize
-Token URL:         https://getsmartalex.com/oauth/token
-Scopes:            contacts:read contacts:write agents:read campaigns:read
-                   campaigns:write calls:read deals:read deals:write
-                   webhooks:read webhooks:write platform:read
-```
+Cloud connections use Supabase native OAuth. When connecting via HTTP transport, your AI client will open a browser window for authentication. No manual token management needed.
 
 ---
 
@@ -187,17 +187,30 @@ Scopes:            contacts:read contacts:write agents:read campaigns:read
 
 Once connected, try asking your AI assistant:
 
-> "List my SmartAlex contacts"
+> "Show me my SmartAlex contacts"
 
-The assistant will use the `list_contacts` tool and return your contacts:
+The assistant will use the `smartalex_list_contacts` tool and return your contacts:
 
-```
-Assistant: I found 47 contacts in your SmartAlex account. Here are the most recent:
-
-1. Sarah Johnson — sarah@example.com — +1 (555) 123-4567 — Tag: enterprise
-2. Michael Chen — michael@chen.co — +1 (555) 234-5678 — Tag: smb
-3. Lisa Park — lisa.park@corp.io — +1 (555) 345-6789 — Tag: enterprise
-...
+```json
+{
+  "data": [
+    {
+      "id": "a1b2c3d4-...",
+      "first_name": "Sarah",
+      "last_name": "Johnson",
+      "email": "sarah@example.com",
+      "phone": "+15551234567",
+      "tags": ["enterprise"],
+      "status": "active",
+      "created_at": "2026-03-01T10:30:00Z"
+    }
+  ],
+  "meta": {
+    "total": 21,
+    "page": 1,
+    "per_page": 25
+  }
+}
 ```
 
 ### More Examples
@@ -206,18 +219,16 @@ Assistant: I found 47 contacts in your SmartAlex account. Here are the most rece
 > "What's the status of my SmartAlex platform?"
 
 **Analyze recent calls:**
-> "Show me calls from the last 7 days and summarize the outcomes"
+> "Show me my recent calls"
 
 **Create a contact:**
 > "Add a new contact: John Smith, john@acme.com, +1 555 987 6543"
 
 **Review your pipeline:**
-> "Show me all deals in the pipeline sorted by value"
+> "Show me all deals in the offer stage"
 
-**Design a campaign:**
-> "Help me design an outbound campaign for my enterprise contacts"
-
-This last example uses the `campaign-strategy` prompt to guide a multi-step conversation.
+**Create a campaign:**
+> "Create an outbound campaign called Q2 Outreach"
 
 ---
 
@@ -226,74 +237,51 @@ This last example uses the `campaign-strategy` prompt to guide a multi-step conv
 | Feature | Cloud | Local |
 |---------|-------|-------|
 | **Setup** | No installation | Requires Node.js 18+ |
-| **Transport** | HTTP | stdio |
-| **Latency** | ~50ms (edge-hosted) | ~10ms + API round-trip |
-| **Updates** | Automatic | `npm update` required |
-| **Offline use** | No | No (still needs API) |
-| **Best for** | ChatGPT, quick setup | Claude Code, Cursor, VS Code |
+| **Auth** | OAuth (browser) or API key | API key only |
+| **Transport** | HTTP Streamable | stdio |
+| **Updates** | Automatic | `npx @smartalex/mcp-server@latest` |
+| **Offline** | No | No (still needs SmartAlex API) |
+| **Best for** | Claude Code, ChatGPT | Claude Desktop, Cursor, VS Code |
 
-**Recommendation:** Use cloud for the fastest setup. Use local if you want to pin a specific version or your organization requires local-only tool execution.
+**Recommendation:** Use cloud for the fastest setup. Use local if your organization requires local-only tool execution or you want to pin a specific version.
 
 ---
 
 ## Troubleshooting
 
-### "Connection refused" or "Server not found"
-
-**Cloud:** Verify the endpoint URL is exactly `https://mcp.getsmartalex.com`. Check your network allows outbound HTTPS.
-
-**Local:** Ensure Node.js 18+ is installed:
-
-```bash
-node --version  # Should be v18.0.0 or higher
-```
-
 ### "Authentication failed" or "Invalid API key"
 
 - Verify your key starts with `sa_live_` (production) or `sa_test_` (test)
-- Regenerate the key from **Settings > API Keys** if expired
-- Check the environment variable is set correctly:
+- Regenerate the key from **Settings > API Keys** if it may be expired
+- Check the environment variable is set:
 
 ```bash
 echo $SMARTALEX_API_KEY  # Should print your key
 ```
 
-### "Tool not found" or tools not appearing
+### Tools not appearing after connecting
 
 - Restart your AI client after configuration changes
 - For Claude Desktop: fully quit and reopen (not just close the window)
 - For Cursor: use the command palette > "Reload Window"
-- Verify the server is running:
+- For Claude Code: run `/mcp` to check server status
 
-```bash
-npx @smartalex/mcp-server --health
-```
+### "reconnection failed" (Cloud)
+
+The cloud MCP server runs in stateless mode. If you see a reconnection error, simply reconnect — each request is independent and doesn't require a persistent session.
 
 ### Rate Limiting
 
-The SmartAlex MCP server respects your account's API rate limits:
+If you see HTTP 429 responses, you've exceeded the rate limit (100 req/min per tenant for authenticated, 30 req/min per IP for public). Wait for the `Retry-After` header duration and retry. Most AI clients handle this automatically.
 
-| Plan | Requests/minute | Requests/day |
-|------|-----------------|--------------|
-| Starter | 60 | 5,000 |
-| Professional | 300 | 50,000 |
-| Enterprise | 1,000 | Unlimited |
+### First run is slow (Local)
 
-If you hit rate limits, the server returns a `429` status with a `Retry-After` header. Most AI clients handle this automatically.
-
-### Debug Mode
-
-Run the local server with debug logging to diagnose issues:
-
-```bash
-SMARTALEX_DEBUG=true SMARTALEX_API_KEY=sa_live_xxx npx @smartalex/mcp-server
-```
-
-This outputs detailed request/response logs to stderr.
+The first `npx @smartalex/mcp-server` downloads the package (~20 kB + dependencies). Subsequent runs use the cached version and start in under 2 seconds.
 
 ---
 
 ## Next Steps
 
 - [Tools Reference](/mcp/tools-reference) — Complete reference for all 18 tools with parameters and examples
+- [Error Reference](/mcp/errors) — Error codes and troubleshooting
 - [MCP Overview](/mcp/overview) — Architecture, resources, prompts, and workflows
