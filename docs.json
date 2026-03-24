@@ -144,6 +144,8 @@
             "pages": [
               "mcp/overview",
               "mcp/getting-started",
+              "mcp/npm-package",
+              "mcp/examples",
               "mcp/tools-reference",
               "mcp/errors"
             ]

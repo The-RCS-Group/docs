@@ -1,0 +1,405 @@
+---
+title: "npm Package Setup"
+description: "Install and configure the @smartalex/mcp-server npm package. Run SmartAlex locally with Claude Desktop, Cursor, VS Code, Windsurf, or any MCP-compatible AI client."
+---
+
+# npm Package Setup
+
+The `@smartalex/mcp-server` npm package lets you run SmartAlex's MCP server locally on your machine. It communicates with your AI client over stdio and authenticates to SmartAlex's API using your API key.
+
+<Info>
+  **Prefer zero setup?** Use the [cloud connection](/mcp/getting-started#cloud-connection-recommended) instead — no installation, automatic updates, and OAuth authentication.
+</Info>
+
+---
+
+## Install
+
+No global install needed. Your AI client runs the package via `npx`:
+
+```bash
+npx @smartalex/mcp-server
+```
+
+**Requirements:**
+- Node.js 18 or later
+- A SmartAlex API key ([generate one here](https://app.getsmartalex.com/settings))
+
+**Package details:**
+
+| Field | Value |
+|-------|-------|
+| Package | `@smartalex/mcp-server` |
+| Version | `0.1.5` |
+| Size | ~20 kB (plus dependencies) |
+| Transport | stdio |
+| License | MIT |
+| Registry | [npmjs.com/package/@smartalex/mcp-server](https://www.npmjs.com/package/@smartalex/mcp-server) |
+
+---
+
+## Get Your API Key
+
+1. Log in to your [SmartAlex Dashboard](https://app.getsmartalex.com)
+2. Navigate to **Settings > API Keys**
+3. Click **Generate New Key**
+4. Choose your environment:
+   - `sa_live_` — production data
+   - `sa_test_` — staging/test data
+5. Copy the key immediately — it won't be shown again
+
+<Warning>
+  Keep your API key secret. Never commit it to version control or share it publicly. Use environment variables instead.
+</Warning>
+
+---
+
+## Client Setup
+
+### Claude Desktop
+
+Add SmartAlex to your Claude Desktop configuration file.
+
+<Tabs>
+  <Tab title="macOS">
+    Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
+
+    ```json
+    {
+      "mcpServers": {
+        "smartalex": {
+          "command": "npx",
+          "args": ["@smartalex/mcp-server"],
+          "env": {
+            "SMARTALEX_API_KEY": "sa_live_your_key_here"
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="Windows">
+    Edit `%APPDATA%\Claude\claude_desktop_config.json`:
+
+    ```json
+    {
+      "mcpServers": {
+        "smartalex": {
+          "command": "cmd",
+          "args": ["/c", "npx", "-y", "@smartalex/mcp-server"],
+          "env": {
+            "SMARTALEX_API_KEY": "sa_live_your_key_here"
+          }
+        }
+      }
+    }
+    ```
+
+    <Note>
+      Windows requires `cmd /c` as the command wrapper. The `-y` flag auto-accepts the npx install prompt.
+    </Note>
+  </Tab>
+  <Tab title="Linux">
+    Edit `~/.config/Claude/claude_desktop_config.json`:
+
+    ```json
+    {
+      "mcpServers": {
+        "smartalex": {
+          "command": "npx",
+          "args": ["@smartalex/mcp-server"],
+          "env": {
+            "SMARTALEX_API_KEY": "sa_live_your_key_here"
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+**After saving:** Fully quit Claude Desktop and reopen it. The SmartAlex tools will appear in the tool menu (hammer icon).
+
+---
+
+### Claude Code
+
+```bash
+claude mcp add smartalex -- npx @smartalex/mcp-server
+```
+
+Set your API key as an environment variable:
+
+```bash
+# macOS/Linux — add to ~/.zshrc or ~/.bashrc
+export SMARTALEX_API_KEY=sa_live_your_key_here
+
+# Windows PowerShell
+$env:SMARTALEX_API_KEY = "sa_live_your_key_here"
+```
+
+**Verify the connection:**
+
+```bash
+claude /mcp
+```
+
+You should see `smartalex` listed with 18 tools.
+
+---
+
+### Cursor
+
+Add to `.cursor/mcp.json` in your project root (project-level) or `~/.cursor/mcp.json` (global):
+
+<Tabs>
+  <Tab title="macOS / Linux">
+    ```json
+    {
+      "mcpServers": {
+        "smartalex": {
+          "command": "npx",
+          "args": ["@smartalex/mcp-server"],
+          "env": {
+            "SMARTALEX_API_KEY": "sa_live_your_key_here"
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="Windows">
+    ```json
+    {
+      "mcpServers": {
+        "smartalex": {
+          "command": "cmd",
+          "args": ["/c", "npx", "-y", "@smartalex/mcp-server"],
+          "env": {
+            "SMARTALEX_API_KEY": "sa_live_your_key_here"
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+**After saving:** Restart Cursor or use the command palette: `Developer: Reload Window`.
+
+---
+
+### VS Code (GitHub Copilot)
+
+Add to `.vscode/mcp.json` in your project:
+
+<Tabs>
+  <Tab title="macOS / Linux">
+    ```json
+    {
+      "mcpServers": {
+        "smartalex": {
+          "command": "npx",
+          "args": ["@smartalex/mcp-server"],
+          "env": {
+            "SMARTALEX_API_KEY": "sa_live_your_key_here"
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="Windows">
+    ```json
+    {
+      "mcpServers": {
+        "smartalex": {
+          "command": "cmd",
+          "args": ["/c", "npx", "-y", "@smartalex/mcp-server"],
+          "env": {
+            "SMARTALEX_API_KEY": "sa_live_your_key_here"
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+### Windsurf
+
+Add to your Windsurf MCP configuration:
+
+```json
+{
+  "mcpServers": {
+    "smartalex": {
+      "command": "npx",
+      "args": ["@smartalex/mcp-server"],
+      "env": {
+        "SMARTALEX_API_KEY": "sa_live_your_key_here"
+      }
+    }
+  }
+}
+```
+
+---
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `SMARTALEX_API_KEY` | Yes | Your API key from the dashboard |
+
+The API key is the only configuration needed. The server automatically connects to SmartAlex's production API gateway.
+
+### Version Pinning
+
+To lock to a specific version (recommended for production automations):
+
+```json
+{
+  "mcpServers": {
+    "smartalex": {
+      "command": "npx",
+      "args": ["@smartalex/mcp-server@0.1.5"],
+      "env": {
+        "SMARTALEX_API_KEY": "sa_live_your_key_here"
+      }
+    }
+  }
+}
+```
+
+### Updating
+
+To update to the latest version:
+
+```bash
+# Clear the npx cache and pull the latest
+npx @smartalex/mcp-server@latest
+```
+
+Or install globally for faster startup:
+
+```bash
+npm install -g @smartalex/mcp-server@latest
+```
+
+Then use `@smartalex/mcp-server` (without npx) as the command in your config:
+
+```json
+{
+  "mcpServers": {
+    "smartalex": {
+      "command": "@smartalex/mcp-server",
+      "env": {
+        "SMARTALEX_API_KEY": "sa_live_your_key_here"
+      }
+    }
+  }
+}
+```
+
+---
+
+## What's Included
+
+The npm package provides the same 18 tools, 7 resources, and 5 prompts as the cloud endpoint:
+
+| Category | Count | Examples |
+|----------|-------|---------|
+| **Tools** | 18 | `smartalex_list_contacts`, `smartalex_create_deal`, `smartalex_get_call` |
+| **Resources** | 7 | `smartalex://agents`, `smartalex://deals/pipeline`, `smartalex://workflows` |
+| **Prompts** | 5 | `campaign-strategy`, `lead-qualification`, `pipeline-review` |
+
+See the [Tools Reference](/mcp/tools-reference) for the complete list with parameters and examples.
+
+---
+
+## Architecture
+
+```
+┌──────────────┐      stdio       ┌──────────────────────┐     HTTPS      ┌─────────────────┐
+│  AI Client   │ ◄──────────────► │  @smartalex/mcp-server │ ────────────► │  SmartAlex API  │
+│  (Claude,    │                  │  (runs locally)        │  Bearer token  │  Gateway        │
+│   Cursor,    │                  │                        │                │                 │
+│   VS Code)   │                  └──────────────────────┘                └─────────────────┘
+└──────────────┘
+```
+
+1. Your AI client spawns the MCP server as a local process
+2. Communication happens over **stdio** (stdin/stdout)
+3. The server authenticates to SmartAlex's API using your API key
+4. All data stays within your SmartAlex tenant — multi-tenant isolation is enforced server-side
+
+---
+
+## Troubleshooting
+
+### "Authentication failed" or 401 errors
+
+- Verify your key starts with `sa_live_` or `sa_test_`
+- Check the key hasn't expired or been revoked in the dashboard
+- Confirm the environment variable is set:
+
+```bash
+echo $SMARTALEX_API_KEY
+```
+
+### Tools not appearing
+
+- Restart your AI client completely after config changes
+- **Claude Desktop:** Fully quit (not just close window) and reopen
+- **Cursor:** Command palette > `Developer: Reload Window`
+- **Claude Code:** Run `/mcp` to check server status
+
+### First run is slow
+
+The first `npx @smartalex/mcp-server` downloads the package (~20 kB + dependencies). Subsequent runs use the npx cache and start in under 2 seconds.
+
+### Windows: "npx is not recognized"
+
+Ensure Node.js is installed and in your PATH:
+
+```powershell
+node --version   # Should print v18.x or later
+npx --version    # Should print a version number
+```
+
+If not installed, download from [nodejs.org](https://nodejs.org/).
+
+### Windows: spawn errors
+
+Windows requires the `cmd /c` wrapper. See the [Windows tab](#claude-desktop) in the setup section above.
+
+---
+
+## npm Package vs Cloud
+
+| Feature | npm Package (local) | Cloud Endpoint |
+|---------|-------------------|----------------|
+| **Installation** | Requires Node.js 18+ | None |
+| **Auth** | API key (env var) | OAuth (browser) or API key |
+| **Transport** | stdio | HTTP Streamable |
+| **Updates** | Manual (`@latest`) | Automatic |
+| **Offline** | No (needs SmartAlex API) | No |
+| **Best for** | Claude Desktop, Cursor, VS Code | Claude Code, ChatGPT |
+| **Version control** | Pin to specific version | Always latest |
+
+**When to use local:** Your organization requires local tool execution, you want to pin a specific version, or your AI client only supports stdio transport.
+
+**When to use cloud:** You want zero setup, automatic updates, or OAuth-based authentication. [Set up cloud connection →](/mcp/getting-started#cloud-connection-recommended)
+
+---
+
+## Next Steps
+
+- [Usage Examples](/mcp/examples) — Real-world workflows and conversation examples
+- [Tools Reference](/mcp/tools-reference) — Complete reference for all 18 tools
+- [Error Reference](/mcp/errors) — Error codes and troubleshooting

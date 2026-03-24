@@ -1,0 +1,336 @@
+---
+title: "Usage Examples"
+description: "Real-world examples of using SmartAlex MCP tools to manage contacts, run campaigns, analyze calls, and track deals through AI conversation."
+---
+
+# Usage Examples
+
+These examples show real conversations between users and AI assistants connected to SmartAlex via MCP. Each example shows the natural language prompt, the tools the assistant calls, and the result.
+
+<Info>
+  These examples work with any MCP-compatible client — Claude Desktop, Claude Code, Cursor, VS Code, or ChatGPT. The AI assistant automatically selects the right tools based on your request.
+</Info>
+
+---
+
+## Example 1: Contact Management Workflow
+
+### Import and organize contacts
+
+**You:** "Add a new contact Sarah Chen, email sarah@acmerealty.com, phone +1 415 555 0123, company Acme Realty. Tag her as enterprise and buyer."
+
+**Assistant calls:** `smartalex_create_contact`
+
+```json
+{
+  "first_name": "Sarah",
+  "last_name": "Chen",
+  "email": "sarah@acmerealty.com",
+  "phone": "+14155550123",
+  "company": "Acme Realty",
+  "tags": ["enterprise", "buyer"]
+}
+```
+
+**Result:**
+
+```json
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "first_name": "Sarah",
+  "last_name": "Chen",
+  "email": "sarah@acmerealty.com",
+  "phone": "+14155550123",
+  "company": "Acme Realty",
+  "tags": ["enterprise", "buyer"],
+  "status": "active",
+  "created_at": "2026-03-24T10:30:00+00:00"
+}
+```
+
+**You:** "Now create a $75,000 deal for Sarah called 'Acme Realty Enterprise' in the qualified stage."
+
+**Assistant calls:** `smartalex_create_deal`
+
+```json
+{
+  "deal_name": "Acme Realty Enterprise",
+  "stage": "qualified",
+  "deal_value": 75000,
+  "contact_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+}
+```
+
+**Assistant:** "Done. Created the 'Acme Realty Enterprise' deal for $75,000 in the qualified stage, linked to Sarah Chen."
+
+---
+
+## Example 2: Call Analysis and Follow-Up
+
+### Review recent calls and take action
+
+**You:** "Show me my last 5 calls."
+
+**Assistant calls:** `smartalex_list_calls` with `per_page: 5`
+
+**Assistant:** "Here are your 5 most recent calls:
+
+| # | Contact | Direction | Duration | Sentiment | Status |
+|---|---------|-----------|----------|-----------|--------|
+| 1 | Sarah Chen | Outbound | 3:05 | 0.72 (positive) | Completed |
+| 2 | Mike Rodriguez | Inbound | 1:45 | 0.31 (negative) | Completed |
+| 3 | Lisa Park | Outbound | 4:22 | 0.85 (positive) | Completed |
+| 4 | James Wilson | Outbound | 0:30 | 0.15 (negative) | No answer |
+| 5 | Anna Taylor | Inbound | 2:10 | 0.65 (positive) | Completed |
+
+Call #2 with Mike Rodriguez had a low sentiment score. Want me to pull the transcript?"
+
+**You:** "Yes, show me Mike's call transcript."
+
+**Assistant calls:** `smartalex_get_call` with the call UUID
+
+**Assistant:** "Here's the transcript from Mike's call. He expressed frustration about scheduling delays. Key objections: timing conflict with the Q2 deadline, and pricing concerns for the premium tier. I'd recommend a follow-up call with a discount offer or flexible scheduling options."
+
+**You:** "Update Mike's contact — add a tag 'needs-follow-up'."
+
+**Assistant calls:** `smartalex_update_contact`
+
+```json
+{
+  "id": "b2c3d4e5-...",
+  "tags": ["needs-follow-up"]
+}
+```
+
+---
+
+## Example 3: Pipeline Review and Deal Management
+
+### Analyze your sales pipeline
+
+**You:** "Give me a pipeline overview. How many deals in each stage?"
+
+**Assistant calls:** `smartalex_list_deals` (all stages)
+
+**Assistant:** "Here's your pipeline breakdown:
+
+| Stage | Deals | Total Value |
+|-------|-------|-------------|
+| Lead | 8 | $42,000 |
+| Qualified | 5 | $187,500 |
+| Showing | 3 | $95,000 |
+| Offer | 2 | $150,000 |
+| Under Contract | 1 | $82,000 |
+
+**Total pipeline:** 19 deals worth $556,500.
+
+Your offer stage has the highest average deal value ($75,000). The showing-to-offer conversion looks strong — want me to break down which deals are closest to closing?"
+
+**You:** "Move the Acme Realty deal to the offer stage."
+
+**Assistant calls:** `smartalex_update_deal`
+
+```json
+{
+  "id": "b7a4bc72-31e2-48a3-85ac-7f3ea5fcdab2",
+  "stage": "offer"
+}
+```
+
+**Assistant:** "Done. 'Acme Realty Enterprise' moved from qualified to offer stage."
+
+---
+
+## Example 4: Campaign Creation
+
+### Launch an outbound campaign
+
+**You:** "What agents do I have available?"
+
+**Assistant calls:** `smartalex_list_agents`
+
+**Assistant:** "You have 3 agents:
+
+| Agent | Language | Status |
+|-------|----------|--------|
+| Sales Assistant | English | Active |
+| Support Agent | English | Active |
+| Spanish Outreach | Spanish | Inactive |
+
+Which agent would you like to assign to the campaign?"
+
+**You:** "Create an outbound campaign called 'Q2 Enterprise Outreach' and assign the Sales Assistant."
+
+**Assistant calls:** `smartalex_create_campaign`
+
+```json
+{
+  "name": "Q2 Enterprise Outreach",
+  "campaign_type": "outbound",
+  "agent_id": "d835542e-111b-44ff-b9d8-bf22e9cf7abf"
+}
+```
+
+**Assistant:** "Created 'Q2 Enterprise Outreach' as an outbound campaign with the Sales Assistant agent assigned."
+
+---
+
+## Example 5: Webhook Integration
+
+### Set up real-time event notifications
+
+**You:** "I want to send call completion events to my CRM at https://crm.example.com/webhooks/smartalex"
+
+**Assistant calls:** `smartalex_create_webhook`
+
+```json
+{
+  "url": "https://crm.example.com/webhooks/smartalex",
+  "event_types": ["call.completed", "call.started"],
+  "description": "CRM call sync"
+}
+```
+
+**Result:**
+
+```json
+{
+  "id": "7842bee8-f18d-445d-9451-fa62fbfc3300",
+  "url": "https://crm.example.com/webhooks/smartalex",
+  "event_types": ["call.completed", "call.started"],
+  "signing_secret": "a6e1738893513ff5a4a72fba583aa30b..."
+}
+```
+
+<Warning>
+  The `signing_secret` is shown only once. Save it immediately to verify webhook payloads on your server. See [Webhook Security](/api-reference/webhooks) for verification details.
+</Warning>
+
+**You:** "Show me all my active webhooks."
+
+**Assistant calls:** `smartalex_list_webhooks`
+
+**Assistant:** "You have 2 active webhooks:
+
+| Webhook | URL | Events | Failures |
+|---------|-----|--------|----------|
+| CRM call sync | crm.example.com/webhooks/smartalex | call.completed, call.started | 0 |
+| Slack notifier | hooks.slack.com/services/... | deal.stage_changed | 0 |
+
+Both are healthy with zero failures."
+
+---
+
+## Example 6: Platform Health Check
+
+### Daily operations check
+
+**You:** "How's my SmartAlex platform doing?"
+
+**Assistant calls:** `smartalex_get_platform_status`
+
+**Assistant:** "SmartAlex is operational. Here's your account overview:
+
+| Metric | Value |
+|--------|-------|
+| Status | Operational |
+| Contacts | 247 |
+| Campaigns | 4 active |
+| Total Calls | 1,832 |
+| Deals | 19 in pipeline |
+
+Everything looks healthy. Your call volume is up 12% from last week."
+
+---
+
+## Multi-Step Workflows
+
+The AI assistant can chain multiple tools together in a single conversation to complete complex workflows.
+
+### Lead qualification workflow
+
+**You:** "Run a pipeline review. Show me my qualified leads, check if any have recent calls with negative sentiment, and flag deals that might need attention."
+
+The assistant will automatically:
+
+1. Call `smartalex_list_deals` with `stage: "qualified"`
+2. For each deal with a contact, call `smartalex_list_calls` to check recent activity
+3. Cross-reference sentiment scores
+4. Provide a summary with recommendations
+
+### Campaign performance analysis
+
+**You:** "How did my Q2 Enterprise Outreach campaign perform? Show me the calls, sentiment breakdown, and any deals that came from it."
+
+The assistant will:
+
+1. Call `smartalex_list_campaigns` to find the campaign
+2. Call `smartalex_list_calls` to pull calls from that campaign
+3. Call `smartalex_list_deals` to find related deals
+4. Provide conversion analysis and ROI estimates
+
+---
+
+## Using Prompts
+
+SmartAlex includes 5 built-in prompts that guide the AI through complex analysis:
+
+### Campaign Strategy
+
+**You:** "Use the campaign-strategy prompt to help me design a follow-up campaign for my real estate leads."
+
+The assistant will:
+- Pull your current contacts, agents, and campaigns
+- Analyze which contacts haven't been reached
+- Recommend agent assignment, timing, and messaging
+- Draft a campaign plan
+
+### Pipeline Review
+
+**You:** "Run a pipeline review."
+
+The assistant uses the `pipeline-review` prompt to:
+- Analyze deals at every stage
+- Identify bottlenecks (stages with stale deals)
+- Flag at-risk deals (high value, no recent activity)
+- Provide a forecast based on conversion rates
+
+### Lead Qualification
+
+**You:** "Score my leads using the lead-qualification prompt."
+
+The assistant will:
+- Pull contacts tagged as leads
+- Check call history and transcript sentiment
+- Score each lead on engagement, fit, and timing
+- Rank leads by likelihood to convert
+
+---
+
+## Tips
+
+<AccordionGroup>
+  <Accordion title="Be specific with names and numbers">
+    Instead of "update the deal", say "move the Acme Realty deal to offer stage" — the assistant will search by name.
+  </Accordion>
+
+  <Accordion title="Chain requests naturally">
+    You can say "Create a contact, then create a deal for them" in one message. The assistant handles the sequencing.
+  </Accordion>
+
+  <Accordion title="Ask for analysis, not just data">
+    Instead of "list my calls", try "which calls had the lowest sentiment this week?" — the assistant will filter and analyze for you.
+  </Accordion>
+
+  <Accordion title="Use prompts for complex tasks">
+    When you need multi-step analysis, reference a prompt by name: "Use the pipeline-review prompt" or "Run a lead qualification analysis."
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Next Steps
+
+- [npm Package Setup](/mcp/npm-package) — Install locally with Claude Desktop, Cursor, or VS Code
+- [Tools Reference](/mcp/tools-reference) — Complete parameter reference for all 18 tools
+- [MCP Overview](/mcp/overview) — Architecture, resources, and prompts
