@@ -144,7 +144,7 @@ $env:SMARTALEX_API_KEY = "sa_live_your_key_here"
 claude /mcp
 ```
 
-You should see `smartalex` listed with 18 tools.
+You should see `smartalex` listed with 26 tools.
 
 ---
 
@@ -246,6 +246,26 @@ Add to your Windsurf MCP configuration:
 }
 ```
 
+### Gemini CLI
+
+Add to your Gemini CLI settings file at `~/.gemini/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "smartalex": {
+      "command": "npx",
+      "args": ["@smartalex/mcp-server"],
+      "env": {
+        "SMARTALEX_API_KEY": "sa_live_your_key_here"
+      }
+    }
+  }
+}
+```
+
+After saving, restart Gemini CLI or run `/mcp` to connect.
+
 ---
 
 ## Configuration
@@ -310,11 +330,11 @@ Then use `@smartalex/mcp-server` (without npx) as the command in your config:
 
 ## What's Included
 
-The npm package provides the same 18 tools, 7 resources, and 5 prompts as the cloud endpoint:
+The npm package provides the same 26 tools, 7 resources, and 5 prompts as the cloud endpoint:
 
 | Category | Count | Examples |
 |----------|-------|---------|
-| **Tools** | 18 | `smartalex_list_contacts`, `smartalex_create_deal`, `smartalex_get_call` |
+| **Tools** | 26 | `smartalex_list_contacts`, `smartalex_create_agent`, `smartalex_update_agent`, `smartalex_get_call` |
 | **Resources** | 7 | `smartalex://agents`, `smartalex://deals/pipeline`, `smartalex://workflows` |
 | **Prompts** | 5 | `campaign-strategy`, `lead-qualification`, `pipeline-review` |
 
@@ -401,5 +421,5 @@ Windows requires the `cmd /c` wrapper. See the [Windows tab](#claude-desktop) in
 ## Next Steps
 
 - [Usage Examples](/mcp/examples) — Real-world workflows and conversation examples
-- [Tools Reference](/mcp/tools-reference) — Complete reference for all 18 tools
+- [Tools Reference](/mcp/tools-reference) — Complete reference for all 26 tools
 - [Error Reference](/mcp/errors) — Error codes and troubleshooting

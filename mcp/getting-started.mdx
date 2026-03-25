@@ -123,6 +123,28 @@ Add to `.vscode/mcp.json` in your project:
 }
 ```
 
+### Gemini CLI
+
+Add to your Gemini CLI settings file:
+
+**Location:** `~/.gemini/settings.json`
+
+```json
+{
+  "mcpServers": {
+    "smartalex": {
+      "command": "npx",
+      "args": ["@smartalex/mcp-server"],
+      "env": {
+        "SMARTALEX_API_KEY": "sa_live_your_key_here"
+      }
+    }
+  }
+}
+```
+
+After saving, restart Gemini CLI or run `/mcp` to connect.
+
 ### ChatGPT
 
 ChatGPT connects to SmartAlex via the cloud MCP endpoint using OAuth. Add the SmartAlex MCP server in ChatGPT's MCP settings with:
@@ -179,7 +201,7 @@ $env:SMARTALEX_API_KEY = "sa_live_your_key_here"
 
 ### OAuth 2.0 (Cloud)
 
-Cloud connections use Supabase native OAuth. When connecting via HTTP transport, your AI client will open a browser window for authentication. No manual token management needed.
+Cloud connections use OAuth 2.0. When connecting via HTTP transport, your AI client will open a browser window for authentication. No manual token management needed.
 
 ---
 
@@ -284,6 +306,6 @@ The first `npx @smartalex/mcp-server` downloads the package (~20 kB + dependenci
 
 - [npm Package Setup](/mcp/npm-package) — Detailed local installation guide with version pinning, updating, and per-client setup
 - [Usage Examples](/mcp/examples) — Real-world workflows and conversation examples
-- [Tools Reference](/mcp/tools-reference) — Complete reference for all 18 tools with parameters and examples
+- [Tools Reference](/mcp/tools-reference) — Complete reference for all 26 tools with parameters and examples
 - [Error Reference](/mcp/errors) — Error codes and troubleshooting
 - [MCP Overview](/mcp/overview) — Architecture, resources, prompts, and workflows

@@ -141,25 +141,32 @@ Your offer stage has the highest average deal value ($75,000). The showing-to-of
 
 ---
 
-## Example 4: Campaign Creation
+## Example 4: Full Campaign Workflow
 
-### Launch an outbound campaign
+### Launch an outbound campaign end-to-end
 
-**You:** "What agents do I have available?"
+**You:** "I want to set up an outbound campaign."
 
-**Assistant calls:** `smartalex_list_agents`
+**Assistant calls:** `smartalex_list_agents` and `smartalex_list_phone_numbers`
 
-**Assistant:** "You have 3 agents:
+**Assistant:** "Here's what's available:
+
+**Agents:**
 
 | Agent | Language | Status |
 |-------|----------|--------|
 | Sales Assistant | English | Active |
 | Support Agent | English | Active |
-| Spanish Outreach | Spanish | Inactive |
 
-Which agent would you like to assign to the campaign?"
+**Phone Numbers:**
 
-**You:** "Create an outbound campaign called 'Q2 Enterprise Outreach' and assign the Sales Assistant."
+| Number | Country |
+|--------|---------|
+| +1 (555) 123-4567 | US |
+
+Which agent would you like to use, and what should the campaign objective be?"
+
+**You:** "Use the Sales Assistant. The objective is to schedule product demos with enterprise leads. Use the US number and set it to call weekdays 9am to 5pm Eastern."
 
 **Assistant calls:** `smartalex_create_campaign`
 
@@ -167,11 +174,48 @@ Which agent would you like to assign to the campaign?"
 {
   "name": "Q2 Enterprise Outreach",
   "campaign_type": "outbound",
-  "agent_id": "d835542e-111b-44ff-b9d8-bf22e9cf7abf"
+  "agent_id": "d835542e-111b-44ff-b9d8-bf22e9cf7abf",
+  "objective": "Schedule product demos with enterprise leads",
+  "phone_number_id": "869d52ef-33f4-42c1-9ed9-07508dcbe485",
+  "timezone": "America/New_York",
+  "business_hours": {
+    "monday": { "enabled": true, "start": "09:00", "end": "17:00" },
+    "tuesday": { "enabled": true, "start": "09:00", "end": "17:00" },
+    "wednesday": { "enabled": true, "start": "09:00", "end": "17:00" },
+    "thursday": { "enabled": true, "start": "09:00", "end": "17:00" },
+    "friday": { "enabled": true, "start": "09:00", "end": "17:00" },
+    "saturday": { "enabled": false },
+    "sunday": { "enabled": false }
+  }
 }
 ```
 
-**Assistant:** "Created 'Q2 Enterprise Outreach' as an outbound campaign with the Sales Assistant agent assigned."
+**Assistant:** "Created 'Q2 Enterprise Outreach'. Now let's add contacts. Which contacts should I include?"
+
+**You:** "Add Sarah Johnson and Mike Chen."
+
+**Assistant calls:** `smartalex_add_contacts_to_campaign`
+
+```json
+{
+  "campaign_id": "c1d2e3f4-...",
+  "contact_ids": ["a1b2c3d4-...", "e5f6g7h8-..."]
+}
+```
+
+**Assistant:** "Added 2 contacts. The campaign is ready to launch — want me to start it?"
+
+**You:** "Yes, start it."
+
+**Assistant calls:** `smartalex_start_campaign`
+
+```json
+{
+  "campaign_id": "c1d2e3f4-..."
+}
+```
+
+**Assistant:** "Campaign 'Q2 Enterprise Outreach' is now active. The Sales Assistant will begin calling 2 contacts during your configured business hours (Mon–Fri 9am–5pm ET)."
 
 ---
 
@@ -332,5 +376,5 @@ The assistant will:
 ## Next Steps
 
 - [npm Package Setup](/mcp/npm-package) — Install locally with Claude Desktop, Cursor, or VS Code
-- [Tools Reference](/mcp/tools-reference) — Complete parameter reference for all 18 tools
+- [Tools Reference](/mcp/tools-reference) — Complete parameter reference for all 26 tools
 - [MCP Overview](/mcp/overview) — Architecture, resources, and prompts

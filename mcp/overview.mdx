@@ -1,6 +1,6 @@
 ---
 title: "MCP Server Overview"
-description: "SmartAlex MCP server lets AI assistants like Claude, ChatGPT, Cursor, and VS Code manage voice agents, campaigns, contacts, and analytics through the Model Context Protocol."
+description: "SmartAlex MCP server lets AI assistants like Claude, ChatGPT, Gemini, Cursor, and VS Code manage voice agents, campaigns, contacts, and analytics through the Model Context Protocol."
 ---
 
 # MCP Server Overview
@@ -11,17 +11,17 @@ SmartAlex provides a fully-featured [Model Context Protocol (MCP)](https://model
 
 The Model Context Protocol is an open standard that connects AI assistants to external tools, data sources, and services. Instead of switching between dashboards, you can ask your AI assistant to manage contacts, launch campaigns, analyze calls, and track deals — all through conversation.
 
-MCP is supported by Claude, Claude Code, Cursor, VS Code (GitHub Copilot), ChatGPT, and a growing ecosystem of AI clients.
+MCP is supported by Claude, Claude Code, Cursor, VS Code (GitHub Copilot), ChatGPT, Gemini CLI, and a growing ecosystem of AI clients.
 
 ## What SmartAlex's MCP Server Does
 
-The SmartAlex MCP server exposes **18 tools**, **7 resources**, and **5 prompts** — giving AI assistants full operational access to your SmartAlex workspace.
+The SmartAlex MCP server exposes **26 tools**, **7 resources**, and **5 prompts** — giving AI assistants full operational access to your SmartAlex workspace.
 
 With it, you can:
 
 - **Manage contacts** — list, create, update, and organize your contact database
-- **Configure voice agents** — view agent settings, language, and active status
-- **Run campaigns** — list campaigns and create new voice campaigns
+- **Create and configure voice agents** — build agents from a website URL or with full customization, update settings with automatic voice platform sync
+- **Run campaigns** — create campaigns, add contacts, start calling, and track progress
 - **Analyze calls** — browse call history and read full transcripts with sentiment data
 - **Track deals** — manage your sales pipeline from lead to closed
 - **Set up webhooks** — create event-driven integrations with external systems
@@ -29,9 +29,9 @@ With it, you can:
 
 ---
 
-## Tools (18)
+## Tools (26)
 
-SmartAlex exposes 18 tools organized across 7 domains. All tool names are prefixed with `smartalex_` to avoid conflicts with other MCP servers.
+SmartAlex exposes 26 tools organized across 7 domains. All tool names are prefixed with `smartalex_` to avoid conflicts with other MCP servers.
 
 ### Contacts (4 tools)
 
@@ -39,28 +39,36 @@ SmartAlex exposes 18 tools organized across 7 domains. All tool names are prefix
 |------|-------------|
 | `smartalex_list_contacts` | List contacts with pagination (page, per_page) |
 | `smartalex_get_contact` | Get a single contact by UUID |
-| `smartalex_create_contact` | Create a new contact (first_name and last_name required) |
+| `smartalex_create_contact` | Create a new contact (first_name required) |
 | `smartalex_update_contact` | Partial update — only provided fields change |
 
-### Agents (2 tools)
+### Agents (6 tools)
 
 | Tool | Description |
 |------|-------------|
 | `smartalex_list_agents` | List all AI voice agents with name, language, and status |
 | `smartalex_get_agent` | Get full agent configuration by UUID |
+| `smartalex_create_agent` | Quick Setup — create an agent from a website URL (auto-scrapes, generates prompt) |
+| `smartalex_create_agent_advanced` | Advanced Setup — create a fully customized agent with name, objective, direction, and more |
+| `smartalex_update_agent` | Update agent settings (16 fields) with automatic voice platform sync and prompt regeneration |
+| `smartalex_delete_agent` | Permanently delete a voice agent |
 
-### Campaigns (2 tools)
+### Campaigns (6 tools)
 
 | Tool | Description |
 |------|-------------|
-| `smartalex_list_campaigns` | List all voice campaigns |
-| `smartalex_create_campaign` | Create a campaign, optionally assign an agent |
+| `smartalex_list_phone_numbers` | List available phone numbers for outbound calling |
+| `smartalex_list_campaigns` | List all voice campaigns with status and agent assignment |
+| `smartalex_get_campaign` | Get campaign details including contact counts and call stats |
+| `smartalex_create_campaign` | Create a campaign — assign agent, set objective, configure hours |
+| `smartalex_add_contacts_to_campaign` | Add contacts to a campaign (max 100 per call, deduped) |
+| `smartalex_start_campaign` | Start a campaign to begin making calls |
 
 ### Calls (2 tools)
 
 | Tool | Description |
 |------|-------------|
-| `smartalex_list_calls` | List call records with pagination (direction, status, duration, sentiment, cost) |
+| `smartalex_list_calls` | List call records with pagination (direction, call_status, duration_seconds, sentiment, cost) |
 | `smartalex_get_call` | Get full call detail including conversation transcript |
 
 ### Deals (4 tools)
@@ -96,7 +104,7 @@ Resources provide read-only data that AI assistants can access for context.
 |----------|-----|-------------|
 | Platform Status | `smartalex://platform/status` | Health, uptime, and usage stats |
 | Agents | `smartalex://agents` | All configured voice agents |
-| Active Campaigns | `smartalex://campaigns/active` | Currently running campaigns |
+| Campaigns | `smartalex://campaigns/active` | All campaigns with status, mode, and agent assignment |
 | Recent Calls | `smartalex://calls/recent` | Last 25 calls with summary |
 | Deals Pipeline | `smartalex://deals/pipeline` | Current pipeline and deal values |
 | Contact Stats | `smartalex://contacts/stats` | Contact database overview (first 25) |
@@ -112,7 +120,7 @@ Prompts are pre-built conversation templates that guide AI assistants through co
 |--------|-------------|
 | `campaign-strategy` | Design a campaign strategy based on your contacts, agents, and goals |
 | `lead-qualification` | Analyze and score leads using call transcripts and engagement data |
-| `agent-design` | Design a new voice agent with optimal prompt and voice configuration |
+| `agent-design` | Evaluate and improve voice agents — suggest optimizations, new agents, or retirements |
 | `call-analysis` | Deep analysis of call outcomes — sentiment, objections, and conversions |
 | `pipeline-review` | Review your pipeline — bottlenecks, at-risk deals, and forecast |
 
@@ -128,6 +136,8 @@ SmartAlex MCP server works with any MCP-compatible client:
 | **Claude Desktop** | stdio (local) | Fully supported |
 | **Cursor** | stdio (local) | Fully supported |
 | **VS Code (GitHub Copilot)** | stdio (local) | Fully supported |
+| **Windsurf** | stdio (local) | Fully supported |
+| **Gemini CLI** | stdio (local) | Fully supported |
 | **ChatGPT** | HTTP (cloud) | Supported via cloud endpoint |
 | **Custom clients** | HTTP or stdio | Any MCP-compatible client works |
 
@@ -148,7 +158,7 @@ Generate API keys from your SmartAlex dashboard under **Settings > API Keys**.
 
 ### OAuth 2.0
 
-For AI clients that support OAuth (like Claude Code's HTTP transport), SmartAlex uses Supabase native OAuth. The server advertises its authorization server via the [RFC 9728](https://datatracker.ietf.org/doc/html/rfc9728) Protected Resource Metadata endpoint.
+For AI clients that support OAuth (like Claude Code's HTTP transport), SmartAlex provides native OAuth 2.0 authentication. The server advertises its authorization server via the [RFC 9728](https://datatracker.ietf.org/doc/html/rfc9728) Protected Resource Metadata endpoint.
 
 ---
 
@@ -194,5 +204,5 @@ Connect directly to SmartAlex's hosted MCP endpoint. No local installation requi
 - [Getting Started](/mcp/getting-started) — Connect SmartAlex to your AI assistant in under 2 minutes
 - [npm Package Setup](/mcp/npm-package) — Install locally with Claude Desktop, Cursor, VS Code, or Windsurf
 - [Usage Examples](/mcp/examples) — Real-world workflows and conversation examples
-- [Tools Reference](/mcp/tools-reference) — Complete reference for all 18 tools with parameters and examples
+- [Tools Reference](/mcp/tools-reference) — Complete reference for all 26 tools with parameters and examples
 - [Error Reference](/mcp/errors) — Error codes and troubleshooting

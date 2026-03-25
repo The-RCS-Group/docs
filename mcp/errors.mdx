@@ -7,6 +7,10 @@ description: "Error codes, HTTP status codes, and troubleshooting guide for the 
 
 When a tool call fails, the SmartAlex MCP server returns an error in the tool response content. This page covers all error codes, their causes, and how to resolve them.
 
+<Note>
+**Two error layers:** The SmartAlex API gateway returns HTTP status codes with JSON error bodies. The MCP server wraps these into plain-text error messages with actionable hints that your AI assistant sees directly. The examples below show both formats.
+</Note>
+
 ---
 
 ## HTTP Status Codes
@@ -14,11 +18,12 @@ When a tool call fails, the SmartAlex MCP server returns an error in the tool re
 | Status | Meaning | When it happens |
 |--------|---------|-----------------|
 | 200 | Success | Request processed successfully |
-| 201 | Created | Resource created (contacts, deals, webhooks, campaigns) |
+| 201 | Created | Resource created (contacts, deals, webhooks, campaigns, agents) |
 | 400 | Bad Request | Invalid parameters, missing required fields, or malformed UUID |
 | 401 | Unauthorized | Missing or invalid API key / OAuth token |
 | 403 | Forbidden | Valid auth but insufficient permissions (RBAC) |
 | 404 | Not Found | Resource doesn't exist or belongs to a different tenant |
+| 422 | Validation Error | Request body failed schema validation (e.g. invalid field type or value) |
 | 429 | Too Many Requests | Rate limit exceeded |
 | 500 | Internal Error | Server-side error |
 
@@ -28,10 +33,18 @@ When a tool call fails, the SmartAlex MCP server returns an error in the tool re
 
 ### 401 — Authorization required
 
+**Gateway response:**
+
 ```json
 {
   "error": "Authorization required"
 }
+```
+
+**MCP tool response:**
+
+```
+Failed to list contacts: Authorization required. Check your API key is valid and not expired.
 ```
 
 **Cause:** No `Authorization` header was provided.
@@ -132,6 +145,26 @@ When a tool call fails, the SmartAlex MCP server returns an error in the tool re
 **Cause:** An `id` parameter was provided but isn't a valid UUID.
 
 **Fix:** UUIDs follow the format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` (e.g., `a1b2c3d4-e5f6-7890-abcd-ef1234567890`).
+
+### 422 — Validation error
+
+**Gateway response:**
+
+```json
+{
+  "error": "name: String must contain at least 1 character(s)"
+}
+```
+
+**MCP tool response:**
+
+```
+Failed to create campaign: name: String must contain at least 1 character(s). Check your input parameters for validation errors.
+```
+
+**Cause:** The request body failed schema validation. The field name and specific issue are included in the message.
+
+**Fix:** Check the field mentioned in the error against the [Tools Reference](/mcp/tools-reference) for valid types and constraints.
 
 ---
 
@@ -257,5 +290,5 @@ Gateway error: <!DOCTYPE html>...
 ## Related Pages
 
 - [Getting Started](/mcp/getting-started) — Setup and troubleshooting
-- [Tools Reference](/mcp/tools-reference) — All 18 tools with parameters
+- [Tools Reference](/mcp/tools-reference) — All 26 tools with parameters
 - [MCP Overview](/mcp/overview) — Architecture and authentication

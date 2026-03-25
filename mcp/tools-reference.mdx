@@ -1,11 +1,11 @@
 ---
 title: "MCP Tools Reference"
-description: "Complete reference for all 18 SmartAlex MCP tools. Manage contacts, agents, campaigns, calls, deals, and webhooks from any MCP-compatible AI assistant."
+description: "Complete reference for all 26 SmartAlex MCP tools. Manage contacts, agents, campaigns, calls, deals, and webhooks from any MCP-compatible AI assistant."
 ---
 
 # MCP Tools Reference
 
-Complete reference for all 18 SmartAlex MCP tools, organized by domain. Each tool includes its parameters, response shape, and example usage.
+Complete reference for all 26 SmartAlex MCP tools, organized by domain. Each tool includes its parameters, response shape, and example usage.
 
 All tool names are prefixed with `smartalex_` to avoid conflicts when used alongside other MCP servers.
 
@@ -87,7 +87,7 @@ Create a new contact. Returns the created contact with its UUID.
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `first_name` | string | Yes | First name |
-| `last_name` | string | Yes | Last name |
+| `last_name` | string | No | Last name |
 | `phone` | string | No | Phone number (E.164 format preferred, e.g. `+14155551234`) |
 | `email` | string | No | Email address |
 | `company` | string | No | Company name |
@@ -183,9 +183,111 @@ Get a single AI voice agent by UUID. Returns full agent configuration.
 "Show me the config for agent d835542e-..."
 ```
 
+### smartalex_create_agent
+
+Create a new AI voice agent from a website URL (Quick Setup). The system automatically scrapes the website, analyzes the business, generates an optimized AI prompt, and deploys the agent.
+
+<Warning>Agent creation takes 30-60 seconds as it scrapes the website and configures the AI voice assistant.</Warning>
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `website_url` | string (URL) | Yes | Business website URL to analyze |
+| `company_name` | string | No | Override auto-detected company name |
+
+**Example usage:**
+
+```
+"Create an agent for my website https://example.com"
+```
+
+### smartalex_create_agent_advanced
+
+Create a fully customized AI voice agent with specific settings (Advanced Setup).
+
+<Warning>Agent creation takes 15-30 seconds as it configures the AI voice assistant.</Warning>
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `name` | string | Yes | Agent display name (e.g. "Sarah") |
+| `company_name` | string | Yes | Company name the agent represents |
+| `objective` | string | No | What the agent should do on calls |
+| `call_direction` | string | No | "inbound", "outbound", or "both" (default: "inbound") |
+| `language` | string | No | Language code (default: "en") |
+| `website_url` | string (URL) | No | Website URL for enhanced knowledge |
+| `first_message` | string | No | Custom greeting message |
+
+**Example usage:**
+
+```
+"Create an agent named Sarah for Bright Smiles Dental that schedules appointments"
+```
+
+### smartalex_update_agent
+
+Update an existing voice agent's settings. Changes are automatically synced to the live voice platform. Prompt-affecting fields trigger system prompt regeneration.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | string (UUID) | Yes | Agent UUID |
+| `name` | string | No | Display name (sidebar/dashboard) |
+| `assistant_name` | string | No | AI name (how the agent introduces itself) |
+| `company_name` | string | No | Company name the agent represents |
+| `assistant_personality` | string | No | Personality description |
+| `is_active` | boolean | No | Active/inactive toggle |
+| `objective` | string | No | What the agent should do on calls |
+| `product_description` | string | No | Product/service description |
+| `first_message` | string | No | Custom greeting message |
+| `call_direction` | string | No | "inbound", "outbound", or "both" |
+| `language` | string | No | Language code |
+| `custom_instructions` | string[] | No | Custom behavior rules |
+| `background_sound` | string | No | "office" or "off" |
+| `enabled_tools` | string[] | No | Tool keys to enable |
+| `knowledge_item_ids` | string[] (UUID) | No | KB item UUIDs to link (replaces current) |
+| `phone_number_id` | string (UUID) or null | No | Phone number to assign (null to unassign) |
+
+**Example usage:**
+
+```
+"Rename agent to Sophie and change the objective to schedule demos"
+```
+
+### smartalex_delete_agent
+
+Permanently delete a voice agent. This action cannot be undone.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | string (UUID) | Yes | Agent UUID |
+
+**Example usage:**
+
+```
+"Delete the test agent"
+```
+
 ---
 
 ## Campaigns
+
+### smartalex_list_phone_numbers
+
+List all active phone numbers available for outbound campaigns.
+
+**Parameters:** None
+
+**Example usage:**
+
+```
+"What phone numbers do I have?"
+```
 
 ### smartalex_list_campaigns
 
@@ -235,14 +337,75 @@ Create a new voice campaign. Optionally assign an AI agent to handle calls.
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `name` | string | Yes | Campaign name (1–200 characters) |
-| `campaign_type` | string | No | Campaign type (e.g. `outbound`, `follow-up`) |
 | `agent_id` | string (UUID) | No | UUID of the AI agent to assign |
+| `objective` | string | No | Call objective — what the agent should do on each call (1–2000 chars) |
+| `description` | string | No | Campaign description (max 500 chars) |
+| `campaign_type` | string | No | Campaign type (e.g. `outbound`, `follow-up`) |
+| `phone_number_id` | string (UUID) | No | Phone number to use for outbound calls (from `smartalex_list_phone_numbers`) |
+| `timezone` | string | No | IANA timezone for calling hours (e.g. `America/New_York`, `Europe/London`) |
+| `business_hours` | object | No | Custom calling hours per day — each day has `enabled`, `start`, `end` (24h format) |
+
+<Note>
+  Before creating a campaign, always call `smartalex_list_agents` and `smartalex_list_phone_numbers` to let the user pick an agent and phone number.
+</Note>
 
 **Example usage:**
 
 ```
-"Create a new outbound campaign called Q2 Outreach"
-"Create campaign Follow-ups with agent d835542e-..."
+"Create a new outbound campaign called Q2 Outreach with agent d835542e-..."
+```
+
+### smartalex_get_campaign
+
+Get a single campaign by UUID. Returns full details including status, objective, contact counts, and call statistics.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | string (UUID) | Yes | Campaign UUID |
+
+**Example usage:**
+
+```
+"Show me the details for campaign c1d2e3f4-..."
+```
+
+### smartalex_add_contacts_to_campaign
+
+Add one or more contacts to a campaign. Contacts are queued for calling when the campaign starts. Duplicates are automatically skipped.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `campaign_id` | string (UUID) | Yes | Campaign UUID |
+| `contact_ids` | string[] (UUID) | Yes | Array of contact UUIDs (max 100 per call) |
+
+**Example usage:**
+
+```
+"Add contacts John and Sarah to the Q2 Outreach campaign"
+```
+
+### smartalex_start_campaign
+
+Start a campaign to begin making calls. The campaign must have an agent, an objective, and at least one contact.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `campaign_id` | string (UUID) | Yes | Campaign UUID to start |
+
+<Note>
+  Pre-requisites: The campaign must have an agent assigned, an objective set, contacts added, and a phone number available on the account. Missing requirements return a helpful error message.
+</Note>
+
+**Example usage:**
+
+```
+"Start the Q2 Outreach campaign"
 ```
 
 ---
@@ -589,8 +752,8 @@ All tools include MCP annotations that help AI clients understand tool behavior:
 | Annotation | Description | Tools |
 |------------|-------------|-------|
 | `readOnlyHint: true` | Does not modify data | All list/get tools, platform status |
-| `destructiveHint: true` | Permanently removes data | `delete_deal`, `delete_webhook` |
-| `idempotentHint: true` | Same args = same result | `update_contact`, `update_deal` |
+| `destructiveHint: true` | Permanently removes data | `delete_agent`, `delete_deal`, `delete_webhook` |
+| `idempotentHint: true` | Same args = same result | `update_contact`, `update_agent`, `update_deal` |
 | `openWorldHint: true` | Interacts with external API | All tools |
 
 ---
