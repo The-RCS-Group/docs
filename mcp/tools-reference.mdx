@@ -1,11 +1,11 @@
 ---
 title: "MCP Tools Reference"
-description: "Complete reference for all 26 SmartAlex MCP tools. Manage contacts, agents, campaigns, calls, deals, and webhooks from any MCP-compatible AI assistant."
+description: "Complete reference for all 28 SmartAlex MCP tools. Manage contacts, agents, campaigns, calls, deals, and webhooks from any MCP-compatible AI assistant."
 ---
 
 # MCP Tools Reference
 
-Complete reference for all 26 SmartAlex MCP tools, organized by domain. Each tool includes its parameters, response shape, and example usage.
+Complete reference for all 28 SmartAlex MCP tools, organized by domain. Each tool includes its parameters, response shape, and example usage.
 
 All tool names are prefixed with `smartalex_` to avoid conflicts when used alongside other MCP servers.
 
@@ -275,11 +275,11 @@ Permanently delete a voice agent. This action cannot be undone.
 
 ---
 
-## Campaigns
+## Phone Numbers
 
 ### smartalex_list_phone_numbers
 
-List all active phone numbers available for outbound campaigns.
+List all active phone numbers with country and agent assignment. Use this to see which numbers are available for campaigns and agents.
 
 **Parameters:** None
 
@@ -287,7 +287,78 @@ List all active phone numbers available for outbound campaigns.
 
 ```
 "What phone numbers do I have?"
+"List my phone numbers"
 ```
+
+---
+
+### smartalex_search_available_numbers
+
+Search for available phone numbers to purchase by country. Returns a list of phone numbers that can be bought.
+
+Supported countries: US, CA, GB, AU, NZ, FI, DK, NL, ZA.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `country_code` | string | No | ISO-2 country code (default: "US") |
+| `limit` | integer | No | Max results to return (default: 20, max: 50) |
+
+**Example usage:**
+
+```
+"Search for available US phone numbers"
+"Find 5 phone numbers in the UK"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "phone_number": "+14155551234",
+      "country": "US",
+      "region": "CA",
+      "capabilities": ["voice", "sms"]
+    }
+  ]
+}
+```
+
+---
+
+### smartalex_buy_phone_number
+
+Purchase a specific phone number for use with campaigns and agents. First number is free on trial; additional numbers cost ~$1.66/month.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `phone_number` | string | Yes | Phone number in E.164 format (e.g. `+14155551234`) |
+
+**Example usage:**
+
+```
+"Buy the number +14155551234"
+```
+
+**Example response:**
+
+```json
+{
+  "id": "a1b2c3d4-...",
+  "phone_number": "+14155551234",
+  "country": "US",
+  "status": "active"
+}
+```
+
+---
+
+## Campaigns
 
 ### smartalex_list_campaigns
 

@@ -30,7 +30,7 @@ npx @smartalex/mcp-server
 | Field | Value |
 |-------|-------|
 | Package | `@smartalex/mcp-server` |
-| Version | `0.2.1` |
+| Version | `0.3.8` |
 | Size | ~20 kB (plus dependencies) |
 | Transport | stdio |
 | License | MIT |
@@ -144,7 +144,7 @@ $env:SMARTALEX_API_KEY = "sa_live_your_key_here"
 claude /mcp
 ```
 
-You should see `smartalex` listed with 26 tools.
+You should see `smartalex` listed with 28 tools.
 
 ---
 
@@ -287,7 +287,7 @@ To lock to a specific version (recommended for production automations):
   "mcpServers": {
     "smartalex": {
       "command": "npx",
-      "args": ["@smartalex/mcp-server@0.2.1"],
+      "args": ["@smartalex/mcp-server@0.3.8"],
       "env": {
         "SMARTALEX_API_KEY": "sa_live_your_key_here"
       }
@@ -330,11 +330,11 @@ Then use `@smartalex/mcp-server` (without npx) as the command in your config:
 
 ## What's Included
 
-The npm package provides the same 26 tools, 7 resources, and 5 prompts as the cloud endpoint:
+The npm package provides the same 28 tools, 7 resources, and 5 prompts as the cloud endpoint:
 
 | Category | Count | Examples |
 |----------|-------|---------|
-| **Tools** | 26 | `smartalex_list_contacts`, `smartalex_create_agent`, `smartalex_update_agent`, `smartalex_get_call` |
+| **Tools** | 28 | `smartalex_list_contacts`, `smartalex_create_agent`, `smartalex_update_agent`, `smartalex_get_call` |
 | **Resources** | 7 | `smartalex://agents`, `smartalex://deals/pipeline`, `smartalex://workflows` |
 | **Prompts** | 5 | `campaign-strategy`, `lead-qualification`, `pipeline-review` |
 
@@ -421,5 +421,5 @@ Windows requires the `cmd /c` wrapper. See the [Windows tab](#claude-desktop) in
 ## Next Steps
 
 - [Usage Examples](/mcp/examples) — Real-world workflows and conversation examples
-- [Tools Reference](/mcp/tools-reference) — Complete reference for all 26 tools
+- [Tools Reference](/mcp/tools-reference) — Complete reference for all 28 tools
 - [Error Reference](/mcp/errors) — Error codes and troubleshooting

@@ -15,7 +15,7 @@ MCP is supported by Claude, Claude Code, Cursor, VS Code (GitHub Copilot), ChatG
 
 ## What SmartAlex's MCP Server Does
 
-The SmartAlex MCP server exposes **26 tools**, **7 resources**, and **5 prompts** — giving AI assistants full operational access to your SmartAlex workspace.
+The SmartAlex MCP server exposes **28 tools**, **7 resources**, and **5 prompts** — giving AI assistants full operational access to your SmartAlex workspace.
 
 With it, you can:
 
@@ -29,9 +29,9 @@ With it, you can:
 
 ---
 
-## Tools (26)
+## Tools (28)
 
-SmartAlex exposes 26 tools organized across 7 domains. All tool names are prefixed with `smartalex_` to avoid conflicts with other MCP servers.
+SmartAlex exposes 28 tools organized across 8 domains. All tool names are prefixed with `smartalex_` to avoid conflicts with other MCP servers.
 
 ### Contacts (4 tools)
 
@@ -53,11 +53,18 @@ SmartAlex exposes 26 tools organized across 7 domains. All tool names are prefix
 | `smartalex_update_agent` | Update agent settings (16 fields) with automatic voice platform sync and prompt regeneration |
 | `smartalex_delete_agent` | Permanently delete a voice agent |
 
-### Campaigns (6 tools)
+### Phone Numbers (3 tools)
 
 | Tool | Description |
 |------|-------------|
-| `smartalex_list_phone_numbers` | List available phone numbers for outbound calling |
+| `smartalex_list_phone_numbers` | List all active phone numbers with country and agent assignment |
+| `smartalex_search_available_numbers` | Search available numbers by country (US, CA, GB, AU, NZ, FI, DK, NL, ZA) |
+| `smartalex_buy_phone_number` | Purchase a phone number (~$1.66/mo, first free on trial) |
+
+### Campaigns (5 tools)
+
+| Tool | Description |
+|------|-------------|
 | `smartalex_list_campaigns` | List all voice campaigns with status and agent assignment |
 | `smartalex_get_campaign` | Get campaign details including contact counts and call stats |
 | `smartalex_create_campaign` | Create a campaign — assign agent, set objective, configure hours |
@@ -204,5 +211,5 @@ Connect directly to SmartAlex's hosted MCP endpoint. No local installation requi
 - [Getting Started](/mcp/getting-started) — Connect SmartAlex to your AI assistant in under 2 minutes
 - [npm Package Setup](/mcp/npm-package) — Install locally with Claude Desktop, Cursor, VS Code, or Windsurf
 - [Usage Examples](/mcp/examples) — Real-world workflows and conversation examples
-- [Tools Reference](/mcp/tools-reference) — Complete reference for all 26 tools with parameters and examples
+- [Tools Reference](/mcp/tools-reference) — Complete reference for all 28 tools with parameters and examples
 - [Error Reference](/mcp/errors) — Error codes and troubleshooting
