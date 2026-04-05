@@ -1,0 +1,126 @@
+---
+title: "Calendar Integration"
+description: "Connect Google Calendar, Outlook, or Calendly so your AI agents can check availability, book appointments, and manage schedules."
+---
+
+## Overview
+
+SmartAlex integrates with your existing calendar so your AI agents can book appointments, check availability, and manage events during calls — no manual scheduling required.
+
+## Supported Calendars
+
+| Provider | Sync Direction | Features |
+|----------|---------------|----------|
+| **Google Calendar** | Two-way | Read events, check availability, create/update/cancel events |
+| **Outlook Calendar** | Two-way | Read events, check availability, create/update/cancel events |
+| **Calendly** | Inbound only | Import Calendly events into SmartAlex |
+
+## Connecting Your Calendar
+
+<Steps>
+  <Step title="Open Calendar Hub">
+    Navigate to **Calendar** in your dashboard.
+  </Step>
+
+  <Step title="Open settings">
+    Click the **Settings** icon to open the Connected Calendars panel.
+  </Step>
+
+  <Step title="Add a calendar">
+    Click your provider (Google, Outlook, or Calendly). A popup opens for you to sign in and authorize access.
+  </Step>
+
+  <Step title="Configure sync">
+    After connecting, configure sync settings:
+    - **Sync direction**: Two-way, inbound only, or outbound only
+    - **Calendar color**: Pick a color for visual distinction
+    - **Visibility**: Show or hide in calendar views
+  </Step>
+</Steps>
+
+## Calendar Hub
+
+The Calendar Hub shows all your events in one view. Switch between view modes:
+
+| View | Description |
+|------|-------------|
+| **Week** | 7-day grid with hourly time slots |
+| **Month** | Traditional monthly calendar |
+| **Day** | Single-day detailed view |
+| **Agenda** | Scrollable list of upcoming events |
+
+Events are color-coded by type:
+
+| Event Type | Color | Description |
+|------------|-------|-------------|
+| AI Meeting | Blue | Scheduled by your AI agent |
+| Scheduled Call | Green | Outbound call scheduled |
+| Callback | Amber | Customer callback request |
+| Property Viewing | Teal | Real estate viewing appointment |
+| External Event | Gray | Synced from external calendar |
+| Blocked Time | Gray | Time marked as unavailable |
+
+## Giving Agents Calendar Access
+
+To let your AI agents book and manage appointments:
+
+<Steps>
+  <Step title="Open Calendar Configuration">
+    Go to **Calendar** and open the agent configuration page.
+  </Step>
+
+  <Step title="Select tasks">
+    Choose what your agents can do:
+    - **Book Appointments** — check availability and schedule new events
+    - **Change or Cancel Appointments** — reschedule or cancel existing events
+  </Step>
+
+  <Step title="Select agents">
+    Choose which agents get calendar access. Use search to filter, or select all.
+  </Step>
+
+  <Step title="Save">
+    Click **Finish**. Selected agents can now manage calendar events during calls.
+  </Step>
+</Steps>
+
+<Warning>
+You must connect a calendar provider before agents can book appointments. Without a connected calendar, agents can only take messages.
+</Warning>
+
+## How Agents Use Calendar
+
+During a call, an agent with calendar access can:
+
+- **Check availability**: "Let me check what times are open this week..."
+- **Book appointments**: "I've scheduled you for Tuesday at 2pm."
+- **Reschedule**: "I've moved your appointment to Thursday at 10am."
+- **Cancel**: "Your appointment has been cancelled."
+
+The agent checks your real calendar in real-time, so it will never double-book.
+
+## Calendar Assistant
+
+The Calendar Hub includes a built-in assistant you can interact with using voice or text:
+
+- Click the **mic icon** to speak naturally: "Schedule a meeting with Sarah at 3pm"
+- Or switch to **text mode** and type your request
+- The assistant confirms before making changes
+- Your calendar refreshes automatically after each action
+
+## Managing Calendars
+
+| Action | How |
+|--------|-----|
+| **Sync now** | Click **Sync Now** to manually refresh events |
+| **Change color** | Click the color swatch next to a calendar |
+| **Toggle visibility** | Hide a calendar from views without disconnecting |
+| **Pause sync** | Toggle sync off to stop updates temporarily |
+| **Disconnect** | Click **Remove** — revokes access and stops syncing |
+
+## Best Practices
+
+- **Connect your main business calendar** — the one where you track appointments
+- **Enable two-way sync** — so appointments booked by AI appear in your calendar app
+- **Set business hours** — agents will only book within your available hours
+- **Test with a real call** — ask your agent to book an appointment and verify it appears on your calendar

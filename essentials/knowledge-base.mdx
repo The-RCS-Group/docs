@@ -1,0 +1,116 @@
+---
+title: "Knowledge Base"
+description: "Upload documents, scrape websites, and add custom content so your AI agents can answer questions accurately during calls."
+---
+
+## What is a Knowledge Base?
+
+A Knowledge Base is a collection of documents and content that your AI agents can reference during calls. Instead of relying only on their system prompt, agents search your knowledge base in real-time to give accurate, specific answers about your business.
+
+## Adding Content
+
+Navigate to **Agent Studio** and select your agent. In the **Knowledge Base** section, you have four ways to add content:
+
+### Upload Files
+
+Drag and drop files or click to browse. SmartAlex processes them automatically.
+
+| File Type | Extensions | Processing |
+|-----------|-----------|------------|
+| **PDF** | .pdf | Parsed and chunked |
+| **Word** | .doc, .docx | Parsed and chunked |
+| **Text** | .txt | Ready immediately |
+| **Markdown** | .md | Ready immediately |
+| **CSV** | .csv | Ready immediately |
+
+**Limits:** Up to 10 files at a time, 20MB max per file.
+
+### Scrape a Webpage
+
+Enter a single URL and SmartAlex will extract the content from that page:
+
+1. Click **Scrape Webpage**
+2. Enter the full URL (e.g., `https://example.com/about`)
+3. SmartAlex fetches and processes the page content
+4. A new document appears in your knowledge base
+
+### Scrape a Website
+
+Extract content from multiple pages at once using your sitemap:
+
+<Steps>
+  <Step title="Enter your domain">
+    Type your website domain (e.g., `example.com`) and click **Load**.
+  </Step>
+
+  <Step title="Select pages">
+    SmartAlex discovers all pages from your sitemap. Select which pages to scrape (up to 50 per batch).
+  </Step>
+
+  <Step title="Start scraping">
+    Click **Scrape N Pages**. Each page becomes a separate document in your knowledge base.
+  </Step>
+</Steps>
+
+### Write Manually
+
+Create a document from scratch:
+
+1. Click **Write Document**
+2. Enter a title (e.g., "Return Policy", "Office Hours")
+3. Write or paste your content
+4. Click **Create**
+
+## Document Processing
+
+After adding content, documents go through automatic processing:
+
+| Status | Meaning |
+|--------|---------|
+| **Pending** | Queued for processing |
+| **Processing** | Being split into chunks and indexed |
+| **Ready** | Available to your agent (shows chunk count) |
+| **Failed** | Processing error — retry or delete and re-upload |
+
+Text files (.txt, .md, .csv) are ready immediately. PDFs and Word documents require processing time.
+
+## Connecting Documents to Agents
+
+Each document can be connected to one or more agents:
+
+1. Open your agent in **Agent Studio**
+2. Go to the **Knowledge Base** section
+3. Toggle the checkbox next to each document you want the agent to use
+4. Connected documents show a checkmark
+
+<Note>
+Connected documents are available to your agent during calls. The agent searches relevant content to answer questions accurately.
+</Note>
+
+## How Agents Use Knowledge
+
+During a call, when a caller asks a question:
+
+1. The agent identifies the question topic
+2. It searches connected knowledge base documents
+3. The most relevant content chunks are retrieved
+4. The agent uses this context to give an accurate answer
+
+This happens in real-time — callers won't notice any delay.
+
+## Managing Documents
+
+| Action | How |
+|--------|-----|
+| **Preview** | Click the eye icon to view full content and metadata |
+| **Search** | Use the search bar to filter documents by title |
+| **Delete** | Click the trash icon — this is permanent |
+| **Disconnect** | Uncheck the document to stop the agent from using it (doesn't delete the document) |
+
+## Best Practices
+
+- **Keep documents focused** — one topic per document works better than one large document
+- **Update regularly** — delete and re-upload documents when your business information changes
+- **Start with your FAQ** — the questions your receptionist answers most often are the best starting point
+- **Test after adding** — call your agent and ask questions to verify it finds the right answers
+- **Use descriptive titles** — helps you organize and find documents later

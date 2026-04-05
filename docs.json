@@ -26,8 +26,18 @@
             "pages": [
               "essentials/dashboard",
               "essentials/agents",
+              "essentials/knowledge-base",
+              "essentials/squads",
               "essentials/campaigns",
               "essentials/phone-numbers"
+            ]
+          },
+          {
+            "group": "Communication",
+            "pages": [
+              "essentials/channels",
+              "essentials/inbox",
+              "essentials/calendar"
             ]
           },
           {
@@ -37,6 +47,12 @@
               "essentials/callbacks",
               "essentials/contacts",
               "essentials/analytics"
+            ]
+          },
+          {
+            "group": "Sales Pipeline",
+            "pages": [
+              "essentials/deals"
             ]
           },
           {
