@@ -75,9 +75,9 @@ Warm targets are configured on the agent as "transfer destinations" , name, alia
 
 | Target type | How it's configured | SIP URI format |
 |---|---|---|
-| **PBX extension** | `PbxExtensionsManager` → extension number + name + aliases | `sip:<ext>@<pbx_domain>` |
-| **PBX queue** | Added as an extension with the queue's number | `sip:<queue>@<pbx_domain>` |
-| **PBX ring group** | Added as an extension with the ring group's number | `sip:<ring>@<pbx_domain>` |
+| **PBX extension** | `PbxExtensionsManager` → extension number + name + aliases | `sip:EXT@PBX_DOMAIN` |
+| **PBX queue** | Added as an extension with the queue's number | `sip:QUEUE@PBX_DOMAIN` |
+| **PBX ring group** | Added as an extension with the ring group's number | `sip:RING@PBX_DOMAIN` |
 | **Individual PSTN number** | Configured as a "transfer target" on the agent with name, alias, phone | `tel:+27xxxxxxxxx` |
 | **Default call-forwarding number** | Agent setting , single external number | `tel:+27xxxxxxxxx` |
 | **Voicemail** | Falls through automatically if extension no-answer-forwards to VM | PBX-managed |
