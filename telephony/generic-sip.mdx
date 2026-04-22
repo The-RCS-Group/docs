@@ -1,0 +1,135 @@
+---
+title: "Generic SIP"
+description: "Connect any SIP-compliant phone system to SmartAlex. Use this guide when your platform isn't one of the named integrations."
+---
+
+<Info>
+**Audience**: network or voice engineer with admin access to a PBX or softswitch. **Time**: 15 minutes.
+</Info>
+
+Use this guide for any of the following:
+
+- A PBX not covered by a named integration guide
+- A custom softswitch or SBC
+- An in-house Asterisk variant or a fork
+- A cloud PBX whose documentation isn't vendor-specific
+
+The SmartAlex side is identical regardless of which system you're connecting. What varies is where to click in your own PBX admin interface.
+
+## What the PBX needs to support
+
+- SIP (any version, RFC 3261)
+- Generic SIP trunk (register-based or IP-based auth)
+- SIP REFER (RFC 3515) for transfers
+- RFC 2833 DTMF
+- G.711 u-law or A-law codecs (G.722 optional, G.729 only if licensed on both sides)
+
+Most production-grade PBXes built in the last fifteen years support all of these.
+
+## Step 1: create the SIP trunk in SmartAlex
+
+1. Phone Numbers, then Connect Your Carrier, then SIP Trunk
+2. Pick **Other** from the PBX dropdown
+3. Trunk Name: label it so you recognise it later
+4. **PBX SIP Domain**: the hostname or IP your PBX presents (required)
+5. Authentication: Credentials (most common) or IP Whitelist (if your PBX has a static public IP)
+6. Leave codecs and transport on the defaults unless your PBX has specific requirements
+7. Create
+
+Copy the connection details from the success screen. Leave that tab open.
+
+## Step 2: add the trunk on your PBX
+
+Generic-SIP-trunk setup will look roughly the same on any PBX. Look for these menu paths or the equivalent:
+
+| PBX concept | Typical menu name |
+|---|---|
+| Create a new trunk | "SIP Trunks", "Voice Gateways", "External Lines", "Providers" |
+| Registrar / Outbound Proxy | "Registrar Domain", "SIP Server", "Host" |
+| Credentials | "Auth Username", "SIP Auth ID", "Display Name" |
+| Codecs | "Codec Priority", "Voice Codec Selection" |
+| Transport | "Protocol", "Transport Layer" |
+| DIDs | "DID Numbers", "Inbound Routes", "Telephone Numbers" |
+
+Enter these values:
+
+| Setting | Value |
+|---|---|
+| Registrar / Server | `sip.voice.getsmartalex.com` |
+| Outbound Proxy | `sip.voice.getsmartalex.com` |
+| Port | 5060 for UDP/TCP, 5061 for TLS |
+| Transport | UDP (default), TCP, or TLS |
+| Auth Username | (from SmartAlex) |
+| Auth Password | (from SmartAlex) |
+| Auth realm | leave blank unless your PBX requires one |
+| Codec priority | G.711 u-law (PCMU) then G.711 A-law (PCMA), then G.722 if supported |
+| DTMF | RFC 2833 |
+
+## Step 3: confirm registration
+
+Your PBX should show the trunk as **Registered**, **Active**, or **Up** within 30 seconds. If not, see Troubleshooting.
+
+## Step 4: route inbound DIDs to the trunk
+
+Create an inbound rule (or equivalent): when this DID rings, send the call out via the SmartAlex trunk. Your PBX's "external routing" or "forward" mechanism should handle this.
+
+## Step 5: add extensions in SmartAlex
+
+Settings, then PBX. Click through to the trunk and add your extensions:
+
+```
+extension,display_name,owner,department,aliases
+101,Sales,Sarah Jones,Sales,sarah|sales team
+102,Support,John Smith,Support,support|tech
+```
+
+Use CSV for bulk.
+
+## Step 6: link the agent to the trunk
+
+Agent Studio, then Telephony tab, then pick the trunk in the dropdown. Save.
+
+## Step 7: test
+
+Call the DID from an external phone. AI should answer. Ask for a transfer by name. Extension should ring within 3 seconds.
+
+## Common compatibility notes
+
+<AccordionGroup>
+  <Accordion title="PBX requires a specific User-Agent or P-headers">
+    SmartAlex's outbound headers are standard RFC 3261. If your PBX rejects based on User-Agent, contact support with the PBX's specific requirements.
+  </Accordion>
+  <Accordion title="PBX only supports G.729">
+    G.729 is a licensed codec. If your PBX requires it, we can enable it on the trunk. Contact support. Note: G.729 adds ~10–20 ms latency compared to G.711 and has slightly lower MOS.
+  </Accordion>
+  <Accordion title="PBX doesn't accept REFER (very rare)">
+    A handful of very old or locked-down PBXes reject REFER. If that's the case, transfers won't work directly. Contact support for alternative transfer models.
+  </Accordion>
+  <Accordion title="PBX wants re-INVITE disabled">
+    Most generic SIP provider templates default this off. Leave it that way.
+  </Accordion>
+</AccordionGroup>
+
+## If your PBX is exotic
+
+Some platforms (certain SBCs, very old Asterisk forks, or vertical-specific systems like hospitality PBXes) have quirks. Capture a SIP trace from your PBX during a failing call and email it to support with:
+
+- PBX vendor and version
+- The exact error or symptom
+- Trace file (PCAP or text-format SIP log)
+
+Most issues resolve within 24 hours.
+
+## Next steps
+
+<CardGroup cols={3}>
+  <Card title="Call Routing & Transfers" icon="arrow-right-arrow-left" href="/telephony/call-routing-transfers">
+    Transfer mechanics.
+  </Card>
+  <Card title="Network Requirements" icon="network-wired" href="/telephony/network-requirements">
+    Firewall and NAT.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/telephony/troubleshooting">
+    Error reference.
+  </Card>
+</CardGroup>

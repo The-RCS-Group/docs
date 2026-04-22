@@ -1,0 +1,181 @@
+---
+title: "Troubleshooting & Error Reference"
+description: "Every SIP error code you'll see, what it means, and how to fix it. Symptom to root cause to remediation."
+---
+
+<Note>
+Organised by symptom first, SIP response code second. If you know the SIP code, use the second table. If you just know what the caller experienced, start with symptoms.
+</Note>
+
+## Quick diagnosis , by symptom
+
+<AccordionGroup>
+  <Accordion title="Trunk shows 'Not Registered' / red indicator">
+    **Most common causes (in order):**
+    1. Wrong credentials , re-copy username and password from SmartAlex
+    2. SIP ALG enabled on firewall , **disable it**
+    3. Outbound UDP 5060 blocked , check firewall rules
+    4. Wrong transport , verify UDP vs TCP vs TLS matches both sides
+
+    **Verification**: your PBX's activity log or SIP trace will show the exact response (401 Unauthorized, 403 Forbidden, or timeout).
+  </Accordion>
+  <Accordion title="Trunk registered but inbound calls fail">
+    - The DID is not registered to the trunk. Add it under the trunk's DIDs list.
+    - Your inbound route doesn't send the DID to the SmartAlex trunk. Update the rule.
+    - Agent not linked to the trunk. In Agent Studio → Telephony tab → select the trunk.
+    - Wallet empty (test-mode tenants). Top up in Settings → Billing.
+  </Accordion>
+  <Accordion title="AI answers but hangs up immediately">
+    - Agent has no configured first message AND no system prompt , the AI has nothing to say.
+    - The call exceeded the tenant's max-call-duration (default 300s).
+    - The LiveKit dispatch failed , check the call_records table or contact support.
+  </Accordion>
+  <Accordion title="AI answers but doesn't understand transfers">
+    - `agents.sip_trunk_id` not set , link the agent to the trunk in Agent Studio → Telephony.
+    - Extensions not populated , add them in Settings → PBX.
+    - The extension has no aliases and the caller isn't using the exact display name , add aliases via CSV upload.
+    - The trunk is in `suspended` status , reactivate it.
+  </Accordion>
+  <Accordion title="Transfer fires but extension doesn't ring">
+    - Target extension doesn't exist on the PBX , verify in the PBX admin console.
+    - Wrong `pbx_domain` , the AI is sending `sip:101@wrong-hostname`. Fix in the trunk settings.
+    - PBX is accepting REFER but rejecting the target , check for 486 / 603 in the PBX SIP log.
+    - Firewall blocking inbound SIP from our IP range (shouldn't be, since we use the existing dialog , but some very aggressive firewalls may block).
+  </Accordion>
+  <Accordion title="One-way audio (we can hear them, they can't hear us)">
+    Almost always SIP ALG on a router between your PBX and the internet. **Disable SIP ALG** and reboot the router. If that doesn't fix it:
+    - Check that your PBX's external / public IP is correctly set in its network settings
+    - Verify RTP port range (9000–10999 typical) is open both ways on the firewall
+    - Try TCP transport instead of UDP as a test
+  </Accordion>
+  <Accordion title="Echo on calls">
+    - Some endpoint (softphone, desk phone, or PBX) is double-applying echo cancellation. Disable on one side.
+    - On calls traversing a carrier with poor echo handling, enable **Krisp noise cancellation** on the trunk.
+  </Accordion>
+  <Accordion title="Calls drop after 30 seconds">
+    Firewall UDP session timeout is too short. Increase to **at least 1800 seconds** (30 minutes) on the firewall between your PBX and the internet.
+  </Accordion>
+  <Accordion title="Calls drop at exactly 5 minutes">
+    The tenant's `max_duration` is set to 300 seconds. Increase it in the agent settings if longer calls are expected.
+  </Accordion>
+  <Accordion title="Poor voice quality / choppy audio">
+    - Packet loss in transit , run a `mtr` or `traceroute` from PBX to `sip.voice.getsmartalex.com` and look for loss or high jitter hops
+    - Insufficient bandwidth , each concurrent call needs 90–100 kbps sustained
+    - Wrong codec , G.711 requires ~90 kbps; if you're on G.729 with poor implementation, switch to G.711
+    - Enable Krisp noise cancellation on the trunk
+  </Accordion>
+  <Accordion title="AI speaks in the wrong language or accent">
+    - Agent's `voice_accent` is not set or is set to something that doesn't match , reconfigure in Agent Studio → Voice.
+    - Some agents hard-code accent in the system prompt; check for conflicting instructions.
+  </Accordion>
+  <Accordion title="CDR not showing transfer correctly">
+    - Some PBXes only surface the first leg by default. Check PBX CDR settings to enable "transfer leg" reporting.
+    - 3CX: enable **Call reporting → Advanced** options.
+    - FreePBX: enable CDR reporting under **Reports → CDR Reports**.
+  </Accordion>
+</AccordionGroup>
+
+## By SIP response code
+
+<AccordionGroup>
+  <Accordion title="401 Unauthorized / 407 Proxy Authentication Required">
+    Your PBX sent an INVITE without authentication, or with the wrong credentials. Verify SIP username and password exactly match what's configured in SmartAlex. Passwords are 24 random characters , a single mis-typed character will cause this.
+  </Accordion>
+  <Accordion title="403 Forbidden">
+    PBX authenticated but is not authorised for this action. Causes:
+    - IP allowlist mismatch (if using IP auth) , verify your public IP is listed
+    - Trunk suspended , check trunk status in Settings → PBX
+    - Tenant account in read-only mode
+  </Accordion>
+  <Accordion title="404 Not Found">
+    The DID being dialled is not registered to any trunk. Add the DID to the trunk's numbers list (or have Support add it to the LiveKit inbound trunk).
+  </Accordion>
+  <Accordion title="408 Request Timeout">
+    PBX didn't respond in time. Most often a network/firewall issue. Check:
+    - Outbound UDP 5060 not blocked
+    - SIP ALG disabled
+    - PBX is reachable from the public internet
+  </Accordion>
+  <Accordion title="480 Temporarily Unavailable">
+    Target extension exists but isn't registered (phone offline, network down). PBX is responding correctly; fix on the PBX side.
+  </Accordion>
+  <Accordion title="486 Busy Here">
+    Target is on another call. Your PBX's busy-forward rules apply (usually voicemail or ring-group fallback). This is expected behaviour, not an error.
+  </Accordion>
+  <Accordion title="488 Not Acceptable Here">
+    Codec mismatch. The target side won't accept the codecs offered. Reconfigure the trunk to advertise G.711 u-law first. If the target PBX requires G.729, enable it on the trunk (note: licensed codec, requires enablement).
+  </Accordion>
+  <Accordion title="503 Service Unavailable">
+    Either:
+    - Concurrent call limit reached , increase `max_concurrent_calls` on the trunk
+    - Platform-wide rate limit hit , extremely rare; if it persists, contact support
+  </Accordion>
+  <Accordion title="600 Busy Everywhere">
+    All alternative routes are busy. PBX-side issue; adjust hunt groups or voicemail fallback.
+  </Accordion>
+  <Accordion title="603 Decline">
+    The target explicitly declined the call. Most often means the extension number doesn't exist in the PBX. Verify extensions are provisioned.
+  </Accordion>
+</AccordionGroup>
+
+## Diagnostic commands
+
+On your PBX:
+
+- **3CX**: Admin → System → **Activity Log** (or Event Log on v18/v19)
+- **FreePBX**: Admin → Reports → **Asterisk Log Files** → `/var/log/asterisk/full`
+- **Asterisk raw**: `asterisk -rvvvv` then `pjsip set logger on`
+- **Yeastar**: System → Event Center → **SIP Logs**
+
+On the SmartAlex side:
+
+- The Phone Numbers page has a **Diagnostics** button on each number , click it to see a live health check (active status, agent assignment, voice engine registration, credentials).
+- Call records show SIP disconnect reasons in the **Call Logs** page.
+- For deeper debugging, contact support with the call ID from the call record.
+
+## Verifying DNS and reachability
+
+From any machine with `dig`:
+
+```bash
+dig +short sip.voice.getsmartalex.com
+```
+
+Expected output (subject to change as we scale):
+```
+voice3-dfbivrhc.sip.livekit.cloud.
+<two IPs>
+```
+
+Test reachability:
+
+```bash
+# UDP ping (requires netcat with UDP support)
+nc -u -v -z sip.voice.getsmartalex.com 5060
+
+# TLS connection test
+openssl s_client -connect sip.voice.getsmartalex.com:5061 -servername sip.voice.getsmartalex.com
+```
+
+## When to escalate
+
+Open a support ticket with:
+
+- Your tenant ID
+- The SIP trunk ID (visible in Settings → PBX)
+- The call ID of a failing call (from Call Logs)
+- A SIP trace from your PBX covering 30 seconds before and after the failure
+- The error symptom in plain language
+
+Email: `support@getsmartalex.com`.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Testing & Validation" icon="check-double" href="/telephony/testing-validation">
+    Proactive test procedures to catch issues before customers do.
+  </Card>
+  <Card title="Observability" icon="chart-line" href="/telephony/observability">
+    Monitoring and alerting.
+  </Card>
+</CardGroup>

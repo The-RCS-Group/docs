@@ -1,0 +1,180 @@
+---
+title: "Testing & Validation"
+description: "Pre-flight checks, end-to-end test procedures, and the acceptance criteria to sign off a new deployment."
+---
+
+<Info>
+**Audience**: whoever is validating a new SmartAlex deployment before go-live. **Use**: work through every section. If any check fails, fix it before the next stage.
+</Info>
+
+## Pre-flight checklist
+
+Before the first test call, confirm:
+
+- [ ] SIP trunk shows status **Active** in SmartAlex
+- [ ] PBX shows the trunk as **Registered** with a green indicator
+- [ ] PBX SIP Domain is correct on the trunk (typo-free)
+- [ ] At least 3 extensions added in SmartAlex with display names
+- [ ] Agent configured with a first message, system prompt, and voice
+- [ ] Agent linked to the SIP trunk via Agent Studio Telephony tab
+- [ ] A DID is routable to the agent, either natively in SmartAlex or via a PBX inbound rule
+- [ ] Tenant wallet has credit (if not on Enterprise billing)
+- [ ] Recording settings configured per your compliance policy
+
+## Test 1: inbound call reaches the AI
+
+From any external phone:
+
+1. Dial the DID
+2. AI should answer within 1 to 2 seconds
+3. AI speaks its configured first message
+4. Listen for voice quality (no choppy audio, no one-way audio, no echo)
+
+**Expected result**: AI greets you cleanly.
+
+**If it fails**:
+- Silence for 10+ seconds before answer: check PBX inbound routing is sending the DID to SmartAlex
+- AI says something generic like "Hello, how can I help?" with no company name: agent's first message or system prompt isn't loaded, verify the agent is linked to the correct trunk
+- Rings but never answers: DID not mapped to an agent, or LiveKit inbound trunk doesn't have the DID. Contact support if you're sure the DID is assigned
+
+## Test 2: basic conversation
+
+Stay on the call from Test 1.
+
+1. Ask a company-related question the AI should know
+2. AI should search its knowledge base, return a relevant answer
+3. Pause 3 seconds between your turns to let VAD settle
+
+**Expected result**: AI responds with accurate, on-topic information.
+
+**If it fails**:
+- AI makes up facts: either the knowledge base is empty or it's searching but not finding relevant documents. Check the knowledge base upload. Re-phrase the question to the AI to test whether it's a retrieval issue.
+- AI seems generic: the system prompt isn't loaded correctly, or is very short. Tune the prompt.
+- AI speaks over you / cuts you off: VAD tuning. Contact support to adjust.
+
+## Test 3: transfer to an extension
+
+1. Say: "Can you put me through to Sales?" (or whichever extension exists)
+2. AI should acknowledge: "Putting you through to Sales now." (or similar)
+3. Approximately 3 seconds later, the extension phone should ring
+4. Answer the extension phone
+5. Confirm you're connected to the extension's user, not the AI
+6. Hang up from either end
+
+**Expected result**: extension rings within 5 seconds of the transfer. You're connected to the human.
+
+**If it fails**:
+- AI says "transferring you" but the extension doesn't ring: PBX didn't accept or route the REFER. Check PBX activity log for the REFER event and the response.
+- AI says "I wasn't able to connect you": REFER timed out (30 sec default). Check network path to PBX. Verify PBX SIP domain is correct in the trunk config.
+- Extension rings but answers the original SIP trunk instead of the extension's assigned user: PBX extension mis-configured.
+
+## Test 4: transfer to a non-existent extension
+
+1. Say: "Put me through to Marketing" (or some other extension that doesn't exist in the directory)
+2. AI should respond with something like "I don't have a Marketing extension. Can I take a message or try someone else?"
+
+**Expected result**: AI handles gracefully, doesn't attempt a bad transfer.
+
+**If it fails**:
+- AI attempts the transfer anyway and the PBX returns 603 Decline: the AI's tool-validation isn't blocking unknown targets. Contact support.
+
+## Test 5: caller ID forwarding
+
+1. Call from a recognisable phone (your mobile)
+2. Ask for a transfer to an extension
+3. On the extension phone when it rings, check the caller ID display
+
+**Expected result**: the caller ID shown is **your mobile number**, not the SmartAlex trunk number.
+
+**If it fails**:
+- Extension shows the trunk number or "Anonymous": P-Asserted-Identity isn't being honoured by your PBX, or the PBX's trunk config has "SIP ID overrides" turned on. Check 3CX's "SIP ID" setting under the extension.
+
+## Test 6: the handoff context
+
+1. Start a new call
+2. Provide context to the AI (e.g., "I'm calling about an urgent billing issue")
+3. Ask to be transferred
+4. On the receiving extension, check what's visible in the CRM or desktop agent
+
+**Expected result**: if you've configured a CRM webhook, the extension user sees a note summarising the call reason.
+
+**If you haven't configured a CRM webhook, this test doesn't apply.**
+
+## Test 7: voicemail handling
+
+If your PBX sends unanswered calls to voicemail after a ring timeout:
+
+1. Transfer to an extension where you know no-one will pick up
+2. Wait through the ring timeout
+3. PBX should send the caller to voicemail per its existing rules
+
+**Expected result**: voicemail behaves exactly as it did before SmartAlex. We don't alter this flow.
+
+## Test 8: load / concurrency
+
+If this deployment needs to handle more than a handful of concurrent calls:
+
+1. Arrange for a coordinated burst: 10 people dial the DID within 30 seconds
+2. Each should reach the AI and have a full conversation
+3. Monitor call quality across all 10
+
+**Expected result**: all 10 calls handled simultaneously with no degradation.
+
+**If it fails**:
+- Some calls get 503 Service Unavailable: increase `max_concurrent_calls` on the trunk.
+- Quality degrades on some calls: network bandwidth issue. Each call needs 90 kbps sustained on G.711.
+
+## Test 9: after-hours behaviour
+
+If the agent has scheduling hours configured:
+
+1. During business hours: AI should handle calls normally
+2. Outside business hours: AI should follow the configured after-hours behaviour (could be taking messages, referring to hours, or still answering)
+
+## Test 10: rollback
+
+Before go-live, practice the rollback:
+
+1. In your PBX, revert the inbound rule for the DID to its pre-SmartAlex target
+2. Verify the DID now rings the old destination
+3. Re-apply the SmartAlex rule
+
+**This takes under 30 seconds.** Confirm this procedure with your PBX admin before the cutover window.
+
+## Sign-off criteria
+
+A deployment is ready for production when:
+
+- [ ] All 10 tests above pass
+- [ ] A minimum of 20 calls have been made by internal team members covering different intents
+- [ ] Transfer accuracy is above 90% across those 20 calls
+- [ ] Voice quality is rated subjectively "normal phone call" or better
+- [ ] The agent's first message and system prompt match your brand guidelines
+- [ ] Recording settings match your compliance policy
+- [ ] Rollback procedure has been dry-run
+
+## Ongoing monitoring (post go-live)
+
+For the first 14 days, review daily:
+
+- Total calls handled and average duration
+- Transfer success rate (transfers that connected to a human)
+- Call record sentiment (flagged as negative or confused)
+- Top 10 intents / transcript themes
+- Any caller complaints mentioned to the team
+
+For weeks 3 to 8, review weekly. Adjust system prompt, extensions, and aliases based on real call data.
+
+## Next steps
+
+<CardGroup cols={3}>
+  <Card title="Troubleshooting" icon="wrench" href="/telephony/troubleshooting">
+    When tests fail.
+  </Card>
+  <Card title="Observability" icon="chart-line" href="/telephony/observability">
+    Ongoing monitoring.
+  </Card>
+  <Card title="Capacity & SLA" icon="gauge" href="/telephony/capacity-sla">
+    Operational limits.
+  </Card>
+</CardGroup>

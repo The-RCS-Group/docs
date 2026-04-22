@@ -1,0 +1,82 @@
+---
+title: "Yeastar"
+description: "Connect Yeastar P-Series or S-Series PBX to SmartAlex via SIP trunk."
+---
+
+<Info>
+**Audience**: Yeastar admin. **Time**: 10 to 15 minutes. **Models**: P-Series (PBX) and S-Series (VoIP PBX appliance).
+</Info>
+
+## Prerequisites
+
+- Yeastar admin credentials
+- A DID routed to this Yeastar
+- PBX SIP Domain (the Yeastar's FQDN or public IP)
+- List of extensions
+
+## Step 1: create the trunk in SmartAlex
+
+Phone Numbers, then Connect Your Carrier, then SIP Trunk, then pick Yeastar. Fill the form. The Yeastar defaults are pre-set: UDP transport, digest authentication, G.711 codecs. Save and copy the connection details.
+
+## Step 2: add the trunk in Yeastar
+
+<Steps>
+  <Step title="Open VoIP settings">
+    Yeastar admin console, then Settings, then PBX, then Trunks, then Add.
+  </Step>
+  <Step title="Choose trunk type">
+    Select **Register Trunk** (credentials-based, matches digest auth).
+  </Step>
+  <Step title="Fill connection">
+    - **Provider Name**: `SmartAlex`
+    - **Hostname / IP**: `sip.voice.getsmartalex.com`
+    - **Port**: `5060`
+    - **Transport**: `UDP`
+    - **Username**: (from SmartAlex)
+    - **Password**: (from SmartAlex)
+    - **Authentication Name**: same as username
+    - **From User**: blank
+  </Step>
+  <Step title="Codecs">
+    Enable PCMU and PCMA. Prioritise PCMU first unless a specific region requires otherwise.
+  </Step>
+  <Step title="Save and verify">
+    Yeastar should show the trunk **Registered** within 30 seconds.
+  </Step>
+</Steps>
+
+## Step 3: inbound routing
+
+Settings, then PBX, then Call Control, then Inbound Routes. Add a route that routes the DID to this trunk (outbound forward).
+
+Alternatively, if SmartAlex provisioned a new DID, you don't need an inbound route on Yeastar.
+
+## Step 4: add extensions in SmartAlex
+
+Settings, then PBX. Add each extension with its number, name, owner, department, and aliases.
+
+## Step 5: link the agent
+
+Agent Studio, then Telephony tab, then pick the trunk.
+
+## Step 6: test
+
+Call the DID. AI answers. Ask for a transfer. Yeastar extension rings.
+
+## Yeastar-specific notes
+
+- **P-Series firmware**: v84.x and later work without issues.
+- **S-Series firmware**: v30.x and later work. Very old firmware may not support re-INVITE correctly. Upgrade if you see media issues.
+- **NAT handling**: Yeastar has a built-in STUN option. Enable under Network settings if the unit is behind NAT.
+- **Codec priority**: Yeastar defaults can be aggressive on G.729. Force G.711 first.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Troubleshooting" icon="wrench" href="/telephony/troubleshooting">
+    Error reference.
+  </Card>
+  <Card title="Testing" icon="check-double" href="/telephony/testing-validation">
+    Validation procedure.
+  </Card>
+</CardGroup>

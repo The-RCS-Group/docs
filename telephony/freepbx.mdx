@@ -1,0 +1,88 @@
+---
+title: "FreePBX"
+description: "Connect FreePBX (Asterisk with GUI) to SmartAlex via chan_pjsip SIP trunk."
+---
+
+<Info>
+**Audience**: FreePBX admin. **Time**: 10 to 15 minutes. **Driver**: chan_pjsip (recommended, not legacy chan_sip).
+</Info>
+
+## Prerequisites
+
+- FreePBX admin access
+- Outbound UDP 5060 allowed on the firewall
+- SIP ALG disabled on the router (mandatory)
+- PBX SIP Domain (FreePBX's public FQDN or IP)
+
+## Step 1: create the trunk in SmartAlex
+
+Phone Numbers, then Connect Your Carrier, then SIP Trunk, then pick FreePBX. Save, copy the credentials.
+
+## Step 2: add the pjsip trunk in FreePBX
+
+<Steps>
+  <Step title="Open Trunks">
+    FreePBX admin, then Connectivity, then Trunks, then Add SIP (chan_pjsip) Trunk.
+  </Step>
+  <Step title="General tab">
+    - **Trunk Name**: `smartalex`
+    - **Hide CallerID**: No
+    - **Outbound CallerID**: your DID
+    - **Maximum Channels**: match the concurrent-call limit in SmartAlex (default 10)
+  </Step>
+  <Step title="pjsip Settings: General tab">
+    - **Username**: (from SmartAlex)
+    - **Secret**: (from SmartAlex)
+    - **Authentication**: Outbound
+    - **Registration**: Send
+    - **SIP Server**: `sip.voice.getsmartalex.com`
+    - **SIP Server Port**: `5060`
+    - **Context**: `from-pstn`
+    - **Transport**: `0.0.0.0-udp`
+  </Step>
+  <Step title="Codecs tab">
+    Enable `ulaw` and `alaw`. Disable `g729` unless licensed.
+  </Step>
+  <Step title="Submit and Apply Config">
+    Click **Submit**, then the **Apply Config** button in the red bar at the top.
+  </Step>
+  <Step title="Verify registration">
+    Admin, then Reports, then Asterisk Info, then Registrations. The trunk should show **Registered**.
+  </Step>
+</Steps>
+
+## Step 3: inbound route
+
+Connectivity, then Inbound Routes, then Add. Set the DID, destination as your SmartAlex trunk (outbound leg).
+
+Alternatively if using a SmartAlex DID, skip this step.
+
+## Step 4: outbound route (optional)
+
+Only if FreePBX extensions should dial out through SmartAlex. Connectivity, then Outbound Routes, then add a dial pattern that strips the prefix and uses the SmartAlex trunk.
+
+## Step 5: extensions and agent linking
+
+Add extensions in SmartAlex Settings, then PBX. Link agent in Agent Studio.
+
+## Step 6: test
+
+Dial the DID. Ask for a transfer.
+
+## FreePBX-specific notes
+
+- **SIP Debug**: Admin, then Asterisk CLI. Run `pjsip set logger on` to trace SIP messages in real time.
+- **NAT handling**: pjsip handles NAT well when `rewrite_contact` is enabled (default).
+- **Call recording conflicts**: if FreePBX records calls at the trunk level, it will record the SmartAlex leg separately. Decide whether that's wanted.
+- **Distro vs Incredible PBX vs stock FreePBX**: configuration is identical across distributions.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Asterisk" icon="terminal" href="/telephony/asterisk">
+    Raw Asterisk setup if you don't run FreePBX.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/telephony/troubleshooting">
+    Error reference.
+  </Card>
+</CardGroup>

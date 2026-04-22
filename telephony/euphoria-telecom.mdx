@@ -1,0 +1,69 @@
+---
+title: "Euphoria Telecom"
+description: "Connect Euphoria Telecom's South African hosted PBX to SmartAlex."
+---
+
+<Info>
+**Audience**: Euphoria Telecom customer admin. **Time**: 15 minutes.
+</Info>
+
+## About Euphoria Telecom
+
+Cape Town-headquartered hosted PBX provider, common with South African SMB and mid-market. Runs a cloud-hosted softswitch with a web admin portal.
+
+## Step 1: create trunk in SmartAlex
+
+SIP Trunk wizard, pick **Other**. Euphoria uses standard SIP, so generic defaults work. Save credentials.
+
+## Step 2: Euphoria portal configuration
+
+Euphoria doesn't traditionally expose a "create an outbound SIP trunk" feature on customer accounts. Two integration options:
+
+### Option A: forward a DID
+
+1. Log in to the Euphoria customer portal
+2. Navigate to Numbers or Phone Numbers
+3. Select the DID you want SmartAlex to handle
+4. Set destination to **External forward** with the SmartAlex-provisioned DID
+
+This is the simplest path. Euphoria handles the DID routing; AI picks up via our DID.
+
+### Option B: SIP trunking
+
+Euphoria can, on request and plan-dependent, configure a SIP trunk from their system to an external endpoint. Contact Euphoria support and request:
+
+- **SIP trunk to external endpoint**: `sip.voice.getsmartalex.com`
+- **Authentication**: provide the username and password from SmartAlex
+- **Codecs**: G.711 u-law, A-law
+- **Transport**: UDP port 5060
+- **Transfers**: REFER supported
+
+Lead time: usually 1 to 3 business days once the request is submitted.
+
+## Step 3: extensions
+
+If using Option A, extensions on Euphoria are reached via the caller's existing phone number (the AI speaks the number to forward to).
+
+If using Option B, populate extensions in SmartAlex and transfer via SIP REFER.
+
+## Step 4: link agent and test
+
+Standard.
+
+## Euphoria-specific notes
+
+- **Call recording on Euphoria**: their portal has built-in recording. If you use Option A, both Euphoria and SmartAlex may record; decide which is primary.
+- **Caller ID**: Euphoria's caller ID handling on forwarded calls depends on your carrier plan. Verify with Euphoria support that P-Asserted-Identity is passed through if you need real caller ID on transfers.
+- **SA Icasa compliance**: Euphoria holds the carrier-side Icasa licences; your obligations are downstream.
+- **MPLS or SIP peering**: enterprise customers can arrange private peering to Euphoria's core. Discuss directly with them.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Switch Telecom" icon="phone-arrow-up-right" href="/telephony/switch-telecom">
+    Another South African hosted PBX.
+  </Card>
+  <Card title="South Africa" icon="earth-africa" href="/telephony/south-africa">
+    Regional notes.
+  </Card>
+</CardGroup>

@@ -1,0 +1,94 @@
+---
+title: "Avaya IP Office"
+description: "Connect Avaya IP Office to SmartAlex via SIP trunk. Enterprise on-premise PBX setup."
+---
+
+<Info>
+**Audience**: Avaya IP Office admin or certified reseller. **Time**: 20 to 30 minutes. **Releases**: 10.x and 11.x (current).
+</Info>
+
+## Prerequisites
+
+- Avaya IP Office admin / Manager access
+- SIP Trunk Channels licence on the IP Office
+- Outbound UDP 5060 allowed on the edge firewall
+- PBX public IP or FQDN
+
+## Step 1: create trunk in SmartAlex
+
+SIP Trunk wizard, pick **Other**. Avaya doesn't have a dedicated preset; Generic works. Use digest auth. Save credentials.
+
+## Step 2: add the SIP trunk in IP Office Manager
+
+<Steps>
+  <Step title="Open IP Office Manager">
+    Connect to the IP Office. Navigate to **Line** then right-click, then **New**, then **SIP Line**.
+  </Step>
+  <Step title="SIP Line tab">
+    - **ITSP Domain Name**: `sip.voice.getsmartalex.com`
+    - **Send Caller ID**: Diversion Header
+    - **Country Code**: (your country code, e.g., 27 for SA)
+    - **Incoming Supervised REFER**: Auto
+    - **Outgoing Supervised REFER**: Auto
+    - **Send 302 Moved Temporarily**: Off
+  </Step>
+  <Step title="Transport tab">
+    - **ITSP Proxy Address**: `sip.voice.getsmartalex.com`
+    - **Network Configuration**: Layer 4 Protocol = UDP, Port = 5060
+    - **Use Network Topology Info**: System
+    - **Calls Route via Registrar**: checked
+  </Step>
+  <Step title="Call Details tab">
+    - Add a new SIP URI.
+    - **Incoming Group**: 99 (or your preferred group)
+    - **Outgoing Group**: 99
+    - **Max Sessions**: match the SmartAlex concurrent-call limit
+  </Step>
+  <Step title="VoIP tab">
+    - **Codec Selection**: Custom
+    - **Selected Codecs**: G.711 ULAW 64K, G.711 ALAW 64K
+    - **Fax Transport**: None
+    - **DTMF Support**: RFC 2833
+    - **Media Security**: Disabled (or Preferred for SRTP if configured)
+  </Step>
+  <Step title="Save and verify">
+    Save configuration to IP Office. Check SIP trunk status in System Status: should show "InService".
+  </Step>
+</Steps>
+
+## Step 3: short codes (outbound, optional)
+
+Short Codes, add a code like `9N` that dials `N` through Line Group 99 (the SmartAlex trunk group).
+
+## Step 4: inbound call route
+
+Incoming Call Route, add a route: Bearer Capability Any Voice, Incoming Line Group 99, Destination to your desired hunt group or extension that will hand off to SmartAlex (typically the main auto-attendant destination you want to replace).
+
+For a SmartAlex-provisioned DID, you don't need an inbound route on Avaya.
+
+## Step 5: extensions and agent
+
+Populate extensions in SmartAlex. Link agent.
+
+## Step 6: test
+
+Dial. Transfer.
+
+## Avaya-specific notes
+
+- **Licensing**: each SIP trunk channel needs a licence. Verify `sysmon` shows available channels.
+- **SBC requirement**: Avaya Session Border Controller (SBCE) is recommended in enterprise deployments for SIP-side security. SmartAlex works with or without SBCE.
+- **Caller ID Name (CNAM)**: IP Office can substitute display names via the Calling Line Directory; this is independent of the SIP transfer mechanism.
+- **Release 11**: newer releases handle REFER more cleanly. If on an older release (10.0 or earlier), upgrade before deployment.
+- **Session Border Controller for Enterprise (SBCE)**: if you terminate SIP on SBCE, configure the trunk on SBCE's side with identical parameters, then point IP Office at SBCE.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Mitel" icon="building-columns" href="/telephony/mitel">
+    Alternative enterprise PBX.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/telephony/troubleshooting">
+    Error reference.
+  </Card>
+</CardGroup>

@@ -31,7 +31,7 @@ When a tool call fails, the SmartAlex MCP server returns an error in the tool re
 
 ## Authentication Errors
 
-### 401 — Authorization required
+### 401 , Authorization required
 
 **Gateway response:**
 
@@ -54,7 +54,7 @@ Failed to list contacts: Authorization required. Check your API key is valid and
 - **OAuth:** Reconnect the MCP server to trigger OAuth authentication
 - **Cloud:** Check that your AI client is sending the Bearer token
 
-### 401 — Invalid or expired token
+### 401 , Invalid or expired token
 
 ```json
 {
@@ -73,7 +73,7 @@ Failed to list contacts: Authorization required. Check your API key is valid and
 
 ## Permission Errors
 
-### 403 — Insufficient permissions
+### 403 , Insufficient permissions
 
 ```json
 {
@@ -81,13 +81,13 @@ Failed to list contacts: Authorization required. Check your API key is valid and
 }
 ```
 
-**Cause:** Your user account doesn't have permission for this operation. SmartAlex uses role-based access control (RBAC) — your admin may have restricted access to certain features.
+**Cause:** Your user account doesn't have permission for this operation. SmartAlex uses role-based access control (RBAC) , your admin may have restricted access to certain features.
 
 **Fix:**
 - Ask your workspace admin to grant the required page permission
 - API keys inherit permissions from the user who created them
 
-### 403 — User principal required
+### 403 , User principal required
 
 ```json
 {
@@ -100,7 +100,7 @@ Failed to list contacts: Authorization required. Check your API key is valid and
 **Fix:**
 - Regenerate the API key from a user account with appropriate permissions
 
-### 403 — API key does not have write permission
+### 403 , API key does not have write permission
 
 ```json
 {
@@ -117,7 +117,7 @@ Failed to list contacts: Authorization required. Check your API key is valid and
 
 ## Validation Errors
 
-### 400 — Invalid parameters
+### 400 , Invalid parameters
 
 ```json
 {
@@ -134,7 +134,7 @@ Failed to list contacts: Authorization required. Check your API key is valid and
 - `id` must be a valid UUID for all get/update/delete operations
 - `stage` must be one of: `lead`, `qualified`, `showing`, `offer`, `under_contract`, `closed_won`, `closed_lost`
 
-### 400 — Invalid UUID
+### 400 , Invalid UUID
 
 ```json
 {
@@ -146,7 +146,7 @@ Failed to list contacts: Authorization required. Check your API key is valid and
 
 **Fix:** UUIDs follow the format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` (e.g., `a1b2c3d4-e5f6-7890-abcd-ef1234567890`).
 
-### 422 — Validation error
+### 422 , Validation error
 
 **Gateway response:**
 
@@ -170,7 +170,7 @@ Failed to create campaign: name: String must contain at least 1 character(s). Ch
 
 ## Resource Errors
 
-### 404 — Not found
+### 404 , Not found
 
 ```json
 {
@@ -183,13 +183,13 @@ Failed to create campaign: name: String must contain at least 1 character(s). Ch
 **Fix:**
 - Verify the UUID is correct
 - Use the corresponding `list_` tool to find valid IDs
-- Resources are tenant-scoped — you can only access your own data
+- Resources are tenant-scoped , you can only access your own data
 
 ---
 
 ## Rate Limiting
 
-### 429 — Too many requests
+### 429 , Too many requests
 
 ```json
 {
@@ -221,7 +221,7 @@ Failed to create campaign: name: String must contain at least 1 character(s). Ch
 
 ## Server Errors
 
-### 500 — Internal server error
+### 500 , Internal server error
 
 ```json
 {
@@ -232,7 +232,7 @@ Failed to create campaign: name: String must contain at least 1 character(s). Ch
 **Cause:** An unexpected error occurred on the server.
 
 **Fix:**
-- Retry the request — transient errors often resolve on the next attempt
+- Retry the request , transient errors often resolve on the next attempt
 - If persistent, contact support at support@getsmartalex.com with the request details
 
 ---
@@ -241,7 +241,7 @@ Failed to create campaign: name: String must contain at least 1 character(s). Ch
 
 These errors come from the MCP SDK transport layer, not from SmartAlex tools.
 
-### 406 — Not Acceptable
+### 406 , Not Acceptable
 
 ```json
 {
@@ -283,12 +283,12 @@ Gateway error: <!DOCTYPE html>...
 
 **Fix:**
 - **Local:** Update to the latest version: `npx @smartalex/mcp-server@latest`
-- **Cloud:** This resolves automatically — contact support if it persists
+- **Cloud:** This resolves automatically , contact support if it persists
 
 ---
 
 ## Related Pages
 
-- [Getting Started](/mcp/getting-started) — Setup and troubleshooting
-- [Tools Reference](/mcp/tools-reference) — All 28 tools with parameters
-- [MCP Overview](/mcp/overview) — Architecture and authentication
+- [Getting Started](/mcp/getting-started) , Setup and troubleshooting
+- [Tools Reference](/mcp/tools-reference) , All 28 tools with parameters
+- [MCP Overview](/mcp/overview) , Architecture and authentication

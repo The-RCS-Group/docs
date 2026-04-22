@@ -9,7 +9,7 @@ MCP (Model Context Protocol) is an open standard that defines how AI assistants 
 
 Before MCP, connecting an AI assistant to an external service required custom integration code for each combination of AI client and service. If you wanted Claude to access your CRM, you built a custom integration. If you wanted ChatGPT to access the same CRM, you built a different custom integration. For every new AI client, you repeated the work.
 
-MCP eliminates this fragmentation. A service builds one MCP server, and it works with every MCP-compatible AI client — Claude, ChatGPT, Cursor, VS Code, Windsurf, and dozens more. An AI client implements MCP support once, and it works with every MCP server. The protocol standardizes how AI models discover available tools, call them with structured inputs, and receive structured outputs.
+MCP eliminates this fragmentation. A service builds one MCP server, and it works with every MCP-compatible AI client , Claude, ChatGPT, Cursor, VS Code, Windsurf, and dozens more. An AI client implements MCP support once, and it works with every MCP server. The protocol standardizes how AI models discover available tools, call them with structured inputs, and receive structured outputs.
 
 Think of MCP as USB-C for AI. Before USB-C, every device had its own charging cable. USB-C standardized the connector so one cable works with everything. MCP does the same for AI-to-tool connections.
 
@@ -27,10 +27,10 @@ MCP exposes three types of capabilities from servers to clients:
 Tools are functions that the AI can call to take actions or retrieve information. Each tool has a name, a description (so the AI knows when to use it), and a defined input schema (so the AI knows what parameters to provide).
 
 **Examples:**
-- `list_contacts` — Search and filter contacts in a CRM
-- `create_appointment` — Book an appointment on a calendar
-- `get_weather` — Retrieve current weather for a location
-- `run_query` — Execute a database query
+- `list_contacts` , Search and filter contacts in a CRM
+- `create_appointment` , Book an appointment on a calendar
+- `get_weather` , Retrieve current weather for a location
+- `run_query` , Execute a database query
 
 When a user asks the AI to do something that requires an external tool, the AI selects the appropriate tool, fills in the parameters, and sends a structured request to the MCP server. The server executes the action and returns the result.
 </Accordion>
@@ -39,9 +39,9 @@ When a user asks the AI to do something that requires an external tool, the AI s
 Resources are read-only data that the AI can access for context without making explicit function calls. They are similar to files or documents that the AI can reference during conversations.
 
 **Examples:**
-- `smartalex://platform-status` — Current platform health and version
-- `github://repo/readme` — The README file of a repository
-- `database://schema` — The schema of a database
+- `smartalex://platform-status` , Current platform health and version
+- `github://repo/readme` , The README file of a repository
+- `database://schema` , The schema of a database
 
 Resources help the AI understand the current state of a system without needing to call a tool. They are typically used for context-setting at the beginning of a conversation.
 </Accordion>
@@ -50,9 +50,9 @@ Resources help the AI understand the current state of a system without needing t
 Prompts are pre-built conversation templates that guide the AI through complex multi-step tasks. They are like expert playbooks that the AI follows when the user selects them.
 
 **Examples:**
-- `campaign-strategy` — Walk through designing an outbound calling campaign
-- `code-review` — Analyze code changes for bugs, style issues, and security concerns
-- `data-analysis` — Guide a structured analysis of a dataset
+- `campaign-strategy` , Walk through designing an outbound calling campaign
+- `code-review` , Analyze code changes for bugs, style issues, and security concerns
+- `data-analysis` , Guide a structured analysis of a dataset
 
 Prompts combine instructions, tool usage, and conversation flow into reusable templates. They ensure consistent, high-quality outputs for common workflows.
 </Accordion>
@@ -78,7 +78,7 @@ MCP supports two transport methods:
 | **stdio** | Server runs locally as a process, communicates via standard input/output | Desktop AI clients (Claude Desktop, Cursor, VS Code) |
 | **HTTP (Streamable HTTP)** | Server runs remotely, communicates via HTTPS | Cloud AI clients (ChatGPT, web-based assistants), hosted services |
 
-The stdio transport is simpler and requires no network configuration — the AI client launches the server process directly. The HTTP transport enables cloud-hosted MCP servers that any client can connect to over the internet.
+The stdio transport is simpler and requires no network configuration , the AI client launches the server process directly. The HTTP transport enables cloud-hosted MCP servers that any client can connect to over the internet.
 
 ---
 
@@ -88,10 +88,10 @@ The stdio transport is simpler and requires no network configuration — the AI 
 
 Before MCP, connecting AI to external tools required:
 
-1. **Custom code per integration** — Every AI client needed its own connector for every service
-2. **Provider lock-in** — Integrations built for one AI client did not work with others
-3. **Maintenance burden** — Each connector needed separate updates, authentication handling, and error management
-4. **Discovery problem** — No standard way for AI to know what tools are available
+1. **Custom code per integration** , Every AI client needed its own connector for every service
+2. **Provider lock-in** , Integrations built for one AI client did not work with others
+3. **Maintenance burden** , Each connector needed separate updates, authentication handling, and error management
+4. **Discovery problem** , No standard way for AI to know what tools are available
 
 For a platform with 20 tools and 5 AI clients, this meant building and maintaining 100 separate integrations.
 
@@ -99,11 +99,11 @@ For a platform with 20 tools and 5 AI clients, this meant building and maintaini
 
 With MCP:
 
-1. **Build once, work everywhere** — One MCP server works with Claude, ChatGPT, Cursor, VS Code, and any future MCP client
-2. **No lock-in** — Switch AI clients without rebuilding integrations
-3. **Automatic discovery** — AI clients discover available tools, their descriptions, and their input schemas automatically
-4. **Standard authentication** — Consistent auth patterns across all integrations
-5. **Growing ecosystem** — Thousands of MCP servers are already available, with more published daily
+1. **Build once, work everywhere** , One MCP server works with Claude, ChatGPT, Cursor, VS Code, and any future MCP client
+2. **No lock-in** , Switch AI clients without rebuilding integrations
+3. **Automatic discovery** , AI clients discover available tools, their descriptions, and their input schemas automatically
+4. **Standard authentication** , Consistent auth patterns across all integrations
+5. **Growing ecosystem** , Thousands of MCP servers are already available, with more published daily
 
 For a platform with 20 tools and 5 AI clients, this means building 1 MCP server instead of 100 integrations.
 
@@ -111,14 +111,14 @@ For a platform with 20 tools and 5 AI clients, this means building 1 MCP server 
 
 MCP has been adopted rapidly across the AI industry:
 
-- **Anthropic** — Claude Desktop, Claude Code (creator of MCP)
-- **OpenAI** — ChatGPT supports MCP for tool calling
-- **Google** — Gemini integration announced
-- **Microsoft** — VS Code with GitHub Copilot, Copilot Studio
-- **Cursor** — Full MCP support for code editing
-- **Windsurf** — MCP support for development workflows
-- **Block (Square)** — Enterprise MCP adoption
-- **Apollo, Replit, Sourcegraph, Zed** — And many more
+- **Anthropic** , Claude Desktop, Claude Code (creator of MCP)
+- **OpenAI** , ChatGPT supports MCP for tool calling
+- **Google** , Gemini integration announced
+- **Microsoft** , VS Code with GitHub Copilot, Copilot Studio
+- **Cursor** , Full MCP support for code editing
+- **Windsurf** , MCP support for development workflows
+- **Block (Square)** , Enterprise MCP adoption
+- **Apollo, Replit, Sourcegraph, Zed** , And many more
 
 The Linux Foundation governance ensures MCP evolves as an open standard rather than being controlled by any single company.
 
@@ -131,7 +131,7 @@ MCP and REST APIs solve related but different problems. REST APIs are designed f
 | Dimension | MCP | REST API |
 |-----------|-----|----------|
 | **Designed for** | AI assistants calling tools | Applications calling services |
-| **Discovery** | Automatic — AI reads tool descriptions and schemas | Manual — developer reads documentation |
+| **Discovery** | Automatic , AI reads tool descriptions and schemas | Manual , developer reads documentation |
 | **Input construction** | AI fills parameters from natural language | Developer writes code to construct requests |
 | **Error handling** | AI interprets errors and adapts | Developer writes error handling code |
 | **Authentication** | Standard patterns (API key, OAuth) built into protocol | Varies per API |
@@ -234,11 +234,11 @@ MCP provides official SDKs in multiple languages:
 
 When building an MCP server:
 
-1. **Write clear tool descriptions** — The AI uses these to decide when to call your tool. Vague descriptions lead to misuse.
-2. **Use specific input schemas** — Define required and optional parameters with types and constraints. The AI constructs better inputs from well-defined schemas.
-3. **Return structured data** — JSON responses are easier for the AI to interpret than free-form text.
-4. **Handle errors gracefully** — Return meaningful error messages that help the AI recover or inform the user.
-5. **Keep tools focused** — One tool per action. A `list_contacts` tool and a `create_contact` tool are better than a single `manage_contacts` tool.
+1. **Write clear tool descriptions** , The AI uses these to decide when to call your tool. Vague descriptions lead to misuse.
+2. **Use specific input schemas** , Define required and optional parameters with types and constraints. The AI constructs better inputs from well-defined schemas.
+3. **Return structured data** , JSON responses are easier for the AI to interpret than free-form text.
+4. **Handle errors gracefully** , Return meaningful error messages that help the AI recover or inform the user.
+5. **Keep tools focused** , One tool per action. A `list_contacts` tool and a `create_contact` tool are better than a single `manage_contacts` tool.
 
 ---
 
@@ -295,10 +295,10 @@ The MCP ecosystem has grown rapidly since the protocol's release. Thousands of M
 
 ### Finding MCP Servers
 
-- **[MCP Server Registry](https://github.com/modelcontextprotocol/servers)** — Official list maintained by the MCP project
-- **[Smithery](https://smithery.ai)** — Community directory of MCP servers
-- **[Glama](https://glama.ai/mcp/servers)** — Searchable MCP server catalog
-- **npm / PyPI** — Search for `mcp-server-*` packages
+- **[MCP Server Registry](https://github.com/modelcontextprotocol/servers)** , Official list maintained by the MCP project
+- **[Smithery](https://smithery.ai)** , Community directory of MCP servers
+- **[Glama](https://glama.ai/mcp/servers)** , Searchable MCP server catalog
+- **npm / PyPI** , Search for `mcp-server-*` packages
 
 ---
 
@@ -313,7 +313,7 @@ OpenAI function calling is a proprietary feature that lets GPT models call funct
 </Accordion>
 
 <Accordion title="Do I need to be a developer to use MCP?">
-To build an MCP server, yes — you need programming skills. To use an MCP server, no. End users simply connect pre-built MCP servers to their AI assistant (often by pasting a configuration snippet or clicking an install button) and then interact with the tools through natural language conversation. The AI handles all the technical details of calling tools and interpreting results.
+To build an MCP server, yes , you need programming skills. To use an MCP server, no. End users simply connect pre-built MCP servers to their AI assistant (often by pasting a configuration snippet or clicking an install button) and then interact with the tools through natural language conversation. The AI handles all the technical details of calling tools and interpreting results.
 </Accordion>
 
 <Accordion title="Is MCP secure?">
@@ -329,7 +329,7 @@ LangChain is a framework for building LLM applications in Python and JavaScript.
 </Accordion>
 
 <Accordion title="How do I add MCP support to my existing product?">
-Build an MCP server that wraps your existing API. If you have a REST API, each API endpoint becomes an MCP tool with a description and input schema. The official TypeScript and Python SDKs make this straightforward — a basic MCP server with 5-10 tools can be built in a few hours. Publish it as an npm or PyPI package so users can install it with one command.
+Build an MCP server that wraps your existing API. If you have a REST API, each API endpoint becomes an MCP tool with a description and input schema. The official TypeScript and Python SDKs make this straightforward , a basic MCP server with 5-10 tools can be built in a few hours. Publish it as an npm or PyPI package so users can install it with one command.
 </Accordion>
 
 <Accordion title="What is the future of MCP?">

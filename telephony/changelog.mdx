@@ -1,0 +1,30 @@
+---
+title: "Changelog"
+description: "Version history for the telephony documentation and platform."
+---
+
+## 2026-04-22 , v1.0
+
+**Initial telephony documentation release.**
+
+- New Telephony tab with full coverage of PBX integrations
+- Integration guides for 3CX, Yeastar, FreePBX, Asterisk, Grandstream UCM, Avaya IP Office, Mitel MiVoice, Microsoft Teams, RingCentral, Euphoria Telecom, Switch Telecom, Generic SIP
+- Replacing Your IVR section with 6 real industry conversation flows
+- Call Routing & Transfers technical deep dive
+- Complete SIP error reference in Troubleshooting
+- Security & Compliance posture page
+- Network Requirements with firewall rules and NAT guidance
+- South Africa regional notes covering POPIA, local carriers, common deployment patterns
+- Migration Playbook with phased rollout guidance
+- Platform Capabilities matrix
+- Testing & Validation procedures
+- Capacity, Limits & SLA page
+- Observability & Reporting page
+- Enterprise FAQ with procurement-grade answers
+
+**Platform context at time of release:**
+- SIP ingress hostname: `sip.voice.getsmartalex.com`
+- Supported transports: UDP, TCP, TLS
+- Default codecs: G.711 u-law, G.711 A-law, G.722
+- Transfer mechanism: SIP REFER (RFC 3515) with caller ID via P-Asserted-Identity (RFC 3325)
+- Recording retention default: 90 days, configurable 7 to 365 days

@@ -1,0 +1,197 @@
+---
+title: "Observability & Reporting"
+description: "What you can see, monitor, and export. Dashboards, logs, webhooks, and SIEM integration."
+---
+
+<Info>
+Three layers of observability: self-serve dashboards for day-to-day operations, webhooks for real-time integration, and exports for compliance and BI.
+</Info>
+
+## In-dashboard metrics
+
+Available to every tenant under the **Analytics** section.
+
+### Real-time
+
+- Active calls (currently connected)
+- Calls in the last hour, broken down by agent
+- Today's totals (inbound, outbound, transferred, voicemail)
+
+### Historical
+
+- Calls per day over the selected time range
+- Average call duration
+- Transfer success rate
+- AI resolution rate (calls that didn't transfer)
+- Average wait-to-answer time
+- Cost per call (if billing is per-minute)
+- Per-agent performance comparisons
+
+### Call record detail
+
+Every call shows:
+
+- Start time, duration, outcome (completed, transferred, voicemail, failed)
+- Direction (inbound or outbound)
+- Phone numbers involved
+- Full transcript
+- Audio recording (if enabled)
+- AI-generated summary
+- Sentiment tagging (positive, neutral, negative, flagged)
+- Tools invoked during the call
+- Transfer target if transferred
+
+## Webhooks
+
+Real-time events pushed to your endpoint. Configure per agent in Agent Studio.
+
+### Event types
+
+| Event | Fires when |
+|---|---|
+| `call.started` | An inbound or outbound call connects |
+| `call.answered` | Callee picked up (outbound only) |
+| `call.transferred` | AI issued a transfer |
+| `call.ended` | Call terminated normally |
+| `call.failed` | Call ended abnormally |
+| `call.summary_ready` | AI summary and transcript are finalised |
+| `call.recording_ready` | Recording URL is available |
+| `contact.created` | AI created a new contact from a call |
+| `lead.captured` | AI captured a lead via a tool call |
+| `tool.invoked` | AI called a custom tool (for CRM / calendar / custom logic) |
+
+### Webhook payload shape
+
+Every payload is JSON:
+
+```json
+{
+  "event": "call.ended",
+  "timestamp": "2026-04-22T10:34:22Z",
+  "tenant_id": "<your-tenant>",
+  "call_id": "<uuid>",
+  "data": {
+    "agent_id": "<uuid>",
+    "agent_name": "Sarah",
+    "from": "+27821234567",
+    "to": "+27872500100",
+    "duration_seconds": 47,
+    "direction": "inbound",
+    "outcome": "completed",
+    "transferred": false
+  }
+}
+```
+
+Full schema in the [API Reference](/api-reference/webhooks).
+
+### Delivery guarantees
+
+- Retried on 5xx responses up to 3 times with exponential backoff
+- Idempotency key in every payload so you can deduplicate
+- HMAC signature header for verification
+- Dead-letter queue for repeatedly failing webhooks (inspectable via admin UI)
+
+## Call detail record export
+
+CSV export available via:
+
+- Dashboard: Analytics then Export
+- API: `GET /v1/calls` with date range
+- Scheduled email delivery: configure under Settings then Exports
+
+Fields include everything visible in the Call Logs page, plus cost data if your plan includes it.
+
+## SIEM integration
+
+Available on Enterprise plan.
+
+### Supported formats
+
+- Syslog (RFC 5424)
+- JSON over HTTPS (with HMAC signature)
+- AWS CloudWatch Logs (cross-account role)
+- Splunk HEC
+- Datadog logs
+
+### Events forwarded to SIEM
+
+Same as webhook events, plus:
+
+- User logins (SmartAlex dashboard auth events)
+- Configuration changes (agents, trunks, extensions)
+- Credential lifecycle events
+- RBAC changes
+- Data export requests
+
+## Grafana and custom dashboards
+
+Metrics are available via a Prometheus-compatible endpoint (Enterprise plan). Point Grafana at it for custom dashboards.
+
+Standard metrics exposed:
+
+- `smartalex_calls_total{agent,outcome,direction}`
+- `smartalex_call_duration_seconds{agent}` (histogram)
+- `smartalex_transfers_total{agent,outcome}`
+- `smartalex_trunk_registered{trunk}`
+- `smartalex_trunk_active_calls{trunk}`
+- `smartalex_api_requests_total{endpoint,status}`
+
+## Per-call diagnostics
+
+On the phone numbers page, every number has a **Diagnostics** button. Clicking it runs a live check:
+
+- Phone number status: Active or Inactive
+- Agent assigned: yes / no / which
+- Voice platform registered: yes or no
+- Telephony credentials: valid / missing / not applicable
+- Agent voice provider configured
+
+This is the first tool to reach for when a specific number isn't working as expected.
+
+## Audit trail access
+
+Available to admin users in Settings then Audit Log.
+
+Filters: by actor, by event type, by date range. Export as CSV.
+
+Retained for 1 year minimum. Longer retention available on Enterprise plans.
+
+## What SmartAlex cannot observe
+
+Be clear about the boundary:
+
+- **We don't see your PBX logs.** If a transfer failed because your PBX rejected it, the failure is visible in your PBX logs, not ours.
+- **We don't see your carrier CDRs.** Carrier-level call data is with your carrier.
+- **We don't see internal extension-to-extension calls.** Those never touch our platform.
+
+## Troubleshooting observability itself
+
+<AccordionGroup>
+  <Accordion title="Webhooks not firing">
+    Check the webhook status in Settings then Webhooks. Each configured endpoint shows recent delivery attempts and any failures. Common causes: endpoint 5xx, TLS cert expired, firewall blocking our IPs.
+  </Accordion>
+  <Accordion title="Call records missing">
+    A failed call may not produce a full record if the failure happened before the AI started. Check the audit log for the call attempt.
+  </Accordion>
+  <Accordion title="Transcripts empty">
+    If a caller said nothing (e.g., immediate hangup), the transcript will be minimal. If transcripts are empty on calls where conversation happened, contact support.
+  </Accordion>
+  <Accordion title="Metrics lagging behind real time">
+    Metrics are eventually consistent. Allow up to 5 minutes for the dashboard to reflect recent activity.
+  </Accordion>
+</AccordionGroup>
+
+## Next steps
+
+<CardGroup cols={3}>
+  <Card title="Testing & Validation" icon="check-double" href="/telephony/testing-validation">
+    Validate a deployment is healthy.
+  </Card>
+  <Card title="Capacity & SLA" icon="gauge" href="/telephony/capacity-sla">
+    Operational targets.
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/introduction">
+    Programmatic access.
+  </Card>
+</CardGroup>
