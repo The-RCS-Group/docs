@@ -1,0 +1,114 @@
+---
+title: "Microsoft Teams Phone"
+description: "Connect Microsoft Teams Phone to SmartAlex via Direct Routing and a Session Border Controller."
+---
+
+<Info>
+**Audience**: Microsoft Teams Phone administrator and SBC owner. **Time**: 2 to 4 hours for a new SBC deployment; 30 minutes if SBC already configured. **Requires**: Session Border Controller.
+</Info>
+
+## How Teams Phone integrates
+
+Microsoft Teams Phone doesn't speak raw SIP trunking to external providers. It uses **Direct Routing** through a **Session Border Controller (SBC)**.
+
+```mermaid
+flowchart LR
+  A[Microsoft Teams] -->|Direct Routing SIP over TLS| B[SBC]
+  B -->|Standard SIP| C[SmartAlex]
+```
+
+Your SBC sits between Teams and SmartAlex, translating Teams-specific SIP to standard SIP.
+
+## Certified SBCs
+
+Microsoft certifies specific SBC products for Direct Routing:
+
+- AudioCodes Mediant series
+- Ribbon Communications (formerly Sonus) SBC
+- Oracle Acme Packet SBC
+- Cisco CUBE
+
+Any of these work with SmartAlex. The SBC configuration is what differs.
+
+## Step 1: create trunk in SmartAlex
+
+SIP Trunk wizard, pick **Microsoft Teams**. Defaults set TLS transport and SRTP for compatibility. Save and copy credentials.
+
+## Step 2: configure your SBC
+
+Two legs to configure on the SBC:
+
+### Leg A: Teams side
+
+- Direction: toward Microsoft 365
+- Transport: TLS on port 5061
+- Certificate: publicly-trusted certificate matching your SBC's FQDN (e.g., `sbc.yourcompany.com`)
+- Peer: Microsoft 365 SIP endpoints (use the SBC's Teams interop template)
+- Media: SRTP mandatory
+
+### Leg B: SmartAlex side
+
+- Direction: toward SmartAlex
+- Transport: UDP on port 5060 (or TLS on 5061 if required; see notes)
+- Peer: `sip.voice.getsmartalex.com`
+- Authentication: SIP digest (username and password from SmartAlex)
+- Media: RTP or SRTP per your policy
+
+## Step 3: Teams admin centre
+
+<Steps>
+  <Step title="Add the SBC as a PSTN gateway">
+    Teams Admin Centre, then Voice, then Direct Routing, then Add. Enter your SBC FQDN and port 5061.
+  </Step>
+  <Step title="Create a voice route">
+    Voice, then Voice Routes, then Add. Pattern to match numbers you want routed via SmartAlex. Target: your SBC.
+  </Step>
+  <Step title="Create a voice routing policy">
+    Assign the voice route to a policy.
+  </Step>
+  <Step title="Assign policy to users">
+    Users who call numbers routed via SmartAlex need the policy assigned.
+  </Step>
+</Steps>
+
+## Step 4: extensions and agent
+
+Configure extensions in SmartAlex. Link agent in Agent Studio.
+
+## Step 5: test
+
+Dial from a Teams user to a DID routed through SmartAlex. The call should arrive at the AI agent via your SBC.
+
+## Teams-specific notes
+
+- **SBC is mandatory**: there's no direct Teams-to-SIP-provider path without one. Teams Operator Connect and Calling Plans are different products (Microsoft's own carrier services) and don't apply here.
+- **Certificate requirements**: Teams Direct Routing requires a public certificate from a trusted CA on the SBC's Teams-facing side.
+- **Bypass vs non-bypass mode**: Media Bypass (where RTP flows directly from Teams client to SBC without traversing Microsoft 365 media servers) reduces latency. Configure on the PSTN gateway in Teams Admin Centre.
+- **Capacity**: each SBC has its own call licences and capacity limits.
+- **Teams Phone vs Teams calling**: this guide is for Teams Phone (PSTN-enabled). Teams calling without Phone doesn't support Direct Routing.
+- **Enterprise only**: we treat Teams integrations as Enterprise tier due to the SBC complexity. Contact your account manager to confirm scope.
+
+## Common pitfalls
+
+<AccordionGroup>
+  <Accordion title="Teams rejects incoming calls from the SBC">
+    The SBC FQDN must exactly match the certificate. Teams also verifies the certificate chain. Inspect the Teams event log under Monitor, then Call Analytics.
+  </Accordion>
+  <Accordion title="One-way audio Teams-to-SmartAlex">
+    Almost always SIP ALG or misconfigured NAT on the SBC. Verify SBC has a routable external media IP configured.
+  </Accordion>
+  <Accordion title="SBC works for Teams but not SmartAlex">
+    Leg B (SmartAlex side) of the SBC config is usually the issue. Common: authentication credentials mis-typed, or Leg B is TLS-only and SmartAlex ingress expects UDP without cert validation.
+  </Accordion>
+</AccordionGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Network Requirements" icon="network-wired" href="/telephony/network-requirements">
+    Firewall and TLS details.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/telephony/troubleshooting">
+    Error reference.
+  </Card>
+</CardGroup>

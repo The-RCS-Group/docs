@@ -1,0 +1,85 @@
+---
+title: "RingCentral"
+description: "Connect RingCentral to SmartAlex via SIP gateway."
+---
+
+<Info>
+**Audience**: RingCentral super admin. **Time**: 30 to 45 minutes. **Edition**: MVP Standard, Premium, or Ultimate (SIP trunking supported).
+</Info>
+
+## How the integration works
+
+RingCentral doesn't expose a generic outbound SIP trunk on all plans. The integration uses **RingCentral's SIP Connectivity feature** on supported plans, or **call forwarding via a SIP gateway** on others.
+
+Two integration patterns:
+
+1. **SIP trunking (Ultimate plan)**: RingCentral acts as your carrier and sends calls to SmartAlex via SIP.
+2. **Call forwarding**: a RingCentral phone number forwards to a SmartAlex-provisioned DID via standard call forwarding.
+
+## Pattern 1: SIP connectivity (Ultimate)
+
+### Step 1: create trunk in SmartAlex
+
+SIP Trunk wizard, pick **RingCentral**. Defaults set TLS transport. Save credentials.
+
+### Step 2: enable SIP Connectivity in RingCentral
+
+Admin Portal, then Phone System, then Connectivity. Request SIP Connectivity from RingCentral Support (it's not self-serve on all plans).
+
+Once enabled, configure the outbound endpoint:
+
+- **Endpoint Type**: SIP
+- **Server**: `sip.voice.getsmartalex.com`
+- **Port**: `5060`
+- **Transport**: UDP
+- **Authentication**: credentials from SmartAlex
+
+### Step 3: route calls
+
+In RingCentral, set the DIDs you want SmartAlex to handle to forward via the SIP Connectivity rule.
+
+### Step 4: extensions and agent
+
+Standard: populate SmartAlex, link agent.
+
+### Step 5: test
+
+## Pattern 2: call forwarding (all plans)
+
+Simpler but less flexible.
+
+### Step 1: provision a DID in SmartAlex
+
+Phone Numbers, then Buy Number. Choose your country. Assign to an agent.
+
+### Step 2: configure forwarding in RingCentral
+
+Admin Portal, then Users, then pick the user whose number you want to forward, then Call Handling & Forwarding. Forward to the SmartAlex DID.
+
+Or, for a RingCentral call queue or IVR menu: configure its overflow or no-answer destination to the SmartAlex DID.
+
+### Step 3: extensions and agent
+
+Same.
+
+### Step 4: test
+
+Call the RingCentral number. It forwards to the AI.
+
+## RingCentral-specific notes
+
+- **RingCentral's own AI features**: RingCentral offers its own RingSense AI. These are independent; SmartAlex doesn't integrate with or replace RingSense.
+- **International DIDs**: RingCentral has numbers in many countries; pattern 2 works globally.
+- **Call analytics**: RingCentral logs forwarded calls in its CDR as "forwarded to external number". SmartAlex has its own detailed records.
+- **Operator Connect and RingCentral**: separate product, use dedicated Microsoft Teams integration guide if relevant.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Generic SIP" icon="diagram-project" href="/telephony/generic-sip">
+    Fallback reference.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/telephony/troubleshooting">
+    Error reference.
+  </Card>
+</CardGroup>

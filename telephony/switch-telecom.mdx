@@ -1,0 +1,67 @@
+---
+title: "Switch Telecom"
+description: "Connect Switch Telecom's South African hosted PBX (Atria) to SmartAlex."
+---
+
+<Info>
+**Audience**: Switch Telecom customer admin. **Time**: 15 minutes.
+</Info>
+
+## About Switch Telecom
+
+Johannesburg-based hosted PBX provider offering the Atria platform. Common with South African enterprise and mid-market, particularly in financial services and professional services verticals.
+
+## Step 1: create trunk in SmartAlex
+
+SIP Trunk wizard, pick **Other**. Atria speaks standard SIP. Save credentials.
+
+## Step 2: Switch Telecom portal configuration
+
+Same two options as with other hosted PBX providers.
+
+### Option A: forward a DID
+
+1. Log in to the Atria portal
+2. Navigate to the DID management section
+3. Select the target number
+4. Set destination to external forward, pointing at a SmartAlex-provisioned DID
+
+Simplest path. AI answers via our DID.
+
+### Option B: SIP trunk from Atria
+
+Switch Telecom can provision an outbound SIP trunk from Atria to an external endpoint. Contact Switch Telecom support and request:
+
+- **External SIP trunk to**: `sip.voice.getsmartalex.com`
+- **Authentication**: credentials from SmartAlex
+- **Codecs**: G.711 u-law, A-law
+- **Transport**: UDP port 5060
+- **REFER support**: enabled
+
+Lead time depends on your account manager; usually 1 to 5 business days.
+
+## Step 3: extensions and agent
+
+Populate SmartAlex extensions (for Option B). Link agent.
+
+## Step 4: test
+
+Dial, transfer.
+
+## Switch Telecom-specific notes
+
+- **Atria vs their legacy platform**: this guide covers Atria. Older Switch Telecom customers on the legacy platform should contact Switch Telecom to migrate to Atria first, then follow this guide.
+- **Caller ID**: Atria handles P-Asserted-Identity correctly on forwarded calls when configured. Confirm with Switch Telecom support.
+- **Call recording**: Atria has comprehensive recording features. Coordinate with Switch Telecom on whether Atria or SmartAlex is the primary recording source.
+- **Enterprise peering**: Switch Telecom offers direct peering options for high-volume customers. Discuss with your account manager.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Euphoria Telecom" icon="phone-volume" href="/telephony/euphoria-telecom">
+    Alternative SA hosted PBX.
+  </Card>
+  <Card title="South Africa" icon="earth-africa" href="/telephony/south-africa">
+    Regional notes.
+  </Card>
+</CardGroup>

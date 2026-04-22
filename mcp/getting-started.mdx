@@ -22,7 +22,7 @@ Connect SmartAlex to your AI assistant in under 2 minutes. Once connected, you c
 No installation required. Connect directly to SmartAlex's hosted MCP endpoint using OAuth:
 
 ```bash
-# Claude Code — connects via HTTP, authenticates via OAuth
+# Claude Code , connects via HTTP, authenticates via OAuth
 claude mcp add --transport http smartalex https://api.getsmartalex.com/functions/v1/mcp-server
 ```
 
@@ -183,7 +183,7 @@ On Windows, use `cmd` as the command wrapper:
 4. Choose your environment:
    - **Production** keys start with `sa_live_`
    - **Test** keys start with `sa_test_`
-5. Copy the key immediately — it won't be shown again
+5. Copy the key immediately , it won't be shown again
 
 ### Environment Variables
 
@@ -192,7 +192,7 @@ On Windows, use `cmd` as the command wrapper:
 | `SMARTALEX_API_KEY` | Yes (local) | Your API key from the dashboard |
 
 ```bash
-# macOS/Linux — add to ~/.zshrc or ~/.bashrc
+# macOS/Linux , add to ~/.zshrc or ~/.bashrc
 export SMARTALEX_API_KEY=sa_live_your_key_here
 
 # Windows PowerShell
@@ -290,7 +290,7 @@ echo $SMARTALEX_API_KEY  # Should print your key
 
 ### "reconnection failed" (Cloud)
 
-The cloud MCP server runs in stateless mode. If you see a reconnection error, simply reconnect — each request is independent and doesn't require a persistent session.
+The cloud MCP server runs in stateless mode. If you see a reconnection error, simply reconnect , each request is independent and doesn't require a persistent session.
 
 ### Rate Limiting
 
@@ -304,8 +304,8 @@ The first `npx @smartalex/mcp-server` downloads the package (~20 kB + dependenci
 
 ## Next Steps
 
-- [npm Package Setup](/mcp/npm-package) — Detailed local installation guide with version pinning, updating, and per-client setup
-- [Usage Examples](/mcp/examples) — Real-world workflows and conversation examples
-- [Tools Reference](/mcp/tools-reference) — Complete reference for all 28 tools with parameters and examples
-- [Error Reference](/mcp/errors) — Error codes and troubleshooting
-- [MCP Overview](/mcp/overview) — Architecture, resources, prompts, and workflows
+- [npm Package Setup](/mcp/npm-package) , Detailed local installation guide with version pinning, updating, and per-client setup
+- [Usage Examples](/mcp/examples) , Real-world workflows and conversation examples
+- [Tools Reference](/mcp/tools-reference) , Complete reference for all 28 tools with parameters and examples
+- [Error Reference](/mcp/errors) , Error codes and troubleshooting
+- [MCP Overview](/mcp/overview) , Architecture, resources, prompts, and workflows

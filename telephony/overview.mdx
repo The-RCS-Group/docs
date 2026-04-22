@@ -1,0 +1,112 @@
+---
+title: "Telephony Overview"
+description: "Connect SmartAlex to your existing phone system or bring your own numbers. End-to-end setup in under 15 minutes."
+---
+
+SmartAlex plugs into your existing phone system so your AI agent can answer calls, qualify intent, and transfer callers to the right person , all without replacing your PBX, your DIDs, or your carrier.
+
+## How it works
+
+<Steps>
+  <Step title="Your PBX or carrier sends the call to SmartAlex">
+    Using a standard SIP trunk. Works with any system that speaks SIP , 3CX, Yeastar, FreePBX, Microsoft Teams, Avaya, Mitel, Grandstream, and more.
+  </Step>
+  <Step title="The AI answers">
+    Your configured agent greets the caller, understands intent, consults your knowledge base or external tools, and handles the conversation naturally.
+  </Step>
+  <Step title="Transfers happen via SIP REFER">
+    When the caller needs a human, the AI hands the call back to your PBX so it rings the right extension, queue, or ring group. The AI drops out; your system takes over.
+  </Step>
+</Steps>
+
+## Pick your phone system
+
+<CardGroup cols={3}>
+  <Card title="3CX" icon="phone" href="/telephony/3cx">
+    Cloud or on-premise. The most common PBX in South Africa and globally.
+  </Card>
+  <Card title="Yeastar" icon="server" href="/telephony/yeastar">
+    P-Series and S-Series. Popular with SMB and mid-market.
+  </Card>
+  <Card title="FreePBX" icon="code" href="/telephony/freepbx">
+    Open-source GUI on top of Asterisk. Favoured by MSPs.
+  </Card>
+  <Card title="Asterisk" icon="terminal" href="/telephony/asterisk">
+    Raw Asterisk with pjsip. For technical teams who want full control.
+  </Card>
+  <Card title="Grandstream UCM" icon="phone-office" href="/telephony/grandstream">
+    Hardware PBX common in SA small business.
+  </Card>
+  <Card title="Avaya IP Office" icon="building" href="/telephony/avaya">
+    Enterprise on-premise PBX with long deployment history.
+  </Card>
+  <Card title="Mitel MiVoice" icon="building-columns" href="/telephony/mitel">
+    Enterprise UC platform. MiVoice Business and MiVoice Connect.
+  </Card>
+  <Card title="Microsoft Teams" icon="microsoft" href="/telephony/microsoft-teams">
+    Via Direct Routing and a Session Border Controller.
+  </Card>
+  <Card title="RingCentral" icon="cloud" href="/telephony/ringcentral">
+    Cloud UCaaS via SIP gateway.
+  </Card>
+  <Card title="Euphoria Telecom" icon="phone-volume" href="/telephony/euphoria-telecom">
+    South African hosted PBX. Cape Town based.
+  </Card>
+  <Card title="Switch Telecom" icon="phone-arrow-up-right" href="/telephony/switch-telecom">
+    South African hosted PBX. Atria.
+  </Card>
+  <Card title="Generic SIP" icon="diagram-project" href="/telephony/generic-sip">
+    Any SIP-compliant system. Use this when your platform is not listed above.
+  </Card>
+</CardGroup>
+
+## What you need before you start
+
+- Administrative access to your phone system
+- Its public hostname or IP (for us to route transfers back)
+- A list of extensions the AI should be able to transfer to
+- A DID (phone number) for the AI to answer on , either existing or newly provisioned
+- A SmartAlex account with wallet credit and at least one agent configured
+
+Typical setup time: **10 to 15 minutes** end to end.
+
+## Already have an IVR?
+
+Most customers arrive with a traditional press-1-for-sales IVR or a live receptionist. SmartAlex replaces both.
+
+<CardGroup cols={2}>
+  <Card title="Replacing Your IVR" icon="wand-magic-sparkles" href="/telephony/replacing-ivr">
+    How the AI replaces a DTMF tree with a natural conversation , plus measurable before and after.
+  </Card>
+  <Card title="Conversation Flow Library" icon="messages" href="/telephony/conversation-flows">
+    Real industry examples. Medical, automotive, legal, real estate, hospitality, retail.
+  </Card>
+</CardGroup>
+
+## The four things every customer asks
+
+<AccordionGroup>
+  <Accordion title="Does this replace my PBX?">
+    No. SmartAlex sits alongside your PBX. Your phone system keeps handling queues, ring groups, voicemail, call recording , everything it does today. The AI just handles the first touch and routes the caller to the right place via your existing rules.
+  </Accordion>
+  <Accordion title="Do my extensions still work the same way?">
+    Yes. When the AI transfers a caller, your PBX receives a standard SIP REFER and rings the extension exactly as if the call came in any other way. Busy, no-answer, voicemail, queue fallback , all handled by your existing configuration.
+  </Accordion>
+  <Accordion title="Will I see this in my call logs and CDRs?">
+    Yes. Transfers appear in your PBX call detail records as normal SIP transfers. Reporting, recording, and compliance tooling continue to work.
+  </Accordion>
+  <Accordion title="What if the AI cannot help the caller?">
+    It transfers to a human, takes a message, books a callback, or sends the caller to voicemail , whichever you configure as the fallback. Callers are never dropped into silence.
+  </Accordion>
+</AccordionGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Architecture" icon="diagram-project" href="/telephony/architecture">
+    How it all fits together at a technical level.
+  </Card>
+  <Card title="Call Routing & Transfers" icon="arrow-right-arrow-left" href="/telephony/call-routing-transfers">
+    Cold, warm, and attended transfers , what we support and how it works on the wire.
+  </Card>
+</CardGroup>

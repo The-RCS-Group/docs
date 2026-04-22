@@ -1,0 +1,227 @@
+---
+title: "Enterprise FAQ"
+description: "Procurement-grade answers to the questions enterprise buyers ask before signing."
+---
+
+<Info>
+Grouped by topic. Short answers with links to the detailed page for each.
+</Info>
+
+## Security
+
+<AccordionGroup>
+  <Accordion title="Where is our data stored?">
+    Primary storage is in Europe for South African and EU customers, North America for US customers, Asia-Pacific for APAC customers. All customer data is encrypted at rest with AES-256. See [Security & Compliance](/telephony/security-compliance).
+  </Accordion>
+  <Accordion title="Are call recordings encrypted?">
+    Yes. AES-256 server-side encryption in object storage.
+  </Accordion>
+  <Accordion title="Who can access our recordings?">
+    Only tenant users with the correct RBAC permission. Support staff do not have routine access to customer recordings. Access events are logged.
+  </Accordion>
+  <Accordion title="Is consent captured for recording?">
+    Recording can be disabled per agent. If recording is on, most customers configure the agent's first message to disclose it. POPIA and GDPR acceptable with appropriate notice.
+  </Accordion>
+  <Accordion title="How are credentials managed?">
+    SIP trunk passwords are stored in a hardware-backed secrets vault. Never logged. Never visible to support staff. Rotatable on demand.
+  </Accordion>
+  <Accordion title="Do you have SOC 2?">
+    SOC 2 Type I is in progress. Type II is on the roadmap. Compliance attestation available to Enterprise customers on request.
+  </Accordion>
+  <Accordion title="Are you HIPAA compliant?">
+    Not currently certified. Medical practice customers in the US should consult their compliance team. SA medical customers are typically governed by POPIA plus HPCSA guidance, which SmartAlex aligns to.
+  </Accordion>
+  <Accordion title="Is PCI scope a concern?">
+    No. SmartAlex does not process or store cardholder data. If your AI agent captures card information for a separate payment flow, design that flow with PCI scope in mind.
+  </Accordion>
+  <Accordion title="Can you provide a pen test report?">
+    Yes, under NDA on Enterprise plan. Third-party penetration tests are commissioned annually.
+  </Accordion>
+</AccordionGroup>
+
+## Voice quality
+
+<AccordionGroup>
+  <Accordion title="What codec priority is used?">
+    G.711 u-law first, G.711 A-law second, G.722 HD third. G.729 available on request.
+  </Accordion>
+  <Accordion title="Is there echo cancellation?">
+    Yes, built into the SIP ingress. Works in conjunction with your PBX's echo cancellation; usually only one side should apply it to avoid double-processing.
+  </Accordion>
+  <Accordion title="What's the expected MOS?">
+    Above 4.0 in normal network conditions. Measured per call.
+  </Accordion>
+  <Accordion title="What's the typical mouth-to-ear latency?">
+    Under 250 ms for most paths. South African customers connecting to European ingress: typically 180 to 220 ms.
+  </Accordion>
+  <Accordion title="How much packet loss can it tolerate?">
+    Up to 1% packet loss is compensated via PLC (packet loss concealment) with no audible degradation. Above 3% becomes noticeably choppy.
+  </Accordion>
+  <Accordion title="Does the AI handle accents?">
+    Yes. The AI is trained on a wide range of English accents and handles South African, British, Australian, American, and Indian English naturally. Very heavy regional accents may require prompting tweaks.
+  </Accordion>
+</AccordionGroup>
+
+## Call handling
+
+<AccordionGroup>
+  <Accordion title="Can the AI detect voicemail?">
+    Yes. The `detected_voicemail` tool fires when the AI recognises a voicemail greeting, and optionally speaks a configured message before hanging up.
+  </Accordion>
+  <Accordion title="What's the maximum call length?">
+    300 seconds default, configurable up to 14,400 seconds (4 hours) per agent.
+  </Accordion>
+  <Accordion title="What happens if the caller says nothing?">
+    Silence timeout (30 seconds default) triggers a prompt: "Are you still there?" A second silence triggers graceful hangup.
+  </Accordion>
+  <Accordion title="Can callers press digits for account numbers?">
+    Yes, DTMF receive is supported. The AI can prompt for DTMF input and capture it.
+  </Accordion>
+  <Accordion title="How many concurrent calls can an agent handle?">
+    Configurable per trunk. Default 10, maximum 1000. Each agent can serve all concurrent calls simultaneously.
+  </Accordion>
+  <Accordion title="Does the AI remember repeat callers?">
+    Yes, if CRM integration is configured. The AI can look up a caller by phone number and personalise the greeting and routing.
+  </Accordion>
+</AccordionGroup>
+
+## IVR and receptionist replacement
+
+<AccordionGroup>
+  <Accordion title="Can it replace our DTMF IVR?">
+    Yes. That's a primary use case. See [Replacing Your IVR](/telephony/replacing-ivr).
+  </Accordion>
+  <Accordion title="Can it still send DTMF to downstream systems?">
+    Sending DTMF from the AI is on the roadmap. Today, if you need the AI to punch digits through a downstream IVR, that's not supported.
+  </Accordion>
+  <Accordion title="Can it handle multi-language conversations?">
+    English is primary. Limited support for other languages via voice configuration. Contact us for specific requirements.
+  </Accordion>
+  <Accordion title="Can we keep our human receptionist as backup?">
+    Yes. Common deployment pattern: AI handles first touch, transfers to receptionist for anything it can't handle.
+  </Accordion>
+</AccordionGroup>
+
+## Integration
+
+<AccordionGroup>
+  <Accordion title="Does it work with our PBX?">
+    If your PBX speaks standard SIP (RFC 3261) and supports REFER (RFC 3515), yes. See the [integration guides](/telephony/overview#pick-your-phone-system).
+  </Accordion>
+  <Accordion title="Can it transfer to external numbers?">
+    Yes, via the PSTN transfer flow.
+  </Accordion>
+  <Accordion title="Can it queue calls?">
+    Transfers to your PBX queue work. SmartAlex doesn't implement its own queue; it uses yours.
+  </Accordion>
+  <Accordion title="Does it integrate with HubSpot / Salesforce?">
+    Yes via webhooks and the API. Pre-built connectors for common CRMs are available via the [Integrations](/integrations) section.
+  </Accordion>
+  <Accordion title="Can we write custom tools?">
+    Yes. Any HTTP endpoint can be wired as a tool via the tool registry. The AI can invoke it mid-call.
+  </Accordion>
+  <Accordion title="Is there an API?">
+    Yes. Full REST API with OpenAPI specification. See [API Reference](/api-reference/introduction).
+  </Accordion>
+  <Accordion title="Is there MCP support?">
+    Yes. SmartAlex is available as an MCP server for integration with AI assistants. See the [MCP](/mcp/overview) section.
+  </Accordion>
+</AccordionGroup>
+
+## Observability
+
+<AccordionGroup>
+  <Accordion title="Can we see call recordings?">
+    Yes. Admin users can download recordings from Call Logs.
+  </Accordion>
+  <Accordion title="Do we get transcripts?">
+    Yes. Every call has a full transcript, searchable in Call Logs.
+  </Accordion>
+  <Accordion title="Is sentiment analysis available?">
+    Yes. Each call is tagged positive, neutral, negative, or flagged.
+  </Accordion>
+  <Accordion title="Can we export to our SIEM?">
+    Yes on Enterprise plan. Syslog, JSON over HTTPS, Splunk HEC, Datadog supported.
+  </Accordion>
+  <Accordion title="What metrics are available?">
+    Call volume, duration, transfer rate, resolution rate, sentiment distribution, per-agent comparisons, cost per call. See [Observability](/telephony/observability).
+  </Accordion>
+  <Accordion title="Real-time dashboards?">
+    Yes, in the SmartAlex dashboard. Also via Prometheus metrics endpoint on Enterprise plan.
+  </Accordion>
+</AccordionGroup>
+
+## Billing
+
+<AccordionGroup>
+  <Accordion title="How are minutes billed?">
+    AI-talking time is billed per-minute. Post-transfer time is on your own telco contract (no double-billing).
+  </Accordion>
+  <Accordion title="Volume discounts?">
+    Yes on Enterprise plan. Talk to your account manager.
+  </Accordion>
+  <Accordion title="What if we exceed our plan's minutes?">
+    Overage is charged at the plan's per-minute rate. Configurable caps available to avoid surprises.
+  </Accordion>
+  <Accordion title="Are there phone number costs?">
+    If SmartAlex provisions DIDs for you, yes. BYO-carrier customers pay their own carrier directly.
+  </Accordion>
+</AccordionGroup>
+
+## SLA and support
+
+<AccordionGroup>
+  <Accordion title="What's the uptime target?">
+    99.9% monthly. 99.95% and 99.99% available on Enterprise. See [Capacity & SLA](/telephony/capacity-sla).
+  </Accordion>
+  <Accordion title="What are the support hours?">
+    Standard support 08:00 to 18:00 SAST weekdays. 24/7 on-call for SEV-1 and SEV-2 incidents on Enterprise plan.
+  </Accordion>
+  <Accordion title="What's the incident response time?">
+    SEV-1 (platform-wide voice failure): 15 minutes. SEV-2 (regional or partial): 30 minutes. Full SLA in [Capacity & SLA](/telephony/capacity-sla).
+  </Accordion>
+  <Accordion title="How do we escalate issues?">
+    Email support for standard issues. Enterprise customers have a named account manager and escalation path.
+  </Accordion>
+</AccordionGroup>
+
+## Deployment
+
+<AccordionGroup>
+  <Accordion title="How long does setup take?">
+    10 to 15 minutes for the technical integration if you have PBX admin access. 2 to 4 weeks for a production rollout including pilot, parallel run, and cutover. See [Migration Playbook](/telephony/migration-playbook).
+  </Accordion>
+  <Accordion title="Can we pilot before committing?">
+    Yes. Most customers run a 2-week pilot on a test DID or after-hours routing before cutover.
+  </Accordion>
+  <Accordion title="Can we parallel-run?">
+    Yes. Common patterns: after-hours only, overflow from busy, or single-DID test. See [Migration Playbook](/telephony/migration-playbook).
+  </Accordion>
+  <Accordion title="Can we port our existing numbers?">
+    Yes, subject to carrier cooperation and typical porting timelines (7 to 21 business days in SA). Bring your own carrier if you don't want to port.
+  </Accordion>
+  <Accordion title="What if we want to roll back?">
+    30-second rollback: revert your PBX inbound rule to the previous target. The SmartAlex trunk stays configured but idle.
+  </Accordion>
+</AccordionGroup>
+
+## Data and AI
+
+<AccordionGroup>
+  <Accordion title="Is our data used to train a global model?">
+    No. Customer calls, transcripts, and knowledge bases are not used to train any shared or public model. Your data is yours.
+  </Accordion>
+  <Accordion title="Where is the knowledge base stored?">
+    Encrypted at rest in the same region as your other data. Scoped to your tenant.
+  </Accordion>
+  <Accordion title="How does the AI stay current?">
+    Knowledge base can be updated any time. Changes take effect on the next call. Google Search grounding is available for external facts.
+  </Accordion>
+  <Accordion title="Can we opt out of AI features?">
+    AI is the platform. The telephony layer is the PBX integration and routing. Those can run without AI via simple scripted flows, but that's not the primary product.
+  </Accordion>
+</AccordionGroup>
+
+## Something missing?
+
+Email `support@getsmartalex.com` with your question. We'll answer, and if it's common enough, add it here.

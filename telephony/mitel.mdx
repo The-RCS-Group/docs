@@ -1,0 +1,85 @@
+---
+title: "Mitel MiVoice Business"
+description: "Connect Mitel MiVoice Business (formerly MCD) to SmartAlex via SIP trunk."
+---
+
+<Info>
+**Audience**: Mitel MiVoice admin. **Time**: 20 to 30 minutes. **Releases**: MiVoice Business 9.x and later.
+</Info>
+
+## Prerequisites
+
+- Mitel System Administration Tool access
+- SIP trunk licences available
+- Outbound UDP 5060 allowed
+- PBX public IP or FQDN
+
+## Step 1: create trunk in SmartAlex
+
+SIP Trunk wizard, pick **Other**. Use digest authentication. Save credentials.
+
+## Step 2: configure the network element on MiVoice
+
+<Steps>
+  <Step title="Add SIP peer profile">
+    System Admin Tool, then SIP Peer Profile, then Add.
+
+    - **SIP Peer Profile Label**: `SmartAlex`
+    - **Address Type**: IP
+    - **SIP Peer IP Address**: `sip.voice.getsmartalex.com`
+    - **SIP Peer Port**: `5060`
+    - **Transport**: UDP
+  </Step>
+  <Step title="Configure authentication">
+    - **Authentication Username**: (from SmartAlex)
+    - **Authentication Password**: (from SmartAlex)
+    - **Registration**: Enabled
+  </Step>
+  <Step title="Codec settings">
+    Enable G.711 Mu-law and A-law. Priority to match your region.
+
+    Disable G.729 unless licensed.
+  </Step>
+  <Step title="Signalling options">
+    - **DTMF**: RFC 2833 (Telephone Event)
+    - **Refer Support**: Enabled (this is required for transfers)
+    - **Session Timer**: 1800 seconds
+  </Step>
+  <Step title="Save and verify">
+    Save profile. In SIP Peer Status, the peer should show **Registered**.
+  </Step>
+</Steps>
+
+## Step 3: trunk group
+
+Assign this SIP peer to a trunk group. Configure digit translation tables if needed for DID manipulation.
+
+## Step 4: call routing
+
+Add an inbound route: DID to the SmartAlex trunk group (for outbound leg). Alternative: use a SmartAlex-provisioned DID and skip this step.
+
+## Step 5: extensions and agent
+
+Populate SmartAlex. Link agent.
+
+## Step 6: test
+
+Dial. Transfer.
+
+## Mitel-specific notes
+
+- **MiVoice Business vs MiVoice Connect**: this guide covers MiVoice Business. MiVoice Connect (formerly ShoreTel) uses a different admin interface but the same SIP principles.
+- **Mitel Border Gateway (MBG)**: if you terminate SIP on MBG, configure the peer on MBG's SIP Server configuration, then connect the internal PBX.
+- **Clustered systems**: each node needs the SIP peer profile; cluster-level configuration replicates where applicable.
+- **ARS (Automatic Route Selection)**: if you route outbound through ARS, ensure a route pattern matches SmartAlex for any outbound scenarios.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Avaya IP Office" icon="building" href="/telephony/avaya">
+    Alternative enterprise PBX.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/telephony/troubleshooting">
+    Error reference.
+  </Card>
+</CardGroup>

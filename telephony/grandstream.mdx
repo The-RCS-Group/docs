@@ -1,0 +1,78 @@
+---
+title: "Grandstream UCM"
+description: "Connect Grandstream UCM series PBX to SmartAlex via SIP trunk."
+---
+
+<Info>
+**Audience**: Grandstream UCM admin. **Time**: 10 to 15 minutes. **Models**: UCM6200, UCM6300, UCM6500 series.
+</Info>
+
+## Prerequisites
+
+- UCM admin access
+- Firmware 1.0.20 or later (older firmware has SIP interop issues)
+- Outbound UDP 5060 allowed
+- SIP ALG disabled upstream
+
+## Step 1: create trunk in SmartAlex
+
+SIP Trunk wizard, pick **Other** (Grandstream defaults match generic). Save credentials.
+
+## Step 2: add the trunk in UCM
+
+<Steps>
+  <Step title="Open SIP trunks">
+    UCM web UI, then Extensions/Trunks, then VoIP Trunks, then Create New SIP Trunk.
+  </Step>
+  <Step title="Type and provider">
+    - **Type**: Register SIP Trunk
+    - **Provider Name**: `SmartAlex`
+    - **Hostname**: `sip.voice.getsmartalex.com`
+    - **Transport**: UDP
+    - **Keep Original CID**: No
+  </Step>
+  <Step title="Detailed settings">
+    - **Username**: (from SmartAlex)
+    - **Password**: (from SmartAlex)
+    - **AuthID**: same as username
+    - **From Domain**: `sip.voice.getsmartalex.com`
+    - **Outbound Proxy**: `sip.voice.getsmartalex.com`
+    - **DID Mode**: Request Line
+  </Step>
+  <Step title="Codec">
+    Enable PCMU and PCMA. Priority: PCMU first.
+  </Step>
+  <Step title="Save and Apply">
+    Save, then Apply Changes. Registration should show green within 30 seconds.
+  </Step>
+</Steps>
+
+## Step 3: inbound route
+
+Call Features, then Inbound Routes. Add a route: DID to the SmartAlex trunk.
+
+## Step 4: extensions and agent
+
+Add extensions in SmartAlex. Link agent in Agent Studio.
+
+## Step 5: test
+
+Call DID. Transfer.
+
+## Grandstream-specific notes
+
+- **SIP ALG on Grandstream routers**: if you're running a Grandstream router in front of the UCM, double-check SIP ALG is disabled there too.
+- **Fax / T.38**: not relevant for AI voice; leave at defaults.
+- **UCM hosted vs on-premise**: configuration identical.
+- **Call recording**: UCM records trunk-level calls by default. If you don't need the SmartAlex leg recorded separately, disable it on the trunk.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Generic SIP" icon="diagram-project" href="/telephony/generic-sip">
+    Common fallback reference.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/telephony/troubleshooting">
+    Error reference.
+  </Card>
+</CardGroup>

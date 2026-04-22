@@ -8,7 +8,7 @@ description: "Real-world examples of using SmartAlex MCP tools to manage contact
 These examples show real conversations between users and AI assistants connected to SmartAlex via MCP. Each example shows the natural language prompt, the tools the assistant calls, and the result.
 
 <Info>
-  These examples work with any MCP-compatible client — Claude Desktop, Claude Code, Cursor, VS Code, or ChatGPT. The AI assistant automatically selects the right tools based on your request.
+  These examples work with any MCP-compatible client , Claude Desktop, Claude Code, Cursor, VS Code, or ChatGPT. The AI assistant automatically selects the right tools based on your request.
 </Info>
 
 ---
@@ -91,7 +91,7 @@ Call #2 with Mike Rodriguez had a low sentiment score. Want me to pull the trans
 
 **Assistant:** "Here's the transcript from Mike's call. He expressed frustration about scheduling delays. Key objections: timing conflict with the Q2 deadline, and pricing concerns for the premium tier. I'd recommend a follow-up call with a discount offer or flexible scheduling options."
 
-**You:** "Update Mike's contact — add a tag 'needs-follow-up'."
+**You:** "Update Mike's contact , add a tag 'needs-follow-up'."
 
 **Assistant calls:** `smartalex_update_contact`
 
@@ -124,7 +124,7 @@ Call #2 with Mike Rodriguez had a low sentiment score. Want me to pull the trans
 
 **Total pipeline:** 19 deals worth $556,500.
 
-Your offer stage has the highest average deal value ($75,000). The showing-to-offer conversion looks strong — want me to break down which deals are closest to closing?"
+Your offer stage has the highest average deal value ($75,000). The showing-to-offer conversion looks strong , want me to break down which deals are closest to closing?"
 
 **You:** "Move the Acme Realty deal to the offer stage."
 
@@ -203,7 +203,7 @@ Which agent would you like to use, and what should the campaign objective be?"
 }
 ```
 
-**Assistant:** "Added 2 contacts. The campaign is ready to launch — want me to start it?"
+**Assistant:** "Added 2 contacts. The campaign is ready to launch , want me to start it?"
 
 **You:** "Yes, start it."
 
@@ -355,7 +355,7 @@ The assistant will:
 
 <AccordionGroup>
   <Accordion title="Be specific with names and numbers">
-    Instead of "update the deal", say "move the Acme Realty deal to offer stage" — the assistant will search by name.
+    Instead of "update the deal", say "move the Acme Realty deal to offer stage" , the assistant will search by name.
   </Accordion>
 
   <Accordion title="Chain requests naturally">
@@ -363,7 +363,7 @@ The assistant will:
   </Accordion>
 
   <Accordion title="Ask for analysis, not just data">
-    Instead of "list my calls", try "which calls had the lowest sentiment this week?" — the assistant will filter and analyze for you.
+    Instead of "list my calls", try "which calls had the lowest sentiment this week?" , the assistant will filter and analyze for you.
   </Accordion>
 
   <Accordion title="Use prompts for complex tasks">
@@ -375,6 +375,6 @@ The assistant will:
 
 ## Next Steps
 
-- [npm Package Setup](/mcp/npm-package) — Install locally with Claude Desktop, Cursor, or VS Code
-- [Tools Reference](/mcp/tools-reference) — Complete parameter reference for all 28 tools
-- [MCP Overview](/mcp/overview) — Architecture, resources, and prompts
+- [npm Package Setup](/mcp/npm-package) , Install locally with Claude Desktop, Cursor, or VS Code
+- [Tools Reference](/mcp/tools-reference) , Complete parameter reference for all 28 tools
+- [MCP Overview](/mcp/overview) , Architecture, resources, and prompts

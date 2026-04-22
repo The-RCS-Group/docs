@@ -1,0 +1,170 @@
+---
+title: "Network Requirements"
+description: "Firewall rules, ports, NAT configuration, and everything the network team needs to approve the integration."
+---
+
+<Info>
+**Audience**: network engineer or firewall admin at the customer site. **Purpose**: complete network requirements in one page so you can fill in a change request without searching for missing details.
+</Info>
+
+## Outbound connections required
+
+Your PBX (and any SIP endpoint that reaches SmartAlex) needs outbound access to:
+
+| Destination | Port | Protocol | Purpose |
+|---|---|---|---|
+| `sip.voice.getsmartalex.com` | 5060 | UDP | SIP signalling, default |
+| `sip.voice.getsmartalex.com` | 5060 | TCP | SIP signalling, reliable transport option |
+| `sip.voice.getsmartalex.com` | 5061 | TCP/TLS | SIP signalling over TLS |
+| SmartAlex media range | 10000–60000 | UDP | RTP audio, symmetric |
+
+Inbound from the internet to your PBX is **not** required unless you want to accept unsolicited calls from us (which we do not make).
+
+## IP allowlisting
+
+SmartAlex's SIP infrastructure does **not** have a static IP range. Cloud-native infrastructure means source IPs can change.
+
+Options if your firewall requires IP-based rules:
+
+1. **Use the hostname `sip.voice.getsmartalex.com`** in the firewall rule. Most modern firewalls support FQDN-based rules that resolve and refresh periodically.
+2. **Allow 0.0.0.0/0** for UDP 5060 outbound from the PBX specifically. Combined with digest authentication on the trunk, this is secure: only authenticated INVITEs succeed.
+3. **Put the PBX in a DMZ** with broad outbound rules and restrictive inbound rules.
+
+Inbound filtering by credentials (digest auth) is strictly more secure than IP allowlisting for SIP, because IPs can be spoofed on UDP.
+
+## DNS
+
+DNS lookup for `sip.voice.getsmartalex.com` must resolve correctly from your PBX:
+
+```bash
+dig +short sip.voice.getsmartalex.com
+```
+
+Expected output is a CNAME chain ending in two or more public IPv4 addresses. If your PBX's DNS resolver is on an internal-only network, make sure it can reach public DNS (8.8.8.8, 1.1.1.1) or that your internal resolver knows about this hostname.
+
+## NAT and SIP ALG
+
+<Warning>
+**Disable SIP ALG on your firewall.** Nearly every one-way audio and transfer failure we see is caused by SIP ALG trying to be helpful and mangling SIP headers.
+</Warning>
+
+SIP ALG (Application Layer Gateway) is a feature in many business-grade firewalls that attempts to rewrite SIP headers for NAT traversal. It invariably breaks something: session timers, REFER targets, SDP bodies. Modern SIP handles NAT correctly without ALG. Turn it off.
+
+Common firewalls that have SIP ALG enabled by default:
+
+- Cisco ASA (disable with `no sip inspect` on the global service policy)
+- Fortinet FortiGate (disable `sip-disable-session-helpers`)
+- Sonicwall (disable SIP Transformations under VoIP settings)
+- Mikrotik (remove the `sip` service port)
+- pfSense (disable under Firewall → NAT)
+- SophosXG (disable SIP Helper)
+
+For PBXes behind symmetric NAT, the PBX's own STUN configuration and external IP setting must be correct. Your PBX docs cover this.
+
+## MTU and fragmentation
+
+SIP INVITEs can exceed the default Ethernet MTU of 1500 bytes when carrying many codecs or headers. If you see failed registrations or missing calls during high-load windows:
+
+- Verify MTU end-to-end between PBX and internet edge
+- Test with a smaller packet: `ping -c 4 -s 1450 -M do sip.voice.getsmartalex.com`
+- If fragmentation is an issue, either enable TCP transport (5060 TCP) which segments properly, or reduce MTU on the relevant interface
+
+## RTP port range
+
+SmartAlex sends and expects RTP on the range 10000–60000 UDP. Your firewall must allow outbound to this range, and must allow the return path (stateful firewalls do this automatically when UDP session state is tracked).
+
+RTP session timeout on the firewall should be **at least 1800 seconds** (30 minutes). If session timeouts are shorter, long calls will drop mid-conversation.
+
+## TLS and SRTP
+
+For customers requiring encrypted signalling and media:
+
+- **TLS on port 5061** for SIP signalling
+- **SRTP** for RTP media
+
+Note: TLS requires the PBX to trust our certificate chain. Our certificate is issued for `*.sip.livekit.cloud` (our SIP ingress infrastructure). If a customer PBX strictly validates the hostname in the certificate against the hostname it dialled (`sip.voice.getsmartalex.com`), the check will fail.
+
+**Two options:**
+
+1. **Use UDP or TCP 5060** (unencrypted signalling). Most customers are comfortable with this when combined with VPN or a private peering arrangement.
+2. **For TLS, configure the PBX to dial the raw ingress hostname directly** instead of the branded CNAME. Contact support for the current ingress hostname.
+
+SRTP works independently of signalling encryption and is widely supported.
+
+## Bandwidth
+
+Each concurrent call uses approximately:
+
+| Codec | Sustained bandwidth |
+|---|---|
+| G.711 u-law or A-law | 90 kbps both directions |
+| G.722 (HD) | 90 kbps both directions |
+| G.729 (if enabled) | 30 kbps both directions |
+
+For 10 concurrent calls on G.711: budget 1 Mbps symmetric.
+
+Add 10% overhead for signalling and retransmission.
+
+## Quality of Service (QoS)
+
+Not strictly required, but recommended for production:
+
+- DSCP mark RTP packets as EF (46) and SIP as AF41 (34) outbound from the PBX
+- If your ISP honours DSCP, this prioritises voice over best-effort traffic on congested links
+- On internal links between PBX and firewall, map DSCP into your QoS policy
+
+Most business-grade internet circuits in South Africa don't honour DSCP end to end, but internal QoS still helps when the LAN has bursty non-voice traffic.
+
+## Test commands
+
+From your PBX or a machine in the same network segment:
+
+```bash
+# DNS resolution
+dig +short sip.voice.getsmartalex.com
+
+# Reachability (TCP 5060)
+nc -v -z sip.voice.getsmartalex.com 5060
+
+# TLS handshake (port 5061)
+openssl s_client -connect sip.voice.getsmartalex.com:5061 -servername sip.voice.getsmartalex.com
+
+# Latency and packet loss
+mtr -r -c 100 sip.voice.getsmartalex.com
+```
+
+For SA customers, expected round-trip latency to our European ingress is 180–220 ms. One-way latency (half of RTT) plus codec packetisation should give a mouth-to-ear latency under 250 ms, which is the ITU recommended maximum for good voice quality.
+
+## Firewall change request template
+
+Copy this into your change ticket:
+
+```
+Source: <PBX IP>/32
+Destination: sip.voice.getsmartalex.com (FQDN)
+
+Rules:
+  - Allow UDP 5060 outbound, stateful return
+  - Allow UDP 10000-60000 outbound, stateful return
+  - (Optional for TLS) Allow TCP 5061 outbound, stateful return
+
+Session timeout: UDP 1800 seconds minimum
+
+Additional:
+  - Disable SIP ALG on this firewall (required)
+  - Disable any VoIP inspection / helper features
+```
+
+## Next steps
+
+<CardGroup cols={3}>
+  <Card title="Security & Compliance" icon="shield-check" href="/telephony/security-compliance">
+    Encryption at rest, retention, compliance posture.
+  </Card>
+  <Card title="3CX" icon="phone" href="/telephony/3cx">
+    3CX-specific setup.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/telephony/troubleshooting">
+    When things don't work.
+  </Card>
+</CardGroup>

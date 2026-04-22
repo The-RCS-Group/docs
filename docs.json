@@ -1,11 +1,14 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
+  "theme": "maple",
   "name": "SmartAlex Documentation",
   "colors": {
     "primary": "#010033",
-    "light": "#22C55E",
+    "light": "#6366F1",
     "dark": "#010033"
+  },
+  "fonts": {
+    "family": "Geist"
   },
   "favicon": "/favicon.png",
   "navigation": {
@@ -107,6 +110,75 @@
             "group": "Glossary",
             "pages": [
               "glossary"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Telephony",
+        "groups": [
+          {
+            "group": "Foundations",
+            "pages": [
+              "telephony/overview",
+              "telephony/architecture",
+              "telephony/security-compliance",
+              "telephony/network-requirements",
+              "telephony/platform-capabilities",
+              "telephony/terminology"
+            ]
+          },
+          {
+            "group": "Replacing Your IVR",
+            "pages": [
+              "telephony/replacing-ivr",
+              "telephony/conversation-flows",
+              "telephony/migration-playbook"
+            ]
+          },
+          {
+            "group": "Integration Guides",
+            "pages": [
+              "telephony/3cx",
+              "telephony/yeastar",
+              "telephony/freepbx",
+              "telephony/asterisk",
+              "telephony/grandstream",
+              "telephony/avaya",
+              "telephony/mitel",
+              "telephony/microsoft-teams",
+              "telephony/ringcentral",
+              "telephony/euphoria-telecom",
+              "telephony/switch-telecom",
+              "telephony/generic-sip"
+            ]
+          },
+          {
+            "group": "Operations",
+            "pages": [
+              "telephony/call-routing-transfers",
+              "telephony/testing-validation",
+              "telephony/troubleshooting",
+              "telephony/capacity-sla",
+              "telephony/observability"
+            ]
+          },
+          {
+            "group": "Regional",
+            "pages": [
+              "telephony/south-africa"
+            ]
+          },
+          {
+            "group": "Enterprise FAQ",
+            "pages": [
+              "telephony/faq"
+            ]
+          },
+          {
+            "group": "Changelog",
+            "pages": [
+              "telephony/changelog"
             ]
           }
         ]
@@ -234,6 +306,10 @@
           {
             "label": "Integrations",
             "href": "/integrations"
+          },
+          {
+            "label": "Telephony",
+            "href": "/telephony/overview"
           },
           {
             "label": "API Reference",

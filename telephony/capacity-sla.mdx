@@ -1,0 +1,148 @@
+---
+title: "Capacity, Limits & SLA"
+description: "Concurrent-call ceilings, rate limits, uptime targets, and operational boundaries for the telephony platform."
+---
+
+## Uptime target
+
+SmartAlex targets **99.9% monthly availability** on the voice platform. This equates to approximately 43 minutes of allowable downtime per month.
+
+Enterprise-plan customers can negotiate a stricter target (99.95% or 99.99%) with associated service credits. Contact your account manager.
+
+## Concurrency limits
+
+| Scope | Default | Configurable |
+|---|---|---|
+| Per SIP trunk | 10 concurrent calls | Yes, up to 1000 |
+| Per tenant | Plan-based (5 to 500+) | Yes, with plan upgrade |
+| Platform global | Scales with infrastructure | Not customer-visible |
+
+When a trunk limit is reached, new inbound INVITEs receive `503 Service Unavailable` with a `Retry-After` header. Your PBX can fall back to its own overflow routing.
+
+## Rate limits (API)
+
+| Endpoint | Rate |
+|---|---|
+| Public API (agents, campaigns, contacts) | 60 requests per second per tenant |
+| Webhook delivery | 100 events per second per endpoint |
+| Bulk import (extensions CSV) | 500 rows per call, no throttle between calls |
+
+Exceeding a rate limit returns `429 Too Many Requests`.
+
+## Call duration limits
+
+| Setting | Default | Configurable |
+|---|---|---|
+| Max call duration | 300 seconds (5 minutes) | Per agent, up to 14,400 seconds (4 hours) |
+| Silence timeout | 30 seconds | Per agent |
+
+When a max duration is reached, the AI speaks a closing message and hangs up.
+
+## Storage limits
+
+| Resource | Default | Notes |
+|---|---|---|
+| Call recordings | 90 day retention | Configurable 7 to 365 days |
+| Transcripts | Same as recordings | Synced retention |
+| Knowledge base per agent | 100 MB, 1000 documents | Hard limit |
+| Contact database | No hard limit | Billed per seat |
+
+## Voice quality targets
+
+| Metric | Target | Measured |
+|---|---|---|
+| Mean Opinion Score (MOS) | Above 4.0 | Per call, via post-call network stats |
+| One-way latency (mouth to ear) | Under 250 ms | Network-dependent |
+| Packet loss tolerance | Up to 1% without audible degradation | Via PLC |
+| Jitter tolerance | Up to 40 ms | Via adaptive buffer |
+
+For South African customers connecting to our European ingress, expected one-way latency is 120 to 150 ms depending on ISP path.
+
+## Time to first audio
+
+| Phase | Target |
+|---|---|
+| SIP INVITE to 200 OK | Under 500 ms |
+| 200 OK to first AI word | Under 1 second (warm pool) |
+| First AI word to continuous audio | Near-zero (streaming) |
+
+Total mouth-to-ear from caller dial to hearing the AI: typically 2 to 3 seconds on a warm connection.
+
+## What counts as an incident
+
+| Severity | Definition | Response time |
+|---|---|---|
+| SEV-1 | Platform-wide voice failure | 15 minutes |
+| SEV-2 | Regional degradation affecting multiple tenants | 30 minutes |
+| SEV-3 | Single-tenant or single-trunk issue | 2 business hours |
+| SEV-4 | Non-production or cosmetic | Next business day |
+
+Status page with live incident updates: `status.getsmartalex.com`.
+
+## Scheduled maintenance
+
+- Announced at least 7 days in advance where possible
+- Targeted to low-traffic windows (typically Sunday 02:00 to 04:00 UTC)
+- Rolling deploys mean customer impact is usually zero or sub-second
+- Customers can opt into maintenance notifications via email or webhook
+
+## Scaling procedure
+
+When approaching a limit:
+
+- **Per-trunk concurrent call limit**: self-service, increase in Settings PBX.
+- **Tenant-wide limit**: contact your account manager for a plan adjustment.
+- **API rate limit**: contact support if 60 rps isn't enough; most workloads don't come close.
+
+## Backup and disaster recovery
+
+| Metric | Target |
+|---|---|
+| Recovery Time Objective (RTO) | 1 hour |
+| Recovery Point Objective (RPO) | 5 minutes |
+| Backup frequency | Continuous for database, hourly for object storage |
+| Backup retention | 30 days rolling |
+| Cross-region replication | Yes, for primary data stores |
+
+## Data residency
+
+Current production regions:
+
+| Region | Primarily serves |
+|---|---|
+| Europe (West) | EU, UK, South Africa, Middle East |
+| North America (East) | US, Canada |
+| Asia-Pacific | Australia, Singapore, rest of APAC |
+
+Dedicated South African residency is on the roadmap.
+
+## SLA exclusions
+
+The SLA does not apply to:
+
+- Issues caused by customer misconfiguration
+- Issues caused by customer PBX or carrier outages
+- Planned maintenance announced in advance
+- Third-party failures outside SmartAlex's control (e.g., customer's internet provider, their telco)
+- Beta or preview features
+- Free-tier or trial accounts
+
+## Reporting an SLA violation
+
+If you believe an SLA credit applies:
+
+1. Email `support@getsmartalex.com` within 30 days of the incident
+2. Include: your tenant ID, affected time window, impact description, any case numbers
+3. We verify against platform logs and status history
+4. Credits, if applicable, are applied to the next invoice
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Observability" icon="chart-line" href="/telephony/observability">
+    What you can monitor yourself.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/telephony/troubleshooting">
+    Diagnose issues.
+  </Card>
+</CardGroup>

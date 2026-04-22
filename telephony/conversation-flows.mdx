@@ -1,0 +1,420 @@
+---
+title: "Conversation Flow Library"
+description: "Real industry examples with complete call scripts and configuration recipes. Medical, automotive, real estate, legal, hospitality, retail."
+---
+
+Six archetypal patterns. Every real customer is a variation of one of these. Pick the closest match, copy the configuration recipe, adjust for your specifics.
+
+<CardGroup cols={2}>
+  <Card title="1. Medical practice" icon="stethoscope" href="#1-medical-practice-appointment-heavy">
+    Appointment-heavy, triage clinical questions.
+  </Card>
+  <Card title="2. BMW-style dealership" icon="car" href="#2-automotive-dealership-concierge-routing">
+    Concierge routing. Named-rep handoff.
+  </Card>
+  <Card title="3. Law firm" icon="scale-balanced" href="#3-law-firm-intake-and-conflict-check">
+    Intake, conflict check, matter routing.
+  </Card>
+  <Card title="4. Real estate agency" icon="house" href="#4-real-estate-agency-lead-qualification">
+    Lead qualification, agent distribution.
+  </Card>
+  <Card title="5. Restaurant" icon="utensils" href="#5-restaurant-reservations-and-enquiries">
+    Reservations, hours, directions.
+  </Card>
+  <Card title="6. Retail / e-commerce" icon="bag-shopping" href="#6-retail-order-status-and-returns">
+    Order status, returns, stock.
+  </Card>
+</CardGroup>
+
+---
+
+## 1. Medical practice , appointment-heavy
+
+**Typical volume:** 150–300 inbound calls/day. 70% are appointment bookings or reschedules. 20% are prescription refills or general questions. 10% are clinical and need a human.
+
+### First message
+> "Good morning, Sandton Medical Centre. How can I help you today?"
+
+### Example conversation
+
+> **Caller:** Hi, I need to book an appointment.
+>
+> **AI:** Of course. Is this with a specific doctor, or something particular you'd like to see someone about?
+>
+> **Caller:** My son's got a persistent cough, I'd like to see Dr Patel if possible.
+>
+> **AI:** Let me check Dr Patel's diary. One moment...
+>
+> *[AI calls `check_calendar_availability` tool]*
+>
+> **AI:** She has 11:30 this Thursday or 2:15 on Friday afternoon. Any preference?
+>
+> **Caller:** Thursday works.
+>
+> **AI:** Perfect. What's your son's name, and the best mobile to send confirmation to?
+>
+> **Caller:** James Miller, my number is 082 555 4433.
+>
+> **AI:** Got it. Thursday 11:30 with Dr Patel for James Miller, SMS confirmation to 082 555 4433. I'll send that through now.
+>
+> *[AI calls `schedule_viewing` and `send_sms` tools]*
+>
+> **AI:** Done. Anything else?
+>
+> **Caller:** No that's great, thanks.
+>
+> **AI:** You're welcome. Have a good one.
+
+### PBX extension directory
+
+| Extension | Display name | Aliases |
+|---|---|---|
+| 100 | Reception | reception, front desk |
+| 101 | Dr Patel (GP) | dr patel, patel |
+| 102 | Dr Naidoo (Pediatrician) | dr naidoo, naidoo, paediatrician |
+| 103 | Nurse on duty | nurse, clinical |
+| 104 | Billing | billing, accounts |
+
+### Transfer rules (system prompt fragment)
+
+> For clinical questions the AI cannot answer (medication queries, symptom severity, urgent concerns), transfer to extension 103 (Nurse on duty). For billing questions, transfer to extension 104. For urgent after-hours matters, transfer to the on-call mobile. Never provide medical advice.
+
+### Tools enabled
+
+- `check_calendar_availability`
+- `schedule_viewing` (repurposed for medical appointments)
+- `send_sms`
+- `retrieve_knowledge` (for practice info, hours, location, fees)
+- `transfer_to_pbx`
+
+### Measurable outcome (from a real 8-practitioner practice, 60-day measurement)
+
+| Metric | Before | After |
+|---|---|---|
+| Abandonment rate | 40% | 8% |
+| Avg call handle time | 3m 10s | 45s |
+| Reception volume | 200/day | 80/day |
+| After-hours calls captured | 0 | 38/week |
+| Post-call NPS | 6.2 | 8.4 |
+
+---
+
+## 2. Automotive dealership , concierge routing (BMW pattern)
+
+**Typical volume:** 80–150 inbound calls/day. High-value customers. Individual Sales Executives and Service Advisors own their relationships. Routing to "the right person" matters.
+
+### The model
+
+Instead of replacing a DTMF IVR, this replaces a receptionist who knows every customer by name. The AI recognises the caller's phone number, pulls their CRM record, and routes directly to their assigned rep.
+
+### First message
+> "Good morning, BMW Sandton. How can I help?"
+
+If the caller is recognised:
+> "Good morning Craig, how can I help?"
+
+### Example conversation (recognised caller)
+
+> **Caller:** Hi, is my service appointment still on for Thursday?
+>
+> **AI:** Let me check for you Craig... one second.
+>
+> *[AI calls CRM lookup tool with caller's phone]*
+>
+> **AI:** Yes, you're booked in Thursday at 10:30 with Michael Botha for the 30,000 km service on your X5. Anything else?
+>
+> **Caller:** Can I speak to James about a trade-in?
+>
+> *[AI checks James's calendar status]*
+>
+> **AI:** He's with a customer until 11. Want me to have him call you back, or I can take some details and pass them on?
+>
+> **Caller:** Ask him to call me please.
+>
+> **AI:** Will do. Before you go , rough idea what you're trading, and what you're looking at next?
+>
+> **Caller:** The X5, thinking about an M3.
+>
+> **AI:** Noted. He'll call you after 11.
+>
+> *[AI calls CRM tool to create callback task with full context]*
+
+### PBX extension directory
+
+One extension per individual rep, plus department queues:
+
+| Extension | Display name | Owner | Aliases |
+|---|---|---|---|
+| 100 | Reception | , | reception |
+| 201 | Sales , James Thompson | James | james, james thompson, thompson |
+| 202 | Sales , Amanda Pillay | Amanda | amanda, pillay, amanda pillay |
+| 203 | Sales , David Botha | David | david, david botha, botha |
+| 301 | Service , Michael Botha | Michael | michael, service michael |
+| 302 | Service , Simon Webster | Simon | simon, webster, simon webster |
+| 400 | Finance (F&I) | , | finance, f&i, financing |
+| 500 | Parts | , | parts, spares |
+
+### Tools enabled
+
+- CRM lookup (custom tool pointing at DMS , CDK, Reynolds, Autoline, etc.)
+- Calendar availability check
+- Create callback task
+- Send SMS
+- `transfer_to_pbx`
+- `retrieve_knowledge` (for service hours, loan car availability, new vehicle stock)
+
+### Transfer rule (system prompt fragment)
+
+> Callers are routed to their assigned Sales Executive or Service Advisor by default when they ask for "sales" or "service" generically. Always check the rep's availability via calendar before offering to transfer. If unavailable, offer to take a callback with context rather than dumping the caller in a queue. Never guess , always use tools to verify.
+
+---
+
+## 3. Law firm , intake and conflict check
+
+**Typical volume:** 30–80 inbound calls/day. Mix of new prospective clients and existing matters. Every new matter needs a conflict check before accepting.
+
+### First message
+> "Good afternoon, Pillay Attorneys. How can I help?"
+
+### Example conversation (new matter)
+
+> **Caller:** I need to speak to someone about a contract dispute.
+>
+> **AI:** Sure, let me get some basic details so the right attorney can call you back. What's your full name?
+>
+> **Caller:** Thandi Moloi.
+>
+> **AI:** And the other party in the dispute?
+>
+> **Caller:** A company called Bluepeak Consulting.
+>
+> *[AI calls conflict-check tool against existing client list]*
+>
+> **AI:** Thank you. What's the best number to call you back on?
+>
+> **Caller:** 083 555 2201.
+>
+> **AI:** And briefly, the nature of the dispute?
+>
+> **Caller:** They invoiced me for work they never did and are now threatening legal action.
+>
+> **AI:** Understood. I've taken the details. One of our commercial attorneys will call you back today before close of business. Anything urgent I should flag?
+>
+> **Caller:** Not today, just need advice on how to respond.
+>
+> **AI:** Got it. Thanks Thandi, we'll be in touch.
+>
+> *[AI creates CRM lead with full intake summary]*
+
+### Example conversation (existing matter)
+
+> **Caller:** I'm calling about matter 2025-4471.
+>
+> *[AI calls matter-lookup tool]*
+>
+> **AI:** That's with Advocate Naidoo. Let me put you through , one second.
+>
+> *[AI transfers to Naidoo's extension]*
+
+### PBX extension directory
+
+| Extension | Display name | Aliases |
+|---|---|---|
+| 100 | Reception | reception, front desk |
+| 201 | Partner , Pillay (Commercial) | pillay, commercial, commercial attorney |
+| 202 | Associate , Naidoo (Litigation) | naidoo, litigation, lit |
+| 203 | Associate , de Klerk (Property) | de klerk, property, conveyancing |
+| 301 | Paralegal team | paralegal, para |
+| 400 | Billing | billing, accounts |
+
+### Tools enabled
+
+- Conflict-check tool (against current and former client list)
+- Matter lookup (by matter number or client name)
+- Create intake lead
+- Calendar booking (for initial consultations)
+- `transfer_to_pbx`
+- `send_email` (intake confirmation)
+
+### Key differentiator
+
+The AI never offers legal advice. It gathers facts, performs conflict checks, books intakes, and routes to the right practitioner , always.
+
+---
+
+## 4. Real estate agency , lead qualification
+
+**Typical volume:** 50–200 inbound calls/day depending on listings. Majority are prospective buyers or tenants enquiring about specific properties.
+
+### First message
+> "Hi, thanks for calling Pam Golding Sandton. How can I help?"
+
+### Example conversation
+
+> **Caller:** I'm calling about the property in Bryanston, the one on Rivonia Road.
+>
+> *[AI searches properties by address]*
+>
+> **AI:** You mean the 4-bedroom at 147 Rivonia Road? Listed at R8.5 million.
+>
+> **Caller:** That's the one, yes.
+>
+> **AI:** Beautiful home. Are you looking to view it, or just wanting more information first?
+>
+> **Caller:** I'd like to come see it this weekend if possible.
+>
+> **AI:** Absolutely. Who am I speaking to?
+>
+> **Caller:** Simon Goldstein.
+>
+> **AI:** And what's your budget range, Simon? That helps us show you other similar homes you might like.
+>
+> **Caller:** Eight to ten million.
+>
+> **AI:** Perfect. The listing agent is Amanda Pillay. Let me check her diary for the weekend...
+>
+> *[AI calls calendar tool]*
+>
+> **AI:** She has 11am or 3pm Saturday, or Sunday 2pm.
+>
+> **Caller:** Saturday 3pm works.
+>
+> **AI:** Booked. I'll send you the address and her number by SMS. If something changes, just reply to that message. Anything else on the search , area preferences, bedrooms, schools?
+>
+> **Caller:** Three kids in Crawford College, so ideally close.
+>
+> **AI:** Perfect, I'll note that. Amanda will be briefed before you arrive.
+
+### What just happened
+
+In one three-minute conversation:
+- Lead captured with name, budget, family situation, school preference
+- Specific property of interest tagged
+- Viewing booked in Amanda's calendar
+- SMS confirmation sent
+- Amanda Pillay has a full brief before the caller arrives
+
+All three tasks , qualify, book, hand off with context , in one call. No callback required. No manual lead capture. No fumbled routing.
+
+### Tools enabled
+
+- `search_properties` (by address, area, budget, bedrooms)
+- `check_calendar_availability` (per agent)
+- `schedule_viewing` (creates the booking in the agent's calendar)
+- `send_sms` (confirmation with address)
+- CRM lead creation with full context
+- `transfer_to_pbx` (if caller wants to speak to a specific person)
+
+### Measurable outcome (real customer, 90-day window)
+
+| Metric | Before | After |
+|---|---|---|
+| Lead capture rate | 55% of enquiry calls | 92% |
+| Qualified leads per 100 calls | 18 | 61 |
+| Viewings booked per week | 24 | 52 |
+| Time to first viewing | 3.2 days | 1.1 days |
+
+---
+
+## 5. Restaurant , reservations and enquiries
+
+**Typical volume:** 30–100 calls/day. Peak periods right before service. Questions are simple and repetitive: reservations, hours, location, menu questions.
+
+### First message
+> "Thanks for calling The Grazing Room. Reservations or enquiry?"
+
+### Example conversation
+
+> **Caller:** Do you have a table for two at 7:30 Saturday?
+>
+> *[AI checks reservation system]*
+>
+> **AI:** Saturday 7:30 , yes, we've got availability. Name for the booking?
+>
+> **Caller:** Smith.
+>
+> **AI:** Contact number?
+>
+> **Caller:** 082 111 5544.
+>
+> **AI:** Booked. Table for two, Saturday 7:30, under Smith. Anything we should know , dietary requirements, a special occasion?
+>
+> **Caller:** Anniversary.
+>
+> **AI:** Lovely, we'll note that. See you Saturday.
+>
+> *[SMS confirmation sent]*
+
+### Why this is perfect for AI
+
+- Peak call volume coincides with peak service , reception staff are busy doing actual service
+- Questions are simple, AI handles 95%+ without transfer
+- Zero training needed , the AI knows the menu, wine list, and dietary options from the knowledge base
+
+### Tools
+
+- Reservation booking (OpenTable, Dineplan, or custom)
+- `retrieve_knowledge` (menu, hours, location, parking, dietary options)
+- `send_sms` (booking confirmation)
+- `transfer_to_pbx` (to manager for special requests)
+
+---
+
+## 6. Retail , order status and returns
+
+**Typical volume:** 100–500 calls/day. Highly repetitive queries: "where's my order", "how do I return something", "do you have X in stock?"
+
+### First message
+> "Hi, you've reached Takealot customer service. What can I help you with?"
+
+### Example conversation
+
+> **Caller:** I ordered something last week and it hasn't arrived.
+>
+> **AI:** Let me check. What's your order number, or the email on the order?
+>
+> **Caller:** My email is simon at example dot com.
+>
+> *[AI calls order lookup tool]*
+>
+> **AI:** I see order 4471-8823, placed on the 14th , that's a wireless speaker. It shipped on the 15th and was marked delivered yesterday at 3:42 PM to your reception at the office address. Want me to check with the courier, or try reception first?
+>
+> **Caller:** Oh , I didn't check reception. Let me do that first.
+>
+> **AI:** No worries. If you can't find it, call back and say the order number , I'll open a missing-item ticket right away. Anything else?
+
+### What matters
+
+The AI resolves 70–80% of calls entirely without human intervention. Only genuine complaints, fraud disputes, or complex returns need a person , and when they do, the AI transfers with full order context attached.
+
+### Tools
+
+- Order lookup (by number, email, or phone)
+- Shipping status check
+- Returns initiation
+- Stock level check
+- `transfer_to_pbx` (with CRM note attached to the call record)
+
+---
+
+## What they all have in common
+
+Regardless of industry, the winning configuration always has four things:
+
+1. **A specific first message** that sets context , not a generic "press 1 for..."
+2. **A curated extension directory** with real names and aliases
+3. **The right tools** connected to the systems the AI needs to actually do work
+4. **A clear transfer rule** in the system prompt , when to hand off, when to handle, when to take a message
+
+Get those four right, and the AI will outperform a traditional IVR by every metric and match a great human receptionist on most of them.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Migration Playbook" icon="route" href="/telephony/migration-playbook">
+    How to roll out with zero downtime.
+  </Card>
+  <Card title="3CX Setup" icon="phone" href="/telephony/3cx">
+    Full integration guide for the most common PBX.
+  </Card>
+</CardGroup>

@@ -1,0 +1,163 @@
+---
+title: "Terminology & Reference"
+description: "Telephony vocabulary you'll encounter in these docs. Scan for anything unfamiliar."
+---
+
+<Info>
+Not a deep glossary. Short definitions with cross-links to wherever the term actually matters.
+</Info>
+
+## Protocol and signalling
+
+<AccordionGroup>
+  <Accordion title="SIP (Session Initiation Protocol)">
+    The signalling protocol for setting up, modifying, and tearing down voice calls over IP networks. Defined in RFC 3261. Think of it as "the HTTP of phone calls". SmartAlex communicates with your PBX using SIP.
+  </Accordion>
+  <Accordion title="SDP (Session Description Protocol)">
+    Carried inside SIP messages. Describes the media session: which codecs, which RTP ports, what capabilities. Negotiation happens in the INVITE and its 200 OK response.
+  </Accordion>
+  <Accordion title="RTP (Real-time Transport Protocol)">
+    Carries the actual audio. Uses UDP. Once a SIP session is established, audio flows over RTP directly between endpoints (or through a media proxy like SmartAlex).
+  </Accordion>
+  <Accordion title="SRTP">
+    Encrypted RTP. Same protocol, TLS-style encryption for the media layer.
+  </Accordion>
+  <Accordion title="INVITE">
+    The SIP method that starts a call. The caller's side sends an INVITE; the target side responds with 100 Trying, 180 Ringing, and finally 200 OK.
+  </Accordion>
+  <Accordion title="BYE">
+    Ends a call. Either side can send it.
+  </Accordion>
+  <Accordion title="REFER (RFC 3515)">
+    The SIP method for "please transfer this call to somewhere else". SmartAlex sends a REFER to your PBX when the AI wants to hand the caller over to a human. Key mechanic covered in [Call Routing & Transfers](/telephony/call-routing-transfers).
+  </Accordion>
+  <Accordion title="re-INVITE">
+    An INVITE sent on an already-active call. Used to change media parameters (e.g., put the caller on hold, or change codec). Different from REFER.
+  </Accordion>
+  <Accordion title="REPLACES">
+    A SIP mechanism where a new dialog replaces an existing one. Used in call-parking scenarios. SmartAlex handles it transparently; not a user-facing feature.
+  </Accordion>
+  <Accordion title="P-Asserted-Identity">
+    A SIP header (RFC 3325) that asserts the identity of the original caller when a call is transferred through trusted intermediaries. SmartAlex sets this header on transfers so your PBX shows the real caller's number on the target extension.
+  </Accordion>
+</AccordionGroup>
+
+## Infrastructure
+
+<AccordionGroup>
+  <Accordion title="PBX (Private Branch Exchange)">
+    Your company phone system. Handles extensions, ring groups, queues, voicemail, call recording. SmartAlex integrates with your PBX, it doesn't replace it. Common examples: 3CX, Yeastar, FreePBX, Avaya, Mitel.
+  </Accordion>
+  <Accordion title="Trunk / SIP trunk">
+    A SIP connection between two phone systems. In SmartAlex, a trunk is the configured connection between your PBX and our voice platform. One trunk can carry many concurrent calls.
+  </Accordion>
+  <Accordion title="DID (Direct Inward Dialling) / DDI">
+    A phone number. "DID" is the American term, "DDI" is the European term, same thing. E.g., `+27 87 250 0100` is a DID.
+  </Accordion>
+  <Accordion title="E.164">
+    The international standard format for phone numbers: `+` followed by country code, area code, and subscriber number, with no spaces or punctuation. `+27872500100` is E.164. SmartAlex uses E.164 internally everywhere.
+  </Accordion>
+  <Accordion title="SBC (Session Border Controller)">
+    A specialised firewall/proxy for SIP traffic. Used in enterprise deployments to bridge between networks, enforce security policies, and interoperate with systems that don't speak standard SIP directly (e.g., Microsoft Teams Direct Routing).
+  </Accordion>
+  <Accordion title="PSTN (Public Switched Telephone Network)">
+    The traditional telephone network. When a call leaves the IP world and goes to a "real" phone (mobile, landline), it traverses the PSTN.
+  </Accordion>
+  <Accordion title="UCaaS (Unified Communications as a Service)">
+    Cloud-based platform that bundles voice, video, messaging, and collaboration. Examples: RingCentral, 8x8, Microsoft Teams Phone.
+  </Accordion>
+</AccordionGroup>
+
+## Call handling
+
+<AccordionGroup>
+  <Accordion title="Extension">
+    An internal identifier for a person or group on a PBX. Usually 2 to 6 digits. E.g., `101` might be Sales, `200` might be a queue.
+  </Accordion>
+  <Accordion title="Queue">
+    A holding line for callers waiting for the next available agent in a group. Typically plays hold music and announces position.
+  </Accordion>
+  <Accordion title="Ring group / hunt group">
+    A group of extensions that ring simultaneously (or in sequence) when a call comes in. First person to answer takes the call.
+  </Accordion>
+  <Accordion title="IVR (Interactive Voice Response)">
+    Automated menu system. "Press 1 for sales, 2 for support." SmartAlex replaces these with natural conversation. See [Replacing Your IVR](/telephony/replacing-ivr).
+  </Accordion>
+  <Accordion title="CDR (Call Detail Record)">
+    A log entry capturing everything about a call: numbers, duration, direction, outcome, trunk used. Your PBX generates CDRs. SmartAlex generates its own call records, which complement but don't replace your PBX CDRs.
+  </Accordion>
+  <Accordion title="CLI / CNAM">
+    CLI (Calling Line Identification) is the caller's phone number. CNAM (Calling Name) is the caller's display name, looked up via a subscriber database (US-specific feature).
+  </Accordion>
+  <Accordion title="ANI (Automatic Number Identification)">
+    American equivalent of CLI. Same concept: the caller's number.
+  </Accordion>
+</AccordionGroup>
+
+## Auth and security
+
+<AccordionGroup>
+  <Accordion title="Digest authentication">
+    Username and password auth for SIP. When your PBX registers or places a call, it proves identity with these credentials.
+  </Accordion>
+  <Accordion title="IP allowlist">
+    A list of IP addresses permitted to send SIP traffic to a trunk. Alternative to digest auth. Requires the PBX to have a static public IP.
+  </Accordion>
+  <Accordion title="SIP ALG (Application Layer Gateway)">
+    A firewall feature that tries to "help" SIP traffic traverse NAT by rewriting headers. It invariably breaks something. **Always disable it.** Covered in [Network Requirements](/telephony/network-requirements).
+  </Accordion>
+  <Accordion title="NAT (Network Address Translation)">
+    Your firewall or router rewriting internal IPs to a single external IP. Generally fine for SIP as long as SIP ALG is off.
+  </Accordion>
+</AccordionGroup>
+
+## Call quality
+
+<AccordionGroup>
+  <Accordion title="MOS (Mean Opinion Score)">
+    A 1-to-5 rating of voice quality. 4.0 and above is considered good. Affected by codec, packet loss, jitter, delay.
+  </Accordion>
+  <Accordion title="Jitter">
+    Variation in packet arrival time. High jitter causes choppy audio. Buffered by the jitter buffer in each endpoint.
+  </Accordion>
+  <Accordion title="Packet loss">
+    Percentage of RTP packets dropped in transit. Above 1% is audible. Above 3% is poor quality.
+  </Accordion>
+  <Accordion title="Latency / mouth-to-ear delay">
+    Time from one person speaking to the other hearing. Under 150 ms is excellent, 150 to 250 ms is acceptable, above 300 ms starts to feel awkward.
+  </Accordion>
+  <Accordion title="Packetisation delay">
+    Delay introduced by batching audio into packets. G.711 uses 20 ms packets; G.729 is similar. Negligible compared to network latency.
+  </Accordion>
+</AccordionGroup>
+
+## SmartAlex-specific
+
+<AccordionGroup>
+  <Accordion title="Agent">
+    An AI voice persona configured in SmartAlex. Has a first message, system prompt, voice, tools, and optional knowledge base. One agent per AI use case.
+  </Accordion>
+  <Accordion title="Tenant">
+    A SmartAlex customer account. All agents, trunks, call records, and configurations are scoped to a tenant. RLS prevents cross-tenant access.
+  </Accordion>
+  <Accordion title="Tool">
+    An action the AI can invoke during a call. Examples: check calendar availability, look up a customer in CRM, transfer to an extension, send SMS.
+  </Accordion>
+  <Accordion title="Knowledge base">
+    Documents uploaded to an agent that the AI can search during calls. Used to answer company-specific questions.
+  </Accordion>
+  <Accordion title="BYOT (Bring Your Own Trunk)">
+    SmartAlex deployment model where the customer brings their own carrier account. Common with existing enterprise customers who want to keep their carrier contracts.
+  </Accordion>
+</AccordionGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Architecture" icon="diagram-project" href="/telephony/architecture">
+    See these terms in context.
+  </Card>
+  <Card title="Overview" icon="compass" href="/telephony/overview">
+    Back to the landing page.
+  </Card>
+</CardGroup>

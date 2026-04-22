@@ -1,0 +1,118 @@
+---
+title: "Asterisk"
+description: "Connect raw Asterisk (pjsip) to SmartAlex. For teams running Asterisk without a GUI."
+---
+
+<Info>
+**Audience**: Asterisk admin comfortable editing `pjsip.conf`. **Time**: 10 minutes. **Driver**: chan_pjsip.
+</Info>
+
+## Prerequisites
+
+- Asterisk 16 or later (17, 18, 20, 21 all work)
+- chan_pjsip loaded (`pjsip show version`)
+- Outbound UDP 5060 allowed
+- SIP ALG disabled upstream
+
+## Step 1: create trunk in SmartAlex
+
+SIP Trunk wizard, pick **Asterisk**. Save and copy credentials.
+
+## Step 2: pjsip.conf configuration
+
+Append to `/etc/asterisk/pjsip.conf` (or use a separate conf file):
+
+```
+[smartalex-transport]
+type=transport
+protocol=udp
+bind=0.0.0.0
+
+[smartalex-registration]
+type=registration
+outbound_auth=smartalex-auth
+server_uri=sip:sip.voice.getsmartalex.com
+client_uri=sip:YOUR_USERNAME@sip.voice.getsmartalex.com
+retry_interval=60
+expiration=3600
+
+[smartalex-auth]
+type=auth
+auth_type=userpass
+username=YOUR_USERNAME
+password=YOUR_PASSWORD
+
+[smartalex]
+type=aor
+contact=sip:sip.voice.getsmartalex.com
+
+[smartalex]
+type=endpoint
+transport=smartalex-transport
+outbound_auth=smartalex-auth
+aors=smartalex
+context=from-smartalex
+disallow=all
+allow=ulaw,alaw
+direct_media=no
+from_domain=sip.voice.getsmartalex.com
+rewrite_contact=yes
+
+[smartalex]
+type=identify
+endpoint=smartalex
+match=sip.voice.getsmartalex.com
+```
+
+Replace `YOUR_USERNAME` and `YOUR_PASSWORD` with values from SmartAlex.
+
+## Step 3: extensions.conf dialplan
+
+Add a context for inbound calls from SmartAlex:
+
+```
+[from-smartalex]
+exten => _X.,1,NoOp(Inbound from SmartAlex: ${EXTEN})
+exten => _X.,n,Goto(from-internal,${EXTEN},1)
+```
+
+Reload:
+
+```
+asterisk -rx "pjsip reload"
+asterisk -rx "dialplan reload"
+```
+
+## Step 4: verify registration
+
+```
+asterisk -rx "pjsip show registrations"
+```
+
+Expected: `smartalex` showing `Registered`.
+
+## Step 5: add extensions in SmartAlex
+
+Settings, then PBX. Populate the directory.
+
+## Step 6: link agent and test
+
+Agent Studio, then Telephony tab. Link the trunk. Call, verify, transfer.
+
+## Asterisk-specific notes
+
+- **SIP tracing**: `asterisk -rvvvv` then `pjsip set logger on`.
+- **TLS transport**: add a `type=transport` section with `protocol=tls` and point to your cert bundle. Use port 5061.
+- **Custom headers**: use `PJSIP_HEADER()` in dialplan if you need to inspect P-Asserted-Identity or other SIP headers on transferred calls.
+- **Multiple SmartAlex trunks**: each trunk needs its own unique section names (append `-2`, `-3`, etc.).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="FreePBX" icon="code" href="/telephony/freepbx">
+    GUI on top of Asterisk.
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/telephony/troubleshooting">
+    Error reference.
+  </Card>
+</CardGroup>

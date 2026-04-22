@@ -1,0 +1,198 @@
+---
+title: "South Africa"
+description: "South African regional context. POPIA compliance, local carriers, Icasa considerations, and common deployment patterns."
+---
+
+<Info>
+**Audience**: South African IT or compliance lead. **Purpose**: everything specific to deploying SmartAlex in the South African regulatory and telecoms context.
+</Info>
+
+## Regulatory framework
+
+### POPIA (Protection of Personal Information Act)
+
+SmartAlex's voice platform handles personal information as defined under POPIA: caller phone numbers, voice recordings, transcripts, and any business-specific data captured during the conversation (names, ID numbers if volunteered, account numbers).
+
+**Lawful basis** for processing during a business call is typically:
+- **Performance of a contract** (the caller has requested a service)
+- **Legitimate interest** (responding to an enquiry)
+- **Consent** where explicitly required by sectoral rules (e.g., medical)
+
+**Responsibilities** fall to the customer as the responsible party. SmartAlex is the operator.
+
+### Recording consent
+
+Under POPIA, you generally have the right to record calls for business purposes, subject to:
+
+- **Informing the caller** that the call is being recorded (typically in the opening greeting)
+- **Lawful purpose** (training, quality assurance, compliance, dispute resolution)
+- **Proportionate retention** (don't keep recordings longer than necessary)
+
+Most SmartAlex customers configure the agent's first message to include a brief disclosure:
+
+> "Calls may be recorded for quality and training purposes."
+
+Recording can be disabled per agent for sensitive call types (medical, legal privileged).
+
+### Data subject rights
+
+Callers can request:
+- **Access** to the personal information you hold (including recordings and transcripts)
+- **Correction** of inaccurate information
+- **Deletion** (subject to your lawful retention grounds)
+- **Objection** to processing in specific circumstances
+
+SmartAlex supports these requests through the tenant admin interface: you can export or delete call records, recordings, and transcripts on demand.
+
+### Cross-border data transfer
+
+POPIA requires lawful grounds for transferring personal information outside South Africa. SmartAlex infrastructure is currently located primarily in Europe (with European GDPR-equivalent protections). This satisfies POPIA's transfer requirements in most configurations.
+
+Dedicated South African data residency is on the roadmap.
+
+### Icasa (Independent Communications Authority of South Africa)
+
+SmartAlex is a voice AI platform, not a licensed telecommunications service provider. We integrate with your licensed carrier; we don't terminate or originate PSTN calls on our own.
+
+Your PSTN service provider (Telkom, MTN Business, Vodacom Business, Liquid, Openserve-connected ISPs) holds the Icasa licences for the carriage layer. SmartAlex sits above that.
+
+If you're deploying SmartAlex for a business that has compliance obligations specific to its sector (FSCA for financial services, HPCSA for medical), your sector regulator's rules apply in addition to POPIA.
+
+## South African telecoms context
+
+### Common SA PBX deployments
+
+| PBX | Typical customer |
+|---|---|
+| 3CX | Dominant across SMB and mid-market. Large installed base. |
+| Yeastar | Strong mid-market. Popular via local distributors. |
+| Grandstream UCM | SMB, often via MSP channels. |
+| FreePBX / Asterisk | MSPs and technical teams. |
+| Avaya IP Office | Enterprise legacy, still widespread. |
+| Mitel MiVoice | Enterprise. Aastra legacy common. |
+| Euphoria Telecom | Hosted PBX. Cape Town based. Popular with smaller businesses. |
+| Switch Telecom (Atria) | Hosted PBX. Johannesburg focused. Enterprise presence. |
+| Microsoft Teams Phone | Growing rapidly. Via Direct Routing and SBC. |
+| Panasonic NS-series | Legacy, still present. |
+
+### Common SA carriers
+
+For BYO-carrier setups:
+
+- **Telkom**: Dominant voice carrier. ISDN-era contracts common; SIP available.
+- **MTN Business**: SIP trunking available, Elite.
+- **Vodacom Business**: SIP trunking available, Bespoke voice.
+- **Liquid Intelligent Technologies**: Pan-African, strong SIP offerings.
+- **Openserve-connected ISPs**: Various (Cipherwave, Vox, Internet Solutions).
+- **Euphoria Telecom**: Their own hosted voice service.
+- **Switch Telecom**: Their own hosted voice service.
+
+For SmartAlex-provisioned numbers (no BYO), we provide South African DIDs directly.
+
+### Number portability
+
+Existing DIDs can usually be ported to carriers that SmartAlex integrates with. Porting timelines are carrier-dependent (typically 7 to 21 business days). Plan migrations with buffer time.
+
+### Dialling plan
+
+South African dialling:
+- E.164: `+27` then the significant number (e.g., `+27821234567`)
+- National format: `0` then the significant number (e.g., `0821234567`)
+
+SmartAlex uses E.164 internally. Most SA PBXes send DIDs in national format on inbound; you may need a prefix-strip rule to match E.164 in the trunk DIDs list. Most PBX templates handle this automatically.
+
+### Emergency services
+
+SmartAlex does not handle emergency calls (10111, 10177). These must remain on your PBX's direct-dial routing to the PSTN.
+
+Do not configure an agent to answer calls to or from emergency numbers.
+
+## Common SA deployment patterns
+
+### Pattern 1: medical practice
+
+Typical setup: 5 to 15-practitioner practice, 150 to 300 calls per day.
+
+- PBX: 3CX or Yeastar on-premise, or Euphoria Telecom hosted
+- Carrier: Telkom or MTN Business SIP trunk
+- AI handles: appointment bookings, prescription refill requests, general enquiries
+- AI transfers: clinical questions to on-duty nurse, billing questions to accounts
+- Compliance: POPIA-aligned, HPCSA guidance where relevant
+
+### Pattern 2: real estate agency
+
+Typical setup: 20 to 200-agent office, 50 to 400 calls per day.
+
+- PBX: 3CX cloud or Euphoria Telecom
+- AI handles: lead qualification, property information lookup, viewing scheduling
+- AI transfers: qualified leads to the assigned agent (not round-robin)
+- Tools: property search, calendar, CRM lead capture, SMS confirmation
+
+### Pattern 3: dealership (automotive)
+
+Typical setup: single-brand dealership, 10 to 30 sales/service staff.
+
+- PBX: Avaya IP Office or 3CX
+- AI handles: service appointment status, parts enquiries, trade-in interest capture
+- AI transfers: customers to their assigned Sales Executive or Service Advisor (named routing)
+- Recognition: caller phone number matched against DMS (dealer management system)
+
+### Pattern 4: professional services (law, accounting, consulting)
+
+Typical setup: 5 to 50-person firm.
+
+- PBX: 3CX, Grandstream UCM, or Switch Telecom hosted
+- AI handles: new matter intake, existing matter routing, appointment scheduling
+- AI transfers: routed by partner, associate, or matter owner
+- Tools: conflict check, matter lookup, CRM lead capture
+- Compliance: sector-specific (LPC for attorneys, IRBA for auditors)
+
+### Pattern 5: hospitality / restaurant
+
+Typical setup: single venue or small chain.
+
+- PBX: 3CX hosted or Yeastar
+- AI handles: reservations, hours, menu enquiries, directions
+- AI transfers: special requests to manager
+- Tools: reservation system integration, knowledge base for menu
+
+## Local support and partnership
+
+SmartAlex operates out of Johannesburg and Cape Town. Local support during South African business hours (08:00 to 18:00 SAST).
+
+Implementation partners accredited to deploy SmartAlex in South Africa:
+
+- (Your accredited partner network)
+
+If you're an MSP or telephony reseller interested in partnering, contact `partners@getsmartalex.com`.
+
+## Common pitfalls for SA deployments
+
+<AccordionGroup>
+  <Accordion title="SIP ALG enabled on SA business routers">
+    MikroTik and Sonicwall devices common in SA often ship with SIP ALG on. Disable it. See [Network Requirements](/telephony/network-requirements).
+  </Accordion>
+  <Accordion title="Under-provisioned internet bandwidth">
+    Some SA ADSL and LTE fallback circuits can't sustain 10 concurrent calls. Verify 90 kbps per concurrent call before rollout.
+  </Accordion>
+  <Accordion title="Dialling plan mismatches">
+    PBX sends DIDs in national format (`0821234567`) but SmartAlex expects E.164 (`+27821234567`). Most PBXes can be configured with a prefix-strip or prefix-add rule.
+  </Accordion>
+  <Accordion title="Recording consent wording">
+    Generic "calls may be recorded" is acceptable for most business contexts under POPIA. Sectoral rules (medical, financial) may require more specific disclosure. Check with your compliance team.
+  </Accordion>
+  <Accordion title="Timezone configuration">
+    SAST (UTC+2) is not always the default. Set `default_timezone` on the agent correctly so scheduling offers the right hours.
+  </Accordion>
+</AccordionGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Security & Compliance" icon="shield-check" href="/telephony/security-compliance">
+    Platform-wide compliance posture.
+  </Card>
+  <Card title="3CX" icon="phone" href="/telephony/3cx">
+    The most common SA PBX integration.
+  </Card>
+</CardGroup>

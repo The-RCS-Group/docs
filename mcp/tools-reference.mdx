@@ -162,7 +162,7 @@ Use this to browse all agents. Use `smartalex_get_agent` if you have a specific 
 ```
 
 <Note>
-  The `voice_provider` field is always returned as `"cloud"` — actual provider details are not exposed through the API for security.
+  The `voice_provider` field is always returned as `"cloud"` , actual provider details are not exposed through the API for security.
 </Note>
 
 ---
@@ -409,12 +409,12 @@ Create a new voice campaign. Optionally assign an AI agent to handle calls.
 |-----------|------|----------|-------------|
 | `name` | string | Yes | Campaign name (1–200 characters) |
 | `agent_id` | string (UUID) | No | UUID of the AI agent to assign |
-| `objective` | string | No | Call objective — what the agent should do on each call (1–2000 chars) |
+| `objective` | string | No | Call objective , what the agent should do on each call (1–2000 chars) |
 | `description` | string | No | Campaign description (max 500 chars) |
 | `campaign_type` | string | No | Campaign type (e.g. `outbound`, `follow-up`) |
 | `phone_number_id` | string (UUID) | No | Phone number to use for outbound calls (from `smartalex_list_phone_numbers`) |
 | `timezone` | string | No | IANA timezone for calling hours (e.g. `America/New_York`, `Europe/London`) |
-| `business_hours` | object | No | Custom calling hours per day — each day has `enabled`, `start`, `end` (24h format) |
+| `business_hours` | object | No | Custom calling hours per day , each day has `enabled`, `start`, `end` (24h format) |
 
 <Note>
   Before creating a campaign, always call `smartalex_list_agents` and `smartalex_list_phone_numbers` to let the user pick an agent and phone number.
@@ -712,7 +712,7 @@ List all active webhook subscriptions. Returns URL, event types, active status, 
 Create a new webhook subscription. Returns the webhook ID and an HMAC-SHA256 `signing_secret`.
 
 <Warning>
-  The `signing_secret` is returned **only once** on creation. Save it immediately — it cannot be retrieved later.
+  The `signing_secret` is returned **only once** on creation. Save it immediately , it cannot be retrieved later.
 </Warning>
 
 **Parameters:**
@@ -831,6 +831,6 @@ All tools include MCP annotations that help AI clients understand tool behavior:
 
 ## Related Pages
 
-- [MCP Overview](/mcp/overview) — Architecture, resources, prompts, and workflows
-- [Getting Started](/mcp/getting-started) — Connect SmartAlex to your AI assistant in 2 minutes
-- [Error Reference](/mcp/errors) — Error codes and troubleshooting
+- [MCP Overview](/mcp/overview) , Architecture, resources, prompts, and workflows
+- [Getting Started](/mcp/getting-started) , Connect SmartAlex to your AI assistant in 2 minutes
+- [Error Reference](/mcp/errors) , Error codes and troubleshooting
