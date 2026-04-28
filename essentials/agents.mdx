@@ -74,14 +74,13 @@ Concurrency is how many calls one agent can handle at the same time. **Every pai
 
 ## Agent status
 
-Agents progress through these states:
+Agents have a simple on/off state:
 
 | Status | Description |
 |---|---|
-| **Draft** | Still being configured, not ready for calls |
+| **Setting up** | The agent is still being provisioned right after creation |
 | **Active** | Live and ready to take calls |
-| **Inactive** | Toggled off, won't answer calls |
-| **Error** | Configuration issue that needs attention |
+| **Inactive** | Toggled off in the agent's identity drawer; won't answer calls |
 
 ## Best practices
 
