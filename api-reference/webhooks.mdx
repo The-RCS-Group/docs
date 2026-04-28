@@ -245,7 +245,7 @@ curl -X GET "https://api.getsmartalex.com/v1/webhooks" \
 ### Update Webhook
 
 ```bash
-curl -X PUT "https://api.getsmartalex.com/v1/webhooks/webhook_abc123" \
+curl -X PATCH "https://api.getsmartalex.com/v1/webhooks/webhook_abc123" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{

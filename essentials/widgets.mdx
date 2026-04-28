@@ -5,7 +5,7 @@ description: "Add click-to-call widgets to your website"
 
 ## Overview
 
-SmartAlex Widgets let your website visitors call your AI agent with one click. No phone required - calls happen directly in the browser.
+SmartAlex Widgets let your website visitors call your AI agent with one click. No phone required — calls happen directly in the browser.
 
 ## Widget Types
 
@@ -81,12 +81,13 @@ Add the widget script to your website's HTML:
 ```html
 <!-- SmartAlex Widget -->
 <script
-  src="https://widget.getsmartalex.com/v1/widget.js"
-  data-widget-id="YOUR_WIDGET_ID">
+  src="https://api.getsmartalex.com/storage/v1/object/public/widget-assets/smartalex-widget.js"
+  data-tenant-id="YOUR_TENANT_ID"
+  async>
 </script>
 ```
 
-Place this code before the closing `</body>` tag.
+Place this code before the closing `</body>` tag. Your `data-tenant-id` value is shown in the widget code panel inside SmartAlex.
 
 ### Platform-Specific Guides
 
@@ -133,8 +134,9 @@ import { useEffect } from 'react';
 export default function Layout({ children }) {
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = 'https://widget.getsmartalex.com/v1/widget.js';
-    script.setAttribute('data-widget-id', 'YOUR_WIDGET_ID');
+    script.src = 'https://api.getsmartalex.com/storage/v1/object/public/widget-assets/smartalex-widget.js';
+    script.setAttribute('data-tenant-id', 'YOUR_TENANT_ID');
+    script.async = true;
     document.body.appendChild(script);
 
     return () => {
@@ -191,8 +193,8 @@ Track widget performance:
 
 <Accordion title="Widget Not Appearing">
 - Check that the script is properly added to your page
-- Verify the widget ID is correct
-- Check browser console for JavaScript errors
+- Verify your `data-tenant-id` value is correct
+- Check the browser console for JavaScript errors
 - Ensure the widget is not hidden by CSS
 </Accordion>
 

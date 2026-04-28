@@ -30,16 +30,14 @@ Platform: app.getsmartalex.com
 - Use "SmartAlex" not "Smart Alex" or "smartalex" in prose
 
 ## Key Facts
-- 50+ natural voices across multiple providers
-- AI models: GPT-4o, Claude, Gemini
-- Phone numbers available in US, UK, Australia, South Africa, Singapore
-- 7-day free trial with $5 wallet credit, no credit card required
-- Plans from $59/month (Professional) to $3,000/month (Real Estate)
+- 50+ natural voices across multiple languages and accents
+- Phone numbers available in 9 countries: US, Canada, UK, Australia, New Zealand, Netherlands, Denmark, Finland, South Africa
+- 7-day free trial on all plans, no credit card required
+- Plans from $99/month (Professional) to $3,000/month (Real Estate); custom Enterprise pricing
 - REST API with Bearer token authentication
-- MCP server with 18 tools for AI agent integration
-- 99.9% uptime SLA
-- SOC 2 Type II compliance
-- Encryption: TLS 1.3 in transit, AES-256 at rest
+- MCP server with 28 tools for AI agent integration
+- 99.9% uptime SLA on Enterprise plans
+- Encryption: TLS in transit, encryption at rest
 
 ## Scope
 - Answer questions about SmartAlex platform features, API, pricing, and setup

@@ -1,138 +1,68 @@
 ---
 title: "Account Settings"
-description: "Manage your profile, security, and preferences"
+description: "Manage your profile, security, notifications, team, and privacy settings"
 ---
 
 ## Overview
 
-Account Settings let you manage your SmartAlex profile, security options, and account preferences.
+Account Settings let you manage your SmartAlex profile, security options, and account preferences. Open the user menu in the top-right of the dashboard and choose **Account** to get there.
 
-## Profile Settings
+## Tabs
 
-### Personal Information
+The account page has tabs for personal account settings and (if you're an admin) workspace-wide settings.
 
-Update your account details:
+**Account tabs:**
+- **Profile** — your name, email, and personal preferences
+- **Security** — password and session management
+- **Billing** — see your plan, wallet balance, and invoices ([Billing](/account/billing))
+- **Plans** — change your subscription plan
+- **Privacy** — data export and account deletion
+
+**Workspace tabs (admin only):**
+- **General** — workspace name, industry, website
+- **Domains** — verified domains for SSO and trusted senders
+- **Concurrency** — call slot allocation across agents
+- **Notifications** — workspace-level notification rules
+
+## Profile
+
+Update your personal details:
 
 | Field | Description |
-|-------|-------------|
+|---|---|
 | **Full Name** | Your display name |
-| **Email** | Login email (requires verification to change) |
+| **Email** | Login email (verification required to change) |
 | **Phone** | Contact phone number |
-| **Timezone** | Your local timezone for scheduling |
-
-### Organization
-
-If you're part of a team:
-
-| Field | Description |
-|-------|-------------|
-| **Organization Name** | Your company or team name |
-| **Industry** | Your business type (for tailored features) |
-| **Website** | Company website URL |
+| **Timezone** | Your local timezone for scheduling and reports |
 
 ## Security
 
 ### Password
 
-Change your password:
-1. Enter current password
-2. Enter new password (minimum 8 characters)
-3. Confirm new password
-4. Click **Update Password**
+Change your password from the Security tab. Choose a strong password (12+ characters with a mix of letters, numbers, and symbols recommended).
 
-<Note>
-  Password requirements:
-  - Minimum 8 characters
-  - At least one uppercase letter
-  - At least one number
-  - At least one special character
-</Note>
+### Active sessions
 
-### Multi-Factor Authentication (MFA)
-
-Add an extra layer of security:
-
-<Steps>
-  <Step title="Enable MFA">
-    Go to **Settings** → **Security** → **Enable MFA**
-  </Step>
-
-  <Step title="Scan QR Code">
-    Use an authenticator app (Google Authenticator, Authy, 1Password) to scan the QR code.
-  </Step>
-
-  <Step title="Enter Verification Code">
-    Enter the 6-digit code from your authenticator app.
-  </Step>
-
-  <Step title="Save Backup Codes">
-    Download and securely store your backup codes for account recovery.
-  </Step>
-</Steps>
-
-<Warning>
-  Keep your backup codes safe. If you lose access to your authenticator app and backup codes, you may be locked out of your account.
-</Warning>
-
-### Active Sessions
-
-View and manage devices logged into your account:
-- Device type and browser
-- Location (approximate)
-- Last active time
-- Revoke access if needed
+View devices currently signed in to your account and revoke access for any session you don't recognise.
 
 ## Notifications
 
-Configure how SmartAlex communicates with you:
+Configure how SmartAlex contacts you. Common email notification types include:
 
-### Email Notifications
+- Campaign completions
+- Usage alerts (approaching plan limits or wallet balance)
+- Billing receipts and reminders
+- Product announcements
 
-| Notification | Description |
-|--------------|-------------|
-| **Campaign Complete** | When a campaign finishes |
-| **Usage Alerts** | When approaching plan limits |
-| **Billing** | Payment receipts and reminders |
-| **Product Updates** | New features and announcements |
-
-### In-App Notifications
-
-Control which notifications appear in the dashboard:
-- System alerts
-- Campaign status updates
-- Callback reminders
-
-## Privacy
-
-### Data Management
-
-| Action | Description |
-|--------|-------------|
-| **Export Data** | Download all your account data (GDPR) |
-| **Delete Recordings** | Remove call recordings |
-| **Delete Account** | Permanently delete your account |
-
-<Warning>
-  Account deletion is permanent and cannot be undone. All data including agents, campaigns, contacts, and call history will be permanently deleted.
-</Warning>
-
-### GDPR Compliance
-
-SmartAlex supports GDPR data rights:
-- **Right to Access**: Export your data anytime
-- **Right to Rectification**: Update your information
-- **Right to Erasure**: Delete your account and data
-- **Data Portability**: Export in standard formats
+Workspace admins can also configure team-wide notification rules from the Workspace → Notifications tab.
 
 ## Team Management
 
-### Team Members
-
-Invite team members to your organization:
+Invite team members from **Account → Team**.
 
 <Steps>
-  <Step title="Go to Team Settings">
-    Navigate to **Settings** → **Team**
+  <Step title="Go to Team">
+    Navigate to **Account** → **Team**.
   </Step>
 
   <Step title="Click Invite">
@@ -141,47 +71,42 @@ Invite team members to your organization:
 
   <Step title="Select Role">
     Choose their permission level:
-    - **Admin**: Full access including billing
-    - **Manager**: Manage agents and campaigns
-    - **Viewer**: Read-only access to analytics
+    - **Owner** — full control of the workspace including billing (only one owner per workspace)
+    - **Admin** — manage agents, campaigns, and team members
+    - **Member** — work with agents, campaigns, and contacts
+    - **Viewer** — read-only access
   </Step>
 
   <Step title="Send Invitation">
-    The invitee receives an email to join your organization.
+    The invitee receives an email to join your workspace.
   </Step>
 </Steps>
 
-### Team Limits
+## Privacy
 
-Team member limits vary by plan:
+Manage your data from the Privacy tab:
 
-| Plan | Team Members |
-|------|-------------|
-| Professional | 3 |
-| Dental | 10 |
-| Real Estate | Unlimited |
+| Action | Description |
+|---|---|
+| **Export Data** | Download a copy of your account data |
+| **Delete Account** | Permanently delete your account and all associated data |
+
+<Warning>
+  Account deletion is permanent and cannot be undone. All data including agents, campaigns, contacts, and call history will be permanently deleted.
+</Warning>
+
+### Data rights
+
+SmartAlex supports common data-protection rights including access, rectification, erasure, and portability. Use the export and delete actions in this tab, or contact [support@getsmartalex.com](mailto:support@getsmartalex.com) for help with specific requests.
 
 ## API Access
 
-### API Keys
-
-Generate API keys for integration:
-
-1. Go to **Settings** → **API**
-2. Click **Generate New Key**
-3. Copy and securely store the key
-4. The key is only shown once
+API keys are managed in the **Developer Portal**, not the Account page. Open the Developer Portal from the side navigation to generate and manage API keys.
 
 <Warning>
-  Treat API keys like passwords. Never share them publicly or commit them to version control.
+  Treat API keys like passwords. They're shown only once when generated — never share them publicly or commit them to source control.
 </Warning>
 
 ### Webhooks
 
-Configure webhook endpoints to receive real-time events:
-- Call completed
-- Campaign status changed
-- Contact updated
-- Callback scheduled
-
-See [API Webhooks](/api-reference/webhooks) for configuration details.
+Configure webhook endpoints to receive real-time events such as call completed, campaign status changes, and callback scheduled. See [Webhooks](/api-reference/webhooks) for setup details.

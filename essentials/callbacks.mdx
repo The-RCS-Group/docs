@@ -9,14 +9,9 @@ When a call doesn't connect, SmartAlex automatically schedules a callback. The s
 
 ## Automatic Retry Logic
 
-| Trigger | Retry Delay | Max Retries |
-|---------|-------------|-------------|
-| **Voicemail** | 24 hours | 3 |
-| **No Answer** | 24 hours | 3 |
-| **Busy Signal** | 1 hour | 5 |
-| **Network Error** | 30 minutes | 3 |
-| **Invalid Number** | No retry | - |
-| **DNC Request** | No retry | - |
+The number of retry attempts and their spacing comes from the campaign's sequence template (Standard or Aggressive — see [Campaigns](/essentials/campaigns)). Each pending retry shows up here as a callback row with its scheduled time.
+
+Calls flagged as **Invalid number** are not retried. Contacts who request to be on the Do Not Call list are added to your suppression list and won't be called again.
 
 <Note>
   Retry counts are per campaign. A contact can be called again in a new campaign even after exhausting retries in a previous one.
@@ -47,15 +42,12 @@ Each callback shows:
 
 ## Manual Actions
 
-For any pending callback, you can:
+For any pending callback, open the row's menu to:
 
 | Action | Description |
 |--------|-------------|
-| **Call Now** | Immediately trigger the callback |
 | **Reschedule** | Change the callback time |
-| **Skip** | Skip this retry, move to next scheduled time |
-| **Cancel** | Cancel all future retries for this contact |
-| **Mark Complete** | Mark as handled (e.g., customer called back) |
+| **Cancel** | Cancel this callback (won't be retried) |
 
 ## Customer-Requested Callbacks
 

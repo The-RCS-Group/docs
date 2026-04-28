@@ -1,167 +1,127 @@
 ---
 title: "AI Agents"
-description: "Create and configure AI voice agents in SmartAlex. Choose from 50+ voices, GPT-4o/Claude/Gemini AI models, custom knowledge bases, and industry-specific templates. Deploy in under 5 minutes."
+description: "Create and configure AI voice agents in SmartAlex. Build from a website URL in under 60 seconds, fine-tune voice, personality, and tools, or build multi-agent squads with Squad Architect."
 ---
 
 ## What is an AI Agent?
 
-An AI Agent is your virtual receptionist, sales representative, or customer service agent. Each agent has its own personality, voice, knowledge base, and behavior settings. Agents can handle both inbound calls and make outbound calls through campaigns.
+An AI Agent is your virtual receptionist, sales rep, or customer service voice. Each agent has its own name, voice, personality, knowledge base, tools, and settings. Agents handle inbound calls and can also make outbound calls through campaigns.
 
-## Creating an Agent
+## How to create an agent
 
-Navigate to **Agents** in your dashboard and click **Create Agent**. The creation wizard guides you through three steps:
+When you click **Create Agent**, you choose between two creation paths.
 
-### Step 1: Describe
+<CardGroup cols={2}>
+  <Card title="Standard" icon="globe">
+    **Recommended.** Paste your website URL — we crawl it and auto-build an agent trained on your business in under 60 seconds. No configuration needed.
+  </Card>
+  <Card title="Advanced" icon="sliders">
+    Step-by-step wizard with full control over voice, personality, identity, objectives, tools, and detailed settings.
+  </Card>
+</CardGroup>
 
-Tell SmartAlex what your agent should do in natural language:
+For multi-agent setups (e.g. a router + specialists), use **Squad Architect** from the agent studio — see [Squads](/essentials/squads).
 
-```
-"You are a friendly receptionist for ABC Dental.
-Answer questions about our services, collect patient
-information, and schedule appointments."
-```
+## Configuration
 
-The AI uses this to configure your agent's behavior automatically.
+After an agent is created you can refine every aspect from the agent's edit drawers.
 
-### Step 2: Customize
+### Identity
 
-Fine-tune your agent's settings:
+- **Name** — what callers will hear and how the agent appears in your dashboard
+- **Direction** — inbound, outbound, or both
+- **First message** — what the agent says when a call connects
+- **Personality / system prompt** — the rules and tone the agent follows
 
-| Setting | Description |
-|---------|-------------|
-| **Name** | Your agent's name (e.g., "Alex", "Sarah") |
-| **Voice** | Choose from 50+ natural voices across multiple providers |
-| **Language** | Primary language (English, Spanish, French, German, and more) |
-| **Personality** | Preset templates for different industries |
-| **AI Model** | GPT-4o, Claude, or Gemini for conversation intelligence |
+### Voice
 
-### Step 3: Deploy
+Pick from a wide library of natural voices spanning multiple languages and accents. Each voice can be previewed before you save.
 
-Review your configuration and create the agent. The agent will be ready to take calls within seconds.
+### Knowledge base
 
-## Agent Configuration
-
-After creation, you can further customize your agent:
-
-### Knowledge Base
-
-Upload documents or add text that your agent can reference during calls:
+Upload PDFs, docs, or paste text the agent can draw from during a call:
 - Business information
-- Product catalogs
-- FAQ content
-- Service descriptions
+- Service descriptions and pricing
+- FAQs
+- Product catalogues
 
-### Custom Instructions
+See [Knowledge Base](/essentials/knowledge-base).
 
-Add specific behavioral rules:
-- How to handle certain questions
-- When to transfer calls
-- Information to always collect
-- Topics to avoid
+### Tools
 
-### Call Settings
+Connect actions the agent can take during a call:
+- Transfer the call to a human
+- Schedule appointments via your calendar
+- Look up or update CRM data
+- Send SMS or email follow-ups
+- Run custom HTTP requests (Power Tools add-on)
 
-| Setting | Description |
-|---------|-------------|
-| **Call Slots** | How many concurrent calls (2-10+ based on plan) |
-| **Recording** | Enable/disable call recording |
-| **Voicemail** | What to do when agent can't answer |
-| **Transfer Number** | Number to transfer urgent calls to |
+### Phone numbers
 
-## Agent Status
+Assign one or more phone numbers to the agent. Inbound calls to those numbers route to this agent. See [Phone Numbers](/essentials/phone-numbers).
+
+### Scheduling and availability
+
+Set the hours the agent should answer live, and what to do outside those hours (voicemail, transfer, or fallback message).
+
+## Quick Test
+
+Use the **Quick Test** button on any agent to start an instant web call. This lets you have a real conversation with the agent — no phone needed — to validate behaviour before going live.
+
+## Concurrent calls (slots)
+
+Concurrency is how many calls one agent can handle at the same time. **Every paid plan includes 10 concurrent call slots** by default. Buy additional slots at $9.60/slot/month if you need more headroom.
+
+## Agent status
 
 Agents progress through these states:
 
 | Status | Description |
-|--------|-------------|
+|---|---|
 | **Draft** | Still being configured, not ready for calls |
-| **Creating** | Being provisioned by the voice provider |
-| **Ready** | Live and ready to take calls |
+| **Active** | Live and ready to take calls |
+| **Inactive** | Toggled off, won't answer calls |
 | **Error** | Configuration issue that needs attention |
 
-## Best Practices
+## Best practices
 
-<Accordion title="Writing Effective Prompts">
-Be specific about what your agent should do:
+<AccordionGroup>
+  <Accordion title="Writing effective prompts">
+    Be specific about what your agent should do.
 
-**Good example:**
-```
-You are Alex, a receptionist for Sunrise Dental.
+    **Good example:**
+    ```
+    You are Alex, a receptionist for Sunrise Dental.
 
-Your responsibilities:
-1. Greet callers warmly
-2. Answer questions about our services (cleanings, fillings, crowns)
-3. Collect: name, phone, reason for visit
-4. Schedule appointments (available Mon-Fri 9am-5pm)
-5. For emergencies, transfer to Dr. Smith at 555-0100
-```
+    Your responsibilities:
+    1. Greet callers warmly
+    2. Answer questions about our services (cleanings, fillings, crowns)
+    3. Collect: name, phone number, reason for visit
+    4. Schedule appointments (Mon–Fri 9am–5pm only)
+    5. For dental emergencies, transfer to Dr. Smith at +1 555-0100
+    ```
 
-**Avoid vague instructions:**
-```
-Be helpful and answer questions. (Too vague)
-```
-</Accordion>
+    **Avoid vague instructions** like "Be helpful and answer questions."
+  </Accordion>
 
-<Accordion title="Choosing the Right Voice">
-Match your voice to your brand:
+  <Accordion title="Choosing the right voice">
+    Match the voice to your brand:
 
-| Business Type | Recommended Voice Style |
-|--------------|------------------------|
-| Professional services | Calm, authoritative |
-| Retail/hospitality | Friendly, upbeat |
-| Healthcare | Warm, reassuring |
-| Tech/startups | Modern, energetic |
-</Accordion>
+    | Business type | Voice style |
+    |---|---|
+    | Professional services | Calm, authoritative |
+    | Retail / hospitality | Friendly, upbeat |
+    | Healthcare | Warm, reassuring |
+    | Tech / startups | Modern, energetic |
+  </Accordion>
 
-<Accordion title="Testing Before Going Live">
-Always use **Quick Test** before assigning a phone number:
+  <Accordion title="Test before you go live">
+    Always Quick Test before assigning a phone number:
 
-1. Click the Quick Test button on your agent
-2. Have a sample conversation
-3. Test edge cases (difficult questions, transfers)
-4. Review the transcript
-5. Adjust prompts as needed
-</Accordion>
-
-## Concurrent Call Slots
-
-Each plan includes a number of call slots - the maximum concurrent calls your agents can handle:
-
-| Plan | Call Slots |
-|------|-----------|
-| Professional | 2 |
-| Dental | 5 |
-| Real Estate | 10 |
-
-Additional slots can be purchased for $9.60/month each.
-
-## Agent Modes
-
-SmartAlex agents support four modes to match different workflows and experience levels:
-
-| Mode | Description | Best For |
-|------|-------------|----------|
-| **Demo** | Quick test with preset behavior | Evaluating the platform |
-| **Standard** | Full customization with guided setup | Most businesses |
-| **Advanced** | Complete control over all parameters | Power users and developers |
-| **Vibe** | Describe what you want in natural language | Fast prototyping |
-
-## Supported AI Models
-
-Choose the AI model that best fits your use case:
-
-| Model | Provider | Strengths |
-|-------|----------|-----------|
-| **GPT-4o** | OpenAI | Fast, versatile, great for general conversation |
-| **GPT-4o-mini** | OpenAI | Cost-effective, good for simple tasks |
-| **Claude** | Anthropic | Nuanced understanding, excellent instruction following |
-| **Gemini** | Google | Strong reasoning, multilingual |
-
-## Voice Providers
-
-SmartAlex offers 50+ voices across multiple providers for natural, human-like phone conversations:
-
-- **Cartesia Sonic-3**: Emotion control, speed adjustment (0.6-1.5x), volume control
-- **ElevenLabs**: Ultra-realistic voices, voice cloning
-- **OpenAI**: Natural speech synthesis
-- **Deepgram**: Low-latency, high accuracy
+    1. Click **Quick Test** on the agent
+    2. Have a real conversation, including edge cases
+    3. Try transfer scenarios and difficult questions
+    4. Review the transcript afterwards
+    5. Adjust the prompt and re-test
+  </Accordion>
+</AccordionGroup>

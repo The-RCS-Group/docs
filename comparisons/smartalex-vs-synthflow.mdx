@@ -17,11 +17,11 @@ SmartAlex and Synthflow both offer no-code AI voice agent platforms, but they ta
 
 ### What Is SmartAlex?
 
-SmartAlex is an end-to-end AI voice agent platform built for businesses that need more than just voice agents. The platform combines a visual agent builder (with four modes for different use cases) with a full-featured CRM, outbound campaign management, real-time analytics dashboards, Stripe billing with wallet and trial management, embeddable website widgets, and a mobile app for iOS and Android.
+SmartAlex is an end-to-end AI voice agent platform built for businesses that need more than just voice agents. The platform combines a visual agent builder (with a Standard URL-based path and an Advanced wizard, plus Squad Architect for multi-agent designs) with a full-featured CRM, outbound campaign management, real-time analytics dashboards, Stripe billing with wallet and trial management, embeddable website widgets, and a mobile app for iOS and Android.
 
 What sets SmartAlex apart from other voice agent platforms is the depth of its business tooling. The built-in CRM tracks every contact interaction across calls, campaigns, and messaging channels. The campaign management system handles outbound calling operations with scheduling, retry logic, disposition tracking, and performance analytics. And LaunchPad provides purpose-built tools for real estate, including a reservation management system with 15+ status states, buyer portals, developer dashboards, and commission tracking.
 
-SmartAlex also offers an MCP (Model Context Protocol) server with 18 tools, which allows AI assistants like Claude and GPT to manage the platform through natural language, a capability no other voice agent platform provides.
+SmartAlex also offers an MCP (Model Context Protocol) server with 28 tools, which allows AI assistants like Claude and ChatGPT to manage the platform through natural language, a capability no other voice agent platform provides.
 
 ### What Is Synthflow?
 
@@ -40,7 +40,7 @@ Synthflow integrates with common business tools through Zapier and Make, providi
 | **Platform Type** | Full business platform with voice agents | No-code voice agent builder |
 | **Primary Audience** | Businesses, enterprises, real estate | Agencies, SMBs, solopreneurs |
 | **Setup Complexity** | No-code with advanced options available | Pure no-code, minimal learning curve |
-| **Agent Builder** | 4 modes (demo, standard, advanced, vibe) | Drag-and-drop flow builder with templates |
+| **Agent Builder** | Standard (URL-based auto-build) + Advanced wizard + Squad Architect | Drag-and-drop flow builder with templates |
 | **Pre-Built Templates** | Agent modes serve as templates | Templates for common use cases |
 | **CRM** | Built-in contact management with segmentation, tagging, import/export | Basic contact management |
 | **Campaign Management** | Full outbound campaigns with scheduling, retry logic, and analytics | Basic campaign features |
@@ -53,7 +53,7 @@ Synthflow integrates with common business tools through Zapier and Make, providi
 | **Analytics** | Comprehensive dashboards (calls, agents, campaigns, performance, trends) | Call analytics and reporting |
 | **Voice Options** | 50+ voices with emotion control, speed, and volume adjustment | Multiple voice options |
 | **AI Models** | GPT-4.1-mini default, configurable per agent | GPT-4, Claude support |
-| **MCP Server** | 18-tool MCP server for AI assistant integration | Not available |
+| **MCP Server** | 28-tool MCP server for AI assistant integration | Not available |
 | **API Access** | Full REST API, webhooks (67+ events), edge functions (290+) | API available |
 | **Mobile App** | React Native app (iOS + Android) | No native mobile app |
 | **Multi-Tenant** | Native tenant isolation with role-based access control | White-label tenant support |
@@ -75,12 +75,12 @@ SmartAlex uses tiered monthly subscriptions with increasing feature access:
 
 | Plan | Monthly Price | Key Features |
 |------|---------------|--------------|
-| **Starter** | $59 | Agent builder, basic CRM, contact management, embeddable widgets |
-| **Professional** | $149 | Full CRM, campaign management, analytics, API access, priority support |
-| **Business** | $499 | Multi-tenant, advanced analytics, custom integrations, dedicated onboarding |
-| **Enterprise** | $3,000 | Dedicated infrastructure, SLA, LaunchPad, custom onboarding, account manager |
+| **Professional** | $99 | 250 included minutes, 1 phone number, 1 agent, 10 concurrent slots, knowledge base, calendar & email integrations |
+| **Dental** | $349 | 300 included minutes, pre-tuned for dental practices |
+| **Real Estate** | $3,000 | 300 included minutes, 10 phone numbers, lead tracking & CRM, showing bookings, dedicated account manager |
+| **Enterprise** | Custom | Volume pricing, SSO/SAML, custom integrations, 99.9% uptime SLA, white-label options |
 
-All plans include the web dashboard and agent builder. Voice minutes are included with additional minutes at competitive rates.
+All plans include the web dashboard and agent builder. Overage usage is billed at $0.08/min web and $0.11/min phone calls.
 
 ### Synthflow Pricing
 
@@ -110,7 +110,7 @@ Synthflow has a lower entry point, making it attractive for testing or low-volum
 | Mobile App | Not available | Built-in |
 | Leads System | $50-$200/mo (various tools) | Built-in |
 
-For an agency comparing the two, SmartAlex's Business plan ($499) includes multi-tenant management, CRM, campaigns, analytics, and billing that would require $250-$1,000/month in separate tools with Synthflow. For a solo user who only needs basic voice agents and white-label capabilities, Synthflow's lower-tier plans are more economical.
+For an agency comparing the two, SmartAlex's Real Estate plan ($3,000) includes multi-tenant management, CRM, campaigns, analytics, and billing that would require thousands of dollars per month in separate tools with Synthflow. For a solo user who only needs basic voice agents and white-label capabilities, Synthflow's lower-tier plans are more economical.
 
 ---
 
@@ -126,11 +126,10 @@ SmartAlex uses a professionally tuned voice stack optimized for business convers
 - **50+ voices** curated for business use across multiple accents and languages
 - **SSML support** for natural prosody, emphasis, pauses, and pronunciation control
 - **Sub-second end-to-end latency** for real-time conversation
-- **4 agent modes** that pre-configure voice behavior:
-  - **Demo**: Quick testing with simplified settings
-  - **Standard**: Professional business conversations
-  - **Advanced**: Full control over all voice parameters
-  - **Vibe**: Creative and personality-driven interactions
+- **Two creation paths**:
+  - **Standard**: Paste your website URL and an agent is auto-built in under 60 seconds
+  - **Advanced**: Step-by-step wizard with full control over voice, identity, tools, and detailed settings
+  - Plus **Squad Architect** for chat-based design of multi-agent teams
 - **Emotion-aware responses** that adjust tone based on conversation context
 
 ### Synthflow Voice Engine
@@ -158,7 +157,7 @@ SmartAlex offers more granular control over voice parameters (emotion, speed, vo
 SmartAlex provides extensive integration capabilities for teams that want to extend the platform:
 
 - **REST API** covering all platform entities (agents, contacts, campaigns, calls, analytics, billing)
-- **MCP Server** with 18 tools for AI assistant integration (Claude, GPT, and other MCP-compatible clients)
+- **MCP Server** with 28 tools for AI assistant integration (Claude, ChatGPT, and other MCP-compatible clients)
 - **Webhook system** with 67+ event types for real-time notifications and event-driven workflows
 - **Edge Functions** (290+) for custom backend logic, third-party integrations, and workflow automation
 - **Embeddable widgets** with customizable appearance for any website
@@ -268,7 +267,7 @@ SmartAlex's multi-tenant architecture provides deeper per-client functionality (
 | Setup time | Minutes (no-code builder) | Minutes (drag-and-drop) |
 | Learning curve | Moderate (more features to learn) | Low (focused interface) |
 | CRM | Built-in, no extra cost | Separate tool needed |
-| Cost | $59/mo starter | ~$29/mo starter |
+| Cost | $99/mo Professional | ~$29/mo starter |
 | Mobile management | iOS + Android app | Web only |
 
 **Verdict**: Synthflow has a lower entry cost and simpler interface for basic voice agent needs. SmartAlex is better value if you also need CRM and campaign features.

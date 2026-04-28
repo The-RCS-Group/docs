@@ -1,147 +1,70 @@
 ---
 title: "Analytics"
-description: "Track call performance, costs, and insights"
+description: "Track call performance, costs, sentiment, and ROI across all your AI agents and campaigns"
 ---
 
 ## Overview
 
-SmartAlex Analytics gives you deep insights into your AI agent's performance. Track call volumes, sentiment trends, costs, and more.
+Analytics gives you deep insight into how your AI agents are performing. Navigate to **Analytics** in your dashboard to dig into metrics across calls, campaigns, costs, and quality.
 
-## Accessing Analytics
+## Tabs
 
-Navigate to **Analytics** in your dashboard to view:
-- Call volume trends
-- Sentiment analysis
-- Campaign performance
-- Cost tracking
-- Period comparisons
+The Analytics page is organised into focused tabs:
 
-## Call Volume
+| Tab | What you see |
+|---|---|
+| **Overview** | Key metrics across all calls — total calls, success rate, average duration, sentiment distribution |
+| **Campaigns** | Per-campaign performance, contacts reached, connect rates, costs |
+| **Costs & ROI** | Spend breakdown by call type and agent, projected costs, cost per successful call |
+| **Quality** | Call sentiment trends, transcript-level quality signals |
+| **Operations** | Operational metrics for managing capacity and throughput |
+| **Attribution** | Marketing attribution: which channels drive calls and conversions |
 
-### Metrics
+<Note>
+  Some tabs (Campaigns, Attribution) may be hidden on inbound-only plans where they don't apply.
+</Note>
 
-| Metric | Description |
-|--------|-------------|
-| **Total Calls** | All call attempts |
-| **Completed Calls** | Successfully connected calls |
-| **Missed Calls** | No-answer, busy, failed |
-| **Voicemails** | Calls that went to voicemail |
+## Date ranges
 
-### Trends
+Use the date picker to scope all charts and tables. Presets cover today, the last 7 / 30 days, the current and previous month. Pick a custom range from the calendar for arbitrary windows.
 
-View call volume over time:
-- **Daily view** - Hour-by-hour breakdown
-- **Weekly view** - Day-by-day comparison
-- **Monthly view** - Daily trends over 30 days
+## Overview metrics
 
-Identify peak calling times to optimize agent availability and campaign scheduling.
-
-## Sentiment Analysis
-
-Track the emotional tone of your calls:
-
-### Sentiment Breakdown
-
-| Sentiment | Meaning |
-|-----------|---------|
-| **Positive** | Customer expressed satisfaction, interest, or gratitude |
-| **Neutral** | Standard information exchange, no strong emotion |
-| **Negative** | Frustration, complaints, or dissatisfaction |
-
-### Sentiment Trends
-
-Monitor sentiment over time to:
-- Identify improvements in customer satisfaction
-- Spot issues before they become problems
-- Measure the impact of agent prompt changes
-- Track seasonal variations
-
-### Sentiment by Agent
-
-Compare sentiment across agents to identify:
-- Best-performing agent configurations
-- Agents that need prompt improvements
-- Industry-specific patterns
-
-## Campaign Analytics
-
-For each campaign, view:
+The Overview tab surfaces these at a glance:
 
 | Metric | Description |
-|--------|-------------|
-| **Contacts Reached** | Successfully connected calls |
-| **Connect Rate** | Percentage of answered calls |
-| **Average Duration** | Mean call length |
-| **Sentiment Distribution** | Positive/neutral/negative breakdown |
-| **Total Cost** | Campaign calling expenses |
+|---|---|
+| **Total Calls** | All calls in the selected window (inbound + outbound + web) |
+| **Success rate** | Percentage of calls that connected and met the success criteria |
+| **Average duration** | Mean call length |
+| **Cost** | Spend across the window plus per-call and per-success cost |
+| **Sentiment distribution** | Positive / neutral / negative split, shown as a pie chart |
 
-### Campaign Comparison
+Charts include sentiment pies, call-volume bar charts, and duration trend areas.
 
-Compare multiple campaigns side-by-side:
-- Performance metrics
-- Cost efficiency
-- Best performing times
-- Contact list quality indicators
+## Sentiment
 
-## Cost Tracking
+Each call is automatically tagged as **Positive**, **Neutral**, or **Negative** based on the conversation. Use sentiment to:
+- Identify configurations that delight callers
+- Spot prompts or scripts that frustrate them
+- Track satisfaction over time as you iterate
 
-### Usage Metrics
+## Costs & ROI
 
-| Metric | Description |
-|--------|-------------|
-| **Minutes Used** | Total calling minutes |
-| **Per-Minute Cost** | Average cost per minute |
-| **Total Spend** | Current period expenses |
-| **Projected Cost** | Estimated monthly total |
+The Costs tab breaks spend down by:
+- **Call category** — outbound, inbound, web (widget), and test calls
+- **Per-channel** — average cost per call and per successful call
 
-### Cost Breakdown
+Use it to see where your minutes are going and which channels are the most cost-efficient.
 
-View costs by:
-- **Call type** - Inbound, outbound, web
-- **Agent** - Which agents are most expensive
-- **Campaign** - Campaign-level costs
-- **Day/Week** - Spending trends over time
+## Inspecting individual calls
 
-### Budget Alerts
+Click any call row in a table to open the call details panel with:
+- Full transcript with speaker labels
+- Recording playback
+- Caller / contact info
+- AI-generated summary
 
-Set up alerts when:
-- Daily spend exceeds threshold
-- Weekly spend exceeds threshold
-- Wallet balance is low
-- Approaching plan limits
+## Exporting data
 
-## Period Comparisons
-
-Compare performance across time periods:
-
-| Comparison | Use Case |
-|------------|----------|
-| **Week over Week** | Track weekly improvement |
-| **Month over Month** | Monthly trends |
-| **Custom Periods** | Campaign A vs Campaign B |
-
-See percentage changes and trend indicators for key metrics.
-
-## Insights
-
-AI-generated insights highlight:
-
-- **Opportunities** - Times when more capacity could help
-- **Anomalies** - Unusual patterns to investigate
-- **Recommendations** - Suggested prompt improvements
-- **Trends** - Notable patterns in your data
-
-## Exporting Reports
-
-Export analytics data:
-
-1. Select your date range
-2. Choose metrics to include
-3. Click **Export**
-4. Download CSV or PDF report
-
-Use exports for:
-- Executive reporting
-- External analysis
-- Compliance documentation
-- Billing verification
+Export filtered call records to CSV from the relevant table. Use exports for executive reporting, external analysis, or reconciling against your billing.

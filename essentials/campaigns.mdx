@@ -62,23 +62,22 @@ A Campaign lets you call hundreds or thousands of contacts using your AI agent. 
 | Status | Description |
 |--------|-------------|
 | **Draft** | Not yet started, still configuring |
+| **Scheduled** | Configured to start at a future date/time |
 | **Active** | Currently running, making calls |
-| **Paused** | Temporarily stopped, can be resumed |
+| **Paused** | Temporarily stopped, can be resumed (e.g., insufficient wallet balance) |
 | **Completed** | All contacts called or exhausted retries |
 | **Cancelled** | Manually stopped, will not resume |
 
 ## Automatic Retry Logic
 
-SmartAlex automatically schedules callbacks when calls don't connect:
+When you build a campaign sequence, choose a retry template that matches how persistent you want to be:
 
-| Outcome | Retry Behavior |
-|---------|---------------|
-| **Voicemail** | Retry after 24 hours (up to 3 attempts) |
-| **No Answer** | Retry after 24 hours (up to 3 attempts) |
-| **Busy Signal** | Retry after 1 hour (up to 5 attempts) |
-| **Network Error** | Retry after 30 minutes (up to 3 attempts) |
-| **Invalid Number** | Marked as failed, no retry |
-| **DNC Request** | Added to Do Not Call list, no retry |
+| Template | Calls per contact | When to use |
+|---|---|---|
+| **Standard** | 3 calls | Most outreach, balances reach with respect for the contact |
+| **Aggressive** | 5 calls | Time-sensitive offers or high-value follow-ups |
+
+Each subsequent attempt is spaced out automatically. Calls flagged as **Invalid number** or where the contact requests a Do Not Call are not retried — invalid numbers are marked failed, and DNC requests are added to your suppression list.
 
 ## Real-Time Monitoring
 

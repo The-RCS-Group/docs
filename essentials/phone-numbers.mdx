@@ -5,33 +5,29 @@ description: "Get and manage phone numbers for your AI agents"
 
 ## Getting Phone Numbers
 
-SmartAlex provides phone numbers from multiple countries. When someone calls your number, they're connected to your AI agent.
+SmartAlex provisions phone numbers in 9 countries. When someone calls your number, they're connected to your AI agent.
 
 ### Available Countries
 
-| Country | Coverage | Example Format |
-|---------|----------|----------------|
-| United States | All area codes | +1 (555) 123-4567 |
-| United Kingdom | All area codes | +44 20 1234 5678 |
-| Australia | Major cities | +61 2 1234 5678 |
-| South Africa | Major cities | +27 11 123 4567 |
-| Singapore | National | +65 1234 5678 |
+| Country | Number Types Available |
+|---|---|
+| United States | Local, mobile, toll-free |
+| Canada | Local, mobile, toll-free |
+| United Kingdom | Toll-free |
+| Australia | Local, toll-free |
+| New Zealand | Toll-free |
+| Netherlands | Mobile, toll-free |
+| Denmark | Mobile, toll-free |
+| Finland | Local, mobile, toll-free |
+| South Africa | Local |
+
+Regulatory requirements (e.g. local address proof) vary by country and are displayed during the purchase flow.
 
 ### Pricing
 
-Every plan includes **1 free phone number for your first month**. After the first month, phone numbers are billed monthly based on region:
+Phone numbers are billed at **$1/month** flat, regardless of country. Per-minute usage on calls is separate — see the [Pricing page](/pricing) for details.
 
-| Region | Monthly Cost |
-|--------|--------------|
-| United States | $1.15/month |
-| United Kingdom | $1.50/month |
-| Australia | $1.85/month |
-| South Africa | $2.00/month |
-| Singapore | $2.50/month |
-
-<Note>
-Your first phone number is free during your first month on any plan. Additional numbers and all numbers after the first month are billed at the regional rates above.
-</Note>
+Your Professional plan includes **1 phone number** at no extra cost. Additional numbers are $1/month each.
 
 ## Purchasing a Number
 
@@ -40,16 +36,16 @@ Your first phone number is free during your first month on any plan. Additional 
     Go to **Phone Numbers** in your dashboard.
   </Step>
 
-  <Step title="Click Get New Number">
-    Click the **Get New Number** button.
+  <Step title="Click Buy New">
+    Click the **Buy New** button to open the purchase dialog.
   </Step>
 
-  <Step title="Select Country and Area">
-    Choose your country and preferred area code. Available numbers for that area will be shown.
+  <Step title="Select Country">
+    Choose your country. The available number types (local, mobile, or toll-free) for that country are displayed.
   </Step>
 
-  <Step title="Select a Number">
-    Click on the number you want. The number is provisioned immediately.
+  <Step title="Pick a number">
+    Browse available numbers and click **Get Number** to purchase. The number is provisioned immediately.
   </Step>
 
   <Step title="Assign to Agent">
@@ -64,7 +60,7 @@ Your first phone number is free during your first month on any plan. Additional 
 Your phone numbers page shows:
 - Phone number
 - Assigned agent (if any)
-- Monthly cost
+- Country and number type
 - Date acquired
 
 ### Actions
@@ -73,11 +69,11 @@ Your phone numbers page shows:
 |--------|-------------|
 | **Assign Agent** | Connect the number to an AI agent |
 | **Change Agent** | Switch to a different agent |
-| **Unassign** | Remove agent (number won't answer) |
+| **Unassign** | Remove the agent (the number won't answer) |
 | **Release** | Give up the number (cannot be undone) |
 
 <Warning>
-  Releasing a number is permanent. The number will be returned to the pool and may be assigned to another customer.
+  Releasing a number is permanent. The number is returned to the carrier pool and may be assigned to another customer.
 </Warning>
 
 ## Number Assignment
@@ -85,26 +81,30 @@ Your phone numbers page shows:
 Each phone number can be assigned to one AI agent at a time. The agent handles all inbound calls to that number.
 
 You can:
-- Assign one number to multiple campaigns using the same agent
-- Have multiple numbers for the same agent (e.g., different area codes)
+- Use the same number across multiple campaigns by reusing the same agent
+- Assign multiple numbers to the same agent (e.g., one per region)
 - Change assignments at any time without losing the number
 
 <Note>
   When you change which agent is assigned to a number, the change takes effect immediately. No downtime or reconfiguration needed.
 </Note>
 
+## Bring your own carrier
+
+If you already have phone numbers with another carrier or PBX, you can route them to SmartAlex over SIP instead of buying new numbers. See the [Telephony documentation](/telephony/overview) for full integration guides for 3CX, Yeastar, FreePBX, Asterisk, Avaya, Mitel, Microsoft Teams, RingCentral, and more.
+
 ## Best Practices
 
-<Accordion title="Choosing Area Codes">
-Select area codes that make sense for your business:
-- **Local presence**: Use area codes where your customers are
-- **Toll-free**: Consider 800 numbers for national businesses
-- **Multiple markets**: Get numbers in each major market you serve
-</Accordion>
+<AccordionGroup>
+  <Accordion title="Choosing the right number type">
+    - **Local** — best for businesses serving a specific region; callers see a familiar area code
+    - **Toll-free** — good for national or multi-region businesses
+    - **Mobile** — useful in markets where customers prefer dialling mobile numbers
+  </Accordion>
 
-<Accordion title="Number Organization">
-Keep your numbers organized:
-- Name agents clearly (e.g., "Main Line", "Sales", "Support")
-- Document which number is for what purpose
-- Review unused numbers monthly to avoid unnecessary charges
-</Accordion>
+  <Accordion title="Number organisation">
+    - Name the agents clearly (e.g. "Main Line", "Sales", "Support") so each number's purpose is obvious
+    - Document which number is for which campaign or location
+    - Review unused numbers monthly so you're not paying for ones you don't need
+  </Accordion>
+</AccordionGroup>

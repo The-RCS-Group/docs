@@ -58,12 +58,12 @@ curl -X GET "https://api.getsmartalex.com/v1/agents" \
 ### Getting Your API Key
 
 1. Log in to your SmartAlex dashboard
-2. Navigate to **Settings** → **API**
-3. Click **Generate New Key**
+2. Open the **Developer Portal** from the side navigation
+3. Generate a new API key
 4. Copy and securely store the key
 
 <Warning>
-  API keys are shown only once when created. Store them securely - if lost, you'll need to generate a new key.
+  API keys are shown only once when created. Store them securely — if lost, you'll need to generate a new key.
 </Warning>
 
 ## Request Format
@@ -75,11 +75,11 @@ All requests must include:
 | Header | Value |
 |--------|-------|
 | `Authorization` | `Bearer YOUR_API_KEY` |
-| `Content-Type` | `application/json` (for POST/PUT requests) |
+| `Content-Type` | `application/json` (for POST/PATCH requests) |
 
 ### Request Body
 
-POST and PUT requests accept JSON bodies:
+POST and PATCH requests accept JSON bodies:
 
 ```bash
 curl -X POST "https://api.getsmartalex.com/v1/agents" \
@@ -149,15 +149,7 @@ All responses are JSON with a consistent structure:
 
 ## Rate Limits
 
-API requests are rate limited based on your plan:
-
-| Plan | Requests/minute | Requests/day |
-|------|-----------------|--------------|
-| Professional | 60 | 10,000 |
-| Dental | 300 | 50,000 |
-| Real Estate | 600 | 100,000 |
-
-Rate limit headers are included in every response:
+API requests are rate limited to prevent abuse and ensure platform stability. Rate limits are enforced per API key. Rate limit headers are included in every response:
 
 ```
 X-RateLimit-Limit: 60

@@ -19,7 +19,7 @@ SmartAlex and Retell AI both enable businesses to deploy AI voice agents, but th
 
 SmartAlex is a comprehensive AI voice agent platform built for businesses that want to deploy, manage, and scale voice AI operations from a single dashboard. It combines a no-code agent builder with integrated CRM, outbound campaign management, analytics, Stripe billing, embeddable website widgets, and a mobile app. SmartAlex also includes LaunchPad, a purpose-built module for real estate developers and agencies that handles property reservations, buyer portals, and commission tracking.
 
-The platform uses a multi-tenant architecture, meaning agencies and multi-location businesses can manage separate client environments from one account. SmartAlex also offers an MCP (Model Context Protocol) server with 18 tools, enabling AI assistants like Claude and GPT to interact with the platform directly through natural language.
+The platform uses a multi-tenant architecture, meaning agencies and multi-location businesses can manage separate client environments from one account. SmartAlex also offers an MCP (Model Context Protocol) server with 28 tools, enabling AI assistants like Claude and ChatGPT to interact with the platform directly through natural language.
 
 ### What Is Retell AI?
 
@@ -35,7 +35,7 @@ Retell's GPT App for ChatGPT allows users to manage voice agents through convers
 |---------|-----------|-----------|
 | **Deployment Model** | Full SaaS platform with UI | Developer API + SDK |
 | **Setup Complexity** | No-code, ready in minutes | Requires development work |
-| **Voice Agent Builder** | Visual builder with 4 modes (demo, standard, advanced, vibe) | API-based configuration |
+| **Voice Agent Builder** | Visual builder with Standard (URL-based) and Advanced wizard, plus Squad Architect for multi-agent setups | API-based configuration |
 | **CRM** | Built-in contact management with import/export, tagging, segmentation | Not included; BYO CRM |
 | **Campaign Management** | Full outbound campaign system with scheduling, lists, and analytics | Not included |
 | **Outbound Dialing** | Integrated campaign dialer with retry logic and disposition tracking | API-triggered outbound calls |
@@ -48,7 +48,7 @@ Retell's GPT App for ChatGPT allows users to manage voice agents through convers
 | **Voice Options** | 50+ voices across multiple providers | Multiple voice providers supported |
 | **AI Models** | GPT-4.1-mini default, configurable per agent | GPT-4, Claude, custom LLMs |
 | **A/B Testing** | Agent mode comparison | Built-in A/B testing framework |
-| **MCP Server** | 18-tool MCP server for AI assistant integration | GPT App for ChatGPT |
+| **MCP Server** | 28-tool MCP server for AI assistant integration | GPT App for ChatGPT |
 | **Call Recording** | Included with transcription and sentiment analysis | Included with transcription |
 | **PCAP Debugging** | Not available | Available for deep call debugging |
 | **Dynamic Voice Speed** | Configurable per agent (0.6x-1.5x) | Real-time dynamic speed adjustment |
@@ -71,12 +71,12 @@ SmartAlex uses monthly subscription plans with included minutes and features:
 
 | Plan | Price | Includes |
 |------|-------|----------|
-| **Starter** | $59/mo | Core agent features, basic CRM, contact management, embeddable widgets |
-| **Professional** | $149/mo | Full CRM, campaign management, analytics, API access, priority support |
-| **Business** | $499/mo | Multi-tenant, advanced analytics, custom integrations, dedicated onboarding |
-| **Enterprise** | $3,000/mo | Custom deployment, SLA, LaunchPad access, account manager, custom onboarding |
+| **Professional** | $99/mo | 250 included minutes, 1 phone number, 1 agent, 10 concurrent slots, knowledge base, calendar & email integrations |
+| **Dental** | $349/mo | 300 included minutes, pre-tuned for dental practices |
+| **Real Estate** | $3,000/mo | 300 included minutes, 10 phone numbers, lead tracking & CRM, showing bookings, dedicated account manager |
+| **Enterprise** | Custom | Volume pricing, SSO/SAML, custom integrations, 99.9% uptime SLA, white-label options |
 
-Additional voice minutes are billed at competitive per-minute rates. All plans include the web dashboard, agent builder, and contact management.
+Additional voice minutes are billed at $0.08/min web and $0.11/min phone. All plans include the web dashboard, agent builder, and contact management.
 
 ### Retell AI Pricing
 
@@ -117,7 +117,7 @@ SmartAlex uses a multi-provider voice architecture to deliver high-quality, natu
 - **GPT-4.1-mini** as the default LLM, configurable per agent
 - **Emotion-aware responses** with SSML support for natural prosody
 - **Sub-second latency** for real-time conversational flow
-- **4 agent modes** (demo, standard, advanced, vibe) that pre-configure voice behavior for different use cases
+- **Two creation paths** (Standard URL-based and Advanced wizard) plus Squad Architect for multi-agent designs
 
 SmartAlex's voice stack is optimized to work as an integrated system, meaning users do not need to tune individual components. The platform handles the orchestration of STT, LLM, and TTS to deliver consistent call quality.
 
@@ -148,7 +148,7 @@ SmartAlex offers a curated, high-quality voice experience optimized for business
 SmartAlex provides multiple integration points designed for both developers and AI workflows:
 
 - **REST API** for all platform functions (agents, contacts, campaigns, calls, analytics, billing)
-- **MCP Server** with 18 tools for AI assistant integration (Claude, GPT, and other MCP-compatible clients)
+- **MCP Server** with 28 tools for AI assistant integration (Claude, ChatGPT, and other MCP-compatible clients)
 - **Webhook system** with 67+ event types for real-time notifications and event-driven architectures
 - **Embeddable widgets** for adding voice agents to any website with minimal code
 - **Edge Functions** (290+) for extensible backend logic
@@ -322,7 +322,7 @@ SmartAlex provides more comprehensive out-of-the-box security with device finger
 
 If you are currently using Retell AI and considering SmartAlex, here is what the migration looks like:
 
-1. **Agent configurations**: Agent prompts, tool definitions, and voice settings can be recreated in SmartAlex's agent builder. The 4 agent modes (demo, standard, advanced, vibe) provide templates that accelerate setup.
+1. **Agent configurations**: Agent prompts, tool definitions, and voice settings can be recreated in SmartAlex's agent builder. The Standard (URL-based auto-build) and Advanced wizard accelerate setup.
 2. **Contact data**: Import contacts via CSV into SmartAlex's built-in CRM. Fields like name, phone, email, and custom tags are supported.
 3. **Call history**: Historical call recordings and transcripts from Retell would need to be archived separately. SmartAlex starts fresh with its own call log.
 4. **Telephony numbers**: Phone numbers can be ported or new numbers provisioned through SmartAlex's managed telephony.
@@ -370,7 +370,7 @@ SmartAlex is the clear choice for real estate. Its LaunchPad product is purpose-
 </Accordion>
 
 <Accordion title="Can I run A/B tests on my voice agents with SmartAlex?">
-SmartAlex supports comparing different agent modes (demo, standard, advanced, vibe) and configurations, but does not have a dedicated A/B testing framework like Retell. If systematic A/B testing of voice configurations is a core requirement, Retell's built-in testing framework is more mature. For most businesses, SmartAlex's agent mode system and analytics provide sufficient insight into agent performance without formal A/B testing infrastructure.
+SmartAlex supports comparing agent configurations side-by-side, but does not have a dedicated A/B testing framework like Retell. If systematic A/B testing of voice configurations is a core requirement, Retell's built-in testing framework is more mature. For most businesses, SmartAlex's analytics provide sufficient insight into agent performance without formal A/B testing infrastructure.
 </Accordion>
 
 <Accordion title="What level of technical support does each platform provide?">

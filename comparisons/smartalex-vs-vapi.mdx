@@ -39,7 +39,7 @@ With 175+ pages of documentation, VAPI provides one of the most comprehensive de
 |---------|-----------|------|
 | **Platform Type** | Full SaaS platform with web UI and mobile app | Developer API + SDK + Dashboard |
 | **Setup Time** | Minutes (no-code) | Hours to days (requires development) |
-| **Agent Builder** | Visual builder with 4 modes (demo, standard, advanced, vibe) | JSON/API configuration with dashboard |
+| **Agent Builder** | Visual builder with Standard (URL-based) and Advanced wizard, plus Squad Architect for multi-agent setups | JSON/API configuration with dashboard |
 | **No-Code Support** | Full no-code agent creation and management | Dashboard available, but API-first |
 | **CRM** | Built-in contact management with import, tagging, segmentation | Not included |
 | **Campaign Management** | Full outbound campaigns with scheduling, lists, retry logic, analytics | Not included |
@@ -55,7 +55,7 @@ With 175+ pages of documentation, VAPI provides one of the most comprehensive de
 | **STT Engine** | Deepgram Nova-3 | Deepgram, Azure, Google, Whisper, custom |
 | **TTS Engine** | Cartesia Sonic-3 with SSML | ElevenLabs, Play.ht, Azure, Cartesia, custom |
 | **Function Calling** | Agent tools system (9 built-in tool types) | Unlimited custom function calling |
-| **MCP Server** | 18-tool MCP server for AI assistants | Not available |
+| **MCP Server** | 28-tool MCP server for AI assistants | Not available |
 | **Squads / Multi-Agent** | Squad-based agent routing | Squad and transfer support |
 | **Call Recording** | Included with transcription and sentiment analysis | Included with transcription |
 | **Documentation** | Platform docs + API reference | 175+ pages of detailed documentation |
@@ -77,12 +77,12 @@ SmartAlex bundles voice agents with a complete business platform:
 
 | Plan | Monthly Price | Key Inclusions |
 |------|---------------|----------------|
-| **Starter** | $59 | Agent builder, basic CRM, contact management, embeddable widgets |
-| **Professional** | $149 | Full CRM, campaigns, analytics, API access, priority support |
-| **Business** | $499 | Multi-tenant, advanced analytics, custom integrations, dedicated onboarding |
-| **Enterprise** | $3,000 | Dedicated infrastructure, SLA, LaunchPad, custom onboarding, account manager |
+| **Professional** | $99 | 250 included minutes, 1 phone number, 1 agent, 10 concurrent slots, knowledge base, calendar & email integrations |
+| **Dental** | $349 | 300 included minutes, pre-tuned for dental practices |
+| **Real Estate** | $3,000 | 300 included minutes, 10 phone numbers, lead tracking & CRM, showing bookings, dedicated account manager |
+| **Enterprise** | Custom | Volume pricing, SSO/SAML, custom integrations, 99.9% uptime SLA, white-label options |
 
-Voice minutes are included in plans with additional minutes available at competitive per-minute rates.
+Voice minutes are included in each plan, with overage usage billed at $0.08/min web and $0.11/min phone calls.
 
 ### VAPI Pricing
 
@@ -129,11 +129,10 @@ SmartAlex uses a curated voice stack optimized for business conversations:
 - **50+ voices** pre-configured and ready to use across multiple languages and accents
 - **SSML support** for fine-grained prosody control including emphasis, pauses, and pronunciation
 - **Sub-second latency** end-to-end for natural conversational flow
-- **4 agent modes** that pre-configure voice behavior:
-  - **Demo**: Quick testing with simplified settings
-  - **Standard**: Professional business conversations
-  - **Advanced**: Full control over all voice parameters
-  - **Vibe**: Creative and personality-driven interactions
+- **Two creation paths**:
+  - **Standard**: Paste your website URL and an agent is auto-built in under 60 seconds
+  - **Advanced**: Step-by-step wizard with full control over voice, identity, tools, and detailed settings
+  - Plus **Squad Architect** for chat-based design of multi-agent teams with handoff routing
 
 ### VAPI Voice Stack
 
@@ -161,7 +160,7 @@ VAPI offers unmatched flexibility in voice stack configuration, allowing develop
 SmartAlex provides platform-level APIs and integration tools:
 
 - **REST API** covering all platform entities (agents, contacts, campaigns, calls, analytics, billing)
-- **MCP Server** with 18 tools for integration with AI assistants like Claude and GPT
+- **MCP Server** with 28 tools for integration with AI assistants like Claude and ChatGPT
 - **Edge Functions** (290+) providing extensible backend logic with Deno runtime
 - **Embeddable Widgets** for adding voice agents to any website with minimal code
 - **Webhook System** with 67+ event types for real-time event processing and automation

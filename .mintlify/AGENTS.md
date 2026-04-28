@@ -33,6 +33,6 @@
 ## Project Context
 - SmartAlex is a multi-tenant platform — all API calls are scoped to a tenant
 - Authentication is via Bearer token (API key) or OAuth 2.0
-- The platform has three pricing tiers: Professional ($59), Dental ($349), Real Estate ($3,000)
+- The platform has tiered pricing: Professional ($99), Dental ($349), Real Estate ($3,000), and custom Enterprise
 - LaunchPad is the real estate vertical product
-- The MCP server exposes 18 tools across 7 domains
+- The MCP server exposes 28 tools across 8 domains
