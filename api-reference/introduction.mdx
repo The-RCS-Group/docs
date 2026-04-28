@@ -86,9 +86,9 @@ curl -X POST "https://api.getsmartalex.com/v1/agents" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Alex",
-    "voice": "nova",
-    "prompt": "You are a friendly receptionist..."
+    "website_url": "https://example.com",
+    "company_name": "ABC Company",
+    "assistant_name": "Alex"
   }'
 ```
 
@@ -103,7 +103,7 @@ All responses are JSON with a consistent structure:
   "data": {
     "id": "agent_abc123",
     "name": "Alex",
-    "status": "ready"
+    "is_active": true
   }
 }
 ```

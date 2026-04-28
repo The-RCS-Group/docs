@@ -5,7 +5,7 @@ description: 'Receive real-time event notifications'
 
 ## Overview
 
-Webhooks allow you to receive real-time notifications when events occur in your SmartAlex account. Configure webhook endpoints to integrate SmartAlex with your CRM, analytics tools, or custom applications.
+Webhooks let you receive real-time notifications when events occur in your SmartAlex account. Configure webhook endpoints to integrate SmartAlex with your CRM, analytics tools, or custom applications.
 
 ## Setting Up Webhooks
 
@@ -18,8 +18,8 @@ curl -X POST "https://api.getsmartalex.com/v1/webhooks" \
   -H "Content-Type: application/json" \
   -d '{
     "url": "https://your-server.com/webhooks/smartalex",
-    "events": ["call.completed", "campaign.completed"],
-    "secret": "your_webhook_secret"
+    "event_types": ["call.completed", "campaign.completed"],
+    "description": "Production CRM sync"
   }'
 ```
 
@@ -32,8 +32,8 @@ const response = await fetch('https://api.getsmartalex.com/v1/webhooks', {
   },
   body: JSON.stringify({
     url: 'https://your-server.com/webhooks/smartalex',
-    events: ['call.completed', 'campaign.completed'],
-    secret: 'your_webhook_secret'
+    event_types: ['call.completed', 'campaign.completed'],
+    description: 'Production CRM sync'
   })
 });
 const data = await response.json();
@@ -43,32 +43,51 @@ const data = await response.json();
 ### Parameters
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+|---|---|---|---|
 | `url` | string | Yes | HTTPS endpoint to receive webhooks |
-| `events` | array | Yes | Event types to subscribe to |
-| `secret` | string | No | Secret for signature verification |
-| `enabled` | boolean | No | Whether webhook is active (default: true) |
+| `event_types` | array of strings | Yes | Event types to subscribe to (at least 1) |
+| `description` | string | No | Optional label for your reference |
 
-### Response
+### Response (201 Created)
 
 ```json
 {
-  "data": {
-    "id": "webhook_abc123",
-    "url": "https://your-server.com/webhooks/smartalex",
-    "events": ["call.completed", "campaign.completed"],
-    "enabled": true,
-    "created_at": "2024-01-16T10:00:00Z"
-  }
+  "id": "webhook_abc123",
+  "url": "https://your-server.com/webhooks/smartalex",
+  "description": "Production CRM sync",
+  "event_types": ["call.completed", "campaign.completed"],
+  "is_active": true,
+  "created_at": "2026-04-28T10:00:00Z",
+  "signing_secret": "a3f1...long-hex-string..."
 }
 ```
+
+<Warning>
+  The `signing_secret` is returned **only once** at creation. Store it securely — you'll need it to verify webhook signatures, and it cannot be retrieved later.
+</Warning>
+
+## List Webhooks
+
+```bash
+curl -X GET "https://api.getsmartalex.com/v1/webhooks" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+## Delete Webhook
+
+```bash
+curl -X DELETE "https://api.getsmartalex.com/v1/webhooks/webhook_abc123" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+To change a webhook's URL or event subscriptions, delete it and create a new one.
 
 ## Event Types
 
 ### Call Events
 
 | Event | Description |
-|-------|-------------|
+|---|---|
 | `call.started` | Call has been initiated |
 | `call.connected` | Call was answered |
 | `call.completed` | Call has ended |
@@ -77,7 +96,7 @@ const data = await response.json();
 ### Campaign Events
 
 | Event | Description |
-|-------|-------------|
+|---|---|
 | `campaign.started` | Campaign has begun calling |
 | `campaign.paused` | Campaign was paused |
 | `campaign.resumed` | Campaign was resumed |
@@ -86,7 +105,7 @@ const data = await response.json();
 ### Contact Events
 
 | Event | Description |
-|-------|-------------|
+|---|---|
 | `contact.created` | New contact was added |
 | `contact.updated` | Contact was modified |
 | `contact.deleted` | Contact was removed |
@@ -95,7 +114,7 @@ const data = await response.json();
 ### Callback Events
 
 | Event | Description |
-|-------|-------------|
+|---|---|
 | `callback.scheduled` | New callback was scheduled |
 | `callback.completed` | Callback was made |
 | `callback.cancelled` | Callback was cancelled |
@@ -108,7 +127,7 @@ All webhook payloads follow this structure:
 {
   "id": "evt_xyz789",
   "type": "call.completed",
-  "created_at": "2024-01-16T14:30:00Z",
+  "created_at": "2026-04-28T14:30:00Z",
   "data": {
     // Event-specific data
   }
@@ -121,22 +140,20 @@ All webhook payloads follow this structure:
 {
   "id": "evt_xyz789",
   "type": "call.completed",
-  "created_at": "2024-01-16T14:30:00Z",
+  "created_at": "2026-04-28T14:30:00Z",
   "data": {
     "call": {
       "id": "call_abc123",
       "direction": "inbound",
       "agent_id": "agent_def456",
-      "phone_number": "+15551234567",
       "contact_id": "contact_xyz789",
-      "status": "completed",
-      "duration": 245,
+      "call_status": "completed",
+      "duration_seconds": 245,
       "sentiment": "positive",
       "cost": 0.45,
-      "recording_url": "https://recordings.getsmartalex.com/call_abc123.mp3",
       "summary": "Customer scheduled appointment for next Tuesday.",
-      "created_at": "2024-01-16T14:26:00Z",
-      "ended_at": "2024-01-16T14:30:05Z"
+      "start_timestamp": "2026-04-28T14:26:00Z",
+      "end_timestamp": "2026-04-28T14:30:05Z"
     }
   }
 }
@@ -148,20 +165,13 @@ All webhook payloads follow this structure:
 {
   "id": "evt_abc456",
   "type": "campaign.completed",
-  "created_at": "2024-01-16T18:00:00Z",
+  "created_at": "2026-04-28T18:00:00Z",
   "data": {
     "campaign": {
       "id": "campaign_abc123",
       "name": "January Outreach",
-      "contacts_total": 500,
-      "contacts_called": 500,
-      "contacts_connected": 312,
-      "contacts_voicemail": 98,
-      "contacts_failed": 90,
-      "connect_rate": 0.624,
-      "total_cost": 125.50,
-      "started_at": "2024-01-15T09:00:00Z",
-      "completed_at": "2024-01-16T18:00:00Z"
+      "started_at": "2026-04-27T09:00:00Z",
+      "completed_at": "2026-04-28T18:00:00Z"
     }
   }
 }
@@ -173,7 +183,7 @@ All webhook payloads follow this structure:
 {
   "id": "evt_def789",
   "type": "contact.created",
-  "created_at": "2024-01-16T10:00:00Z",
+  "created_at": "2026-04-28T10:00:00Z",
   "data": {
     "contact": {
       "id": "contact_new123",
@@ -181,7 +191,7 @@ All webhook payloads follow this structure:
       "first_name": "John",
       "last_name": "Smith",
       "email": "john@example.com",
-      "created_at": "2024-01-16T10:00:00Z"
+      "created_at": "2026-04-28T10:00:00Z"
     }
   }
 }
@@ -189,12 +199,12 @@ All webhook payloads follow this structure:
 
 ## Signature Verification
 
-If you provide a `secret` when creating a webhook, SmartAlex will include a signature header for verification.
+Every webhook delivery is signed with the `signing_secret` returned when you created the webhook. Verify the signature on every request to ensure it actually came from SmartAlex.
 
 ### Headers
 
 | Header | Description |
-|--------|-------------|
+|---|---|
 | `X-SmartAlex-Signature` | HMAC-SHA256 signature |
 | `X-SmartAlex-Timestamp` | Unix timestamp of the request |
 
@@ -221,11 +231,10 @@ app.post('/webhooks/smartalex', (req, res) => {
   const signature = req.headers['x-smartalex-signature'];
   const timestamp = req.headers['x-smartalex-timestamp'];
 
-  if (!verifyWebhook(req.body, signature, timestamp, 'your_webhook_secret')) {
+  if (!verifyWebhook(req.body, signature, timestamp, 'YOUR_SIGNING_SECRET')) {
     return res.status(401).send('Invalid signature');
   }
 
-  // Process the webhook
   const event = req.body;
   console.log('Received event:', event.type);
 
@@ -233,47 +242,9 @@ app.post('/webhooks/smartalex', (req, res) => {
 });
 ```
 
-## Managing Webhooks
-
-### List Webhooks
-
-```bash
-curl -X GET "https://api.getsmartalex.com/v1/webhooks" \
-  -H "Authorization: Bearer YOUR_API_KEY"
-```
-
-### Update Webhook
-
-```bash
-curl -X PATCH "https://api.getsmartalex.com/v1/webhooks/webhook_abc123" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "events": ["call.completed", "call.failed"],
-    "enabled": true
-  }'
-```
-
-### Delete Webhook
-
-```bash
-curl -X DELETE "https://api.getsmartalex.com/v1/webhooks/webhook_abc123" \
-  -H "Authorization: Bearer YOUR_API_KEY"
-```
-
 ## Retry Policy
 
-If your endpoint returns an error (4xx or 5xx) or times out, SmartAlex will retry:
-
-| Attempt | Delay |
-|---------|-------|
-| 1 | Immediate |
-| 2 | 1 minute |
-| 3 | 5 minutes |
-| 4 | 30 minutes |
-| 5 | 2 hours |
-
-After 5 failed attempts, the webhook delivery is marked as failed. You can view failed deliveries in your dashboard.
+If your endpoint returns an error (4xx or 5xx) or times out, SmartAlex will retry delivery with exponential backoff over several attempts. After repeated failures, the webhook delivery is marked failed — failed deliveries are visible from your dashboard.
 
 ## Best Practices
 
@@ -282,10 +253,8 @@ Return a `200` response as soon as you receive the webhook. Process the data asy
 
 ```javascript
 app.post('/webhooks/smartalex', (req, res) => {
-  // Acknowledge immediately
   res.status(200).send('OK');
 
-  // Process asynchronously
   processWebhook(req.body).catch(console.error);
 });
 ```
@@ -315,18 +284,3 @@ Webhook endpoints must use HTTPS. HTTP endpoints will be rejected.
 <Accordion title="Verify Signatures">
 Always verify the webhook signature to ensure requests are from SmartAlex.
 </Accordion>
-
-## Testing Webhooks
-
-Use the test endpoint to send a sample webhook to your URL:
-
-```bash
-curl -X POST "https://api.getsmartalex.com/v1/webhooks/webhook_abc123/test" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "event_type": "call.completed"
-  }'
-```
-
-This sends a sample event of the specified type to your webhook endpoint.

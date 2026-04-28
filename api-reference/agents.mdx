@@ -35,25 +35,20 @@ const data = await response.json();
     {
       "id": "agent_abc123",
       "name": "Alex",
-      "voice": "nova",
       "language": "en-US",
-      "status": "ready",
-      "created_at": "2024-01-15T10:30:00Z"
+      "is_active": true,
+      "voice_provider": "cloud",
+      "created_at": "2026-01-15T10:30:00Z"
     },
     {
       "id": "agent_def456",
       "name": "Sarah",
-      "voice": "alloy",
       "language": "en-US",
-      "status": "ready",
-      "created_at": "2024-01-14T08:15:00Z"
+      "is_active": true,
+      "voice_provider": "cloud",
+      "created_at": "2026-01-14T08:15:00Z"
     }
-  ],
-  "meta": {
-    "total": 2,
-    "page": 1,
-    "per_page": 20
-  }
+  ]
 }
 ```
 
@@ -84,26 +79,24 @@ const data = await response.json();
   "data": {
     "id": "agent_abc123",
     "name": "Alex",
-    "voice": "nova",
+    "assistant_name": "Alex",
+    "company_name": "ABC Company",
+    "assistant_personality": "friendly and professional",
+    "objective": "Answer caller questions and schedule appointments",
+    "first_message": "Hello, this is Alex from ABC Company. How can I help you today?",
+    "call_direction": "inbound",
     "language": "en-US",
-    "status": "ready",
-    "prompt": "You are Alex, a friendly receptionist...",
-    "knowledge_base": "Our business hours are...",
-    "phone_numbers": ["+15551234567"],
-    "settings": {
-      "recording_enabled": true,
-      "voicemail_enabled": true,
-      "transfer_number": "+15559876543"
-    },
-    "created_at": "2024-01-15T10:30:00Z",
-    "updated_at": "2024-01-15T14:22:00Z"
+    "is_active": true,
+    "voice_provider": "cloud",
+    "created_at": "2026-01-15T10:30:00Z",
+    "updated_at": "2026-01-15T14:22:00Z"
   }
 }
 ```
 
 ## Create Agent
 
-Create a new AI voice agent.
+Create a new AI voice agent. Provide a `website_url` and SmartAlex will auto-build an agent trained on your business in under 60 seconds. Or supply your own configuration fields directly.
 
 <CodeGroup>
 ```bash cURL
@@ -111,13 +104,9 @@ curl -X POST "https://api.getsmartalex.com/v1/agents" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Alex",
-    "voice": "nova",
-    "language": "en-US",
-    "prompt": "You are Alex, a friendly receptionist for ABC Company. Answer questions about our services, collect caller information, and schedule appointments.",
-    "settings": {
-      "recording_enabled": true
-    }
+    "website_url": "https://example.com",
+    "company_name": "ABC Company",
+    "assistant_name": "Alex"
   }'
 ```
 
@@ -129,13 +118,9 @@ const response = await fetch('https://api.getsmartalex.com/v1/agents', {
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
-    name: 'Alex',
-    voice: 'nova',
-    language: 'en-US',
-    prompt: 'You are Alex, a friendly receptionist...',
-    settings: {
-      recording_enabled: true
-    }
+    website_url: 'https://example.com',
+    company_name: 'ABC Company',
+    assistant_name: 'Alex'
   })
 });
 const data = await response.json();
@@ -145,45 +130,23 @@ const data = await response.json();
 ### Parameters
 
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `name` | string | Yes | Agent display name |
-| `voice` | string | Yes | Voice ID (see available voices below) |
-| `language` | string | No | Language code (default: `en-US`) |
-| `prompt` | string | Yes | System prompt defining agent behavior |
-| `knowledge_base` | string | No | Additional context for the agent |
-| `settings` | object | No | Agent configuration settings |
-
-### Settings Object
-
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `recording_enabled` | boolean | true | Record calls |
-| `voicemail_enabled` | boolean | true | Enable voicemail |
-| `transfer_number` | string | null | Number for call transfers |
-| `max_call_duration` | integer | 1800 | Max call length in seconds |
-
-### Response
-
-```json
-{
-  "data": {
-    "id": "agent_new789",
-    "name": "Alex",
-    "voice": "nova",
-    "language": "en-US",
-    "status": "creating",
-    "created_at": "2024-01-16T09:00:00Z"
-  }
-}
-```
+|---|---|---|---|
+| `website_url` | string | No | URL to crawl and auto-build the agent from |
+| `company_name` | string | No | Company name shown to callers |
+| `name` | string | No | Internal name for the agent in your dashboard |
+| `assistant_name` | string | No | The name the agent introduces itself with |
+| `objective` | string | No | What the agent should accomplish on calls |
+| `first_message` | string | No | The agent's opening line |
+| `voice` | string | No | Voice ID (see [Available Voices](#available-voices)) |
+| `accent` | string | No | Accent code |
 
 <Note>
-  New agents have status `creating` while being provisioned. This typically takes a few seconds.
+  At minimum, provide either `website_url` (Standard creation) or the manual configuration fields like `name`, `assistant_name`, and `objective` (Advanced creation).
 </Note>
 
 ## Update Agent
 
-Update an existing agent's configuration.
+Update an existing agent's configuration. Only provide the fields you want to change.
 
 <CodeGroup>
 ```bash cURL
@@ -191,10 +154,8 @@ curl -X PATCH "https://api.getsmartalex.com/v1/agents/agent_abc123" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "prompt": "Updated prompt instructions...",
-    "settings": {
-      "transfer_number": "+15559876543"
-    }
+    "objective": "Updated objective for the agent",
+    "is_active": true
   }'
 ```
 
@@ -206,10 +167,8 @@ const response = await fetch('https://api.getsmartalex.com/v1/agents/agent_abc12
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
-    prompt: 'Updated prompt instructions...',
-    settings: {
-      transfer_number: '+15559876543'
-    }
+    objective: 'Updated objective for the agent',
+    is_active: true
   })
 });
 const data = await response.json();
@@ -221,13 +180,22 @@ const data = await response.json();
 All parameters are optional. Only included fields will be updated.
 
 | Parameter | Type | Description |
-|-----------|------|-------------|
-| `name` | string | Agent display name |
-| `voice` | string | Voice ID |
-| `language` | string | Language code |
-| `prompt` | string | System prompt |
-| `knowledge_base` | string | Additional context |
-| `settings` | object | Agent settings |
+|---|---|---|
+| `name` | string | Internal name in your dashboard |
+| `assistant_name` | string | The name the agent introduces itself with |
+| `company_name` | string | Company name shown to callers |
+| `assistant_personality` | string | Personality descriptor (e.g., "warm and professional") |
+| `is_active` | boolean | Toggle the agent on or off |
+| `objective` | string | What the agent should accomplish on calls |
+| `product_description` | string | Description of what your business sells |
+| `first_message` | string | The agent's opening line |
+| `call_direction` | enum | `inbound`, `outbound`, or `both` |
+| `language` | string | Language code (e.g., `en-US`) |
+| `custom_instructions` | array of strings | Additional behavioural rules |
+| `background_sound` | enum | `office` or `off` |
+| `enabled_tools` | array of strings | List of tool names the agent can use |
+| `knowledge_item_ids` | array of UUIDs | Knowledge base documents linked to this agent |
+| `phone_number_id` | UUID or null | Phone number to assign to the agent |
 
 ## Delete Agent
 
@@ -249,46 +217,25 @@ const response = await fetch('https://api.getsmartalex.com/v1/agents/agent_abc12
 ```
 </CodeGroup>
 
-### Response
-
-```json
-{
-  "data": {
-    "id": "agent_abc123",
-    "deleted": true
-  }
-}
-```
-
 <Warning>
   Deleting an agent will unassign it from all phone numbers and cancel any active campaigns using that agent.
 </Warning>
 
-## Available Voices
-
-| Voice ID | Description | Languages |
-|----------|-------------|-----------|
-| `nova` | Warm and friendly female | en-US, en-GB |
-| `alloy` | Professional neutral | en-US, en-GB, es |
-| `echo` | Confident male | en-US |
-| `fable` | Expressive female | en-US, en-GB |
-| `onyx` | Deep authoritative male | en-US |
-| `shimmer` | Soft and gentle female | en-US, en-GB |
-
 ## Agent Status
 
-| Status | Description |
-|--------|-------------|
-| `draft` | Not yet ready for calls |
-| `creating` | Being provisioned |
-| `ready` | Active and can take calls |
-| `error` | Configuration issue |
+The `is_active` boolean field controls whether the agent answers calls.
+
+| `is_active` | Behaviour |
+|---|---|
+| `true` | Agent is live and ready to take calls |
+| `false` | Agent is toggled off and won't answer calls |
+
+Newly-created agents may take a few seconds to finish provisioning before `is_active` becomes `true`.
 
 ## Error Codes
 
 | Code | Description |
-|------|-------------|
+|---|---|
 | `agent_not_found` | Agent ID doesn't exist |
-| `agent_limit_reached` | Plan limit for agents reached |
-| `invalid_voice` | Voice ID not recognized |
+| `invalid_voice` | Voice ID not recognised |
 | `invalid_language` | Language code not supported |
