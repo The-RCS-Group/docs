@@ -258,7 +258,7 @@ Total rollback time: 30 seconds.
     Verify with `Activity Log` in 3CX (**Admin** → **System** → **Event Log** or **Activity Log**). Look for 401/403 responses (credentials) or timeouts (network).
   </Accordion>
   <Accordion title="Inbound calls ring but the AI doesn't answer">
-    The DID is likely not added to the SmartAlex trunk's accepted numbers list. In 3CX, check the trunk's **DIDs** tab includes the number being dialled. In SmartAlex, the DID must be on the LiveKit inbound trunk (provisioned automatically by Support if you're on Option A with non-SmartAlex DIDs).
+    The DID is likely not added to the SmartAlex trunk's accepted numbers list. In 3CX, check the trunk's **DIDs** tab includes the number being dialled. In SmartAlex, the DID must be registered on the inbound side (provisioned automatically by Support if you're on Option A with non-SmartAlex DIDs).
   </Accordion>
   <Accordion title="Transfer fires but 3CX returns 603 Decline">
     The target extension doesn't exist in 3CX. Verify in 3CX **Extensions** that the extension number the AI is trying to reach is active. Cross-check the extension list in SmartAlex matches what's actually provisioned in 3CX.

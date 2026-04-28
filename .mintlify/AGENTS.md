@@ -31,7 +31,7 @@
 - Use bullet points and numbered lists for scannability
 
 ## Project Context
-- SmartAlex is a multi-tenant platform — all API calls are scoped to a tenant
+- SmartAlex isolates customer data at the workspace level — all API calls are scoped to one workspace (the API field is named `tenant_id` for legacy reasons)
 - Authentication is via Bearer token (API key) or OAuth 2.0
 - The platform has tiered pricing: Professional ($99), Dental ($349), Real Estate ($3,000), and custom Enterprise
 - LaunchPad is the real estate vertical product

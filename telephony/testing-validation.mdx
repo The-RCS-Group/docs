@@ -18,7 +18,7 @@ Before the first test call, confirm:
 - [ ] Agent configured with a first message, system prompt, and voice
 - [ ] Agent linked to the SIP trunk via Agent Studio Telephony tab
 - [ ] A DID is routable to the agent, either natively in SmartAlex or via a PBX inbound rule
-- [ ] Tenant wallet has credit (if not on Enterprise billing)
+- [ ] Workspace wallet has credit (if not on Enterprise billing)
 - [ ] Recording settings configured per your compliance policy
 
 ## Test 1: inbound call reaches the AI
@@ -35,7 +35,7 @@ From any external phone:
 **If it fails**:
 - Silence for 10+ seconds before answer: check PBX inbound routing is sending the DID to SmartAlex
 - AI says something generic like "Hello, how can I help?" with no company name: agent's first message or system prompt isn't loaded, verify the agent is linked to the correct trunk
-- Rings but never answers: DID not mapped to an agent, or LiveKit inbound trunk doesn't have the DID. Contact support if you're sure the DID is assigned
+- Rings but never answers: DID not mapped to an agent, or the inbound trunk doesn't have the DID registered. Contact support if you're sure the DID is assigned
 
 ## Test 2: basic conversation
 

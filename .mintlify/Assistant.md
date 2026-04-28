@@ -25,7 +25,7 @@ Platform: app.getsmartalex.com
 ## Terminology
 - Use "agent" not "bot" or "assistant" when referring to SmartAlex voice agents
 - Use "campaign" not "call list" or "dialer"
-- Use "tenant" not "organization" in API/technical context
+- Use "workspace" not "organization" or "tenant" in user-facing context. The actual API field name `tenant_id` is preserved in JSON examples since that's the real schema.
 - Use "LaunchPad" for the real estate product
 - Use "SmartAlex" not "Smart Alex" or "smartalex" in prose
 
