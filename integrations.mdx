@@ -81,11 +81,11 @@ for (const contact of contacts) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      phone: contact.phone,
       first_name: contact.firstName,
       last_name: contact.lastName,
+      phone: contact.phone,
       email: contact.email,
-      metadata: { external_id: contact.id }
+      tags: [`source:${contact.source}`, `external:${contact.id}`]
     })
   });
 }
