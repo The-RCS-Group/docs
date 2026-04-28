@@ -10,7 +10,7 @@ Connect SmartAlex to your AI assistant in under 2 minutes. Once connected, you c
 ## Prerequisites
 
 - A SmartAlex account at [getsmartalex.com](https://getsmartalex.com)
-- An API key (generate one from **Settings > API Keys** in your dashboard)
+- An API key (generate one from the **Developer Portal** in your dashboard)
 - Node.js 18+ (for local installation only)
 
 ---
@@ -178,8 +178,8 @@ On Windows, use `cmd` as the command wrapper:
 ### Getting Your API Key
 
 1. Log in to [getsmartalex.com](https://getsmartalex.com)
-2. Go to **Settings > API Keys**
-3. Click **Generate New Key**
+2. Open the **Developer Portal** from the side navigation
+3. Generate a new API key
 4. Choose your environment:
    - **Production** keys start with `sa_live_`
    - **Test** keys start with `sa_test_`
@@ -274,7 +274,7 @@ The assistant will use the `smartalex_list_contacts` tool and return your contac
 ### "Authentication failed" or "Invalid API key"
 
 - Verify your key starts with `sa_live_` (production) or `sa_test_` (test)
-- Regenerate the key from **Settings > API Keys** if it may be expired
+- Regenerate the key from the **Developer Portal** if it may be expired
 - Check the environment variable is set:
 
 ```bash
@@ -294,7 +294,7 @@ The cloud MCP server runs in stateless mode. If you see a reconnection error, si
 
 ### Rate Limiting
 
-If you see HTTP 429 responses, you've exceeded the rate limit (100 req/min per tenant for authenticated, 30 req/min per IP for public). Wait for the `Retry-After` header duration and retry. Most AI clients handle this automatically.
+If you see HTTP 429 responses, you've exceeded the rate limit (100 req/min per workspace for authenticated, 30 req/min per IP for public). Wait for the `Retry-After` header duration and retry. Most AI clients handle this automatically.
 
 ### First run is slow (Local)
 

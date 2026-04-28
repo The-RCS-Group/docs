@@ -65,7 +65,7 @@ Failed to list contacts: Authorization required. Check your API key is valid and
 **Cause:** The API key or OAuth token is invalid, expired, or deactivated.
 
 **Fix:**
-- Regenerate your API key from **Settings > API Keys**
+- Regenerate your API key from the **Developer Portal**
 - For OAuth, re-authenticate by reconnecting the MCP server
 - Check that the key starts with `sa_live_` (production) or `sa_test_` (test)
 
@@ -111,7 +111,7 @@ Failed to list contacts: Authorization required. Check your API key is valid and
 **Cause:** The API key only has `read` permission but the operation requires `write`.
 
 **Fix:**
-- Generate a new API key with both `read` and `write` permissions from **Settings > API Keys**
+- Generate a new API key with both `read` and `write` permissions from the **Developer Portal**
 
 ---
 
@@ -178,12 +178,12 @@ Failed to create campaign: name: String must contain at least 1 character(s). Ch
 }
 ```
 
-**Cause:** The requested resource doesn't exist, or it belongs to a different tenant and is not accessible.
+**Cause:** The requested resource doesn't exist, or it belongs to a different workspace and is not accessible.
 
 **Fix:**
 - Verify the UUID is correct
 - Use the corresponding `list_` tool to find valid IDs
-- Resources are tenant-scoped , you can only access your own data
+- Resources are workspace-scoped — you can only access your own data
 
 ---
 

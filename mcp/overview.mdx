@@ -161,7 +161,7 @@ API keys use a prefixed format for easy identification:
 - **Production:** `sa_live_` prefix (e.g., `sa_live_abc123...`)
 - **Test/Staging:** `sa_test_` prefix (e.g., `sa_test_xyz789...`)
 
-Generate API keys from your SmartAlex dashboard under **Settings > API Keys**.
+Generate API keys from the **Developer Portal** in your SmartAlex dashboard.
 
 ### OAuth 2.0
 
@@ -173,7 +173,7 @@ For AI clients that support OAuth (like Claude Code's HTTP transport), SmartAlex
 
 | Transport | Limit | Keyed by |
 |-----------|-------|----------|
-| Cloud (authenticated) | 100 requests/min | Tenant ID |
+| Cloud (authenticated) | 100 requests/min | Workspace |
 | Cloud (public/onboarding) | 30 requests/min | IP address |
 
 Rate limit headers are included on all responses: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`.

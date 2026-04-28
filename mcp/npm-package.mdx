@@ -41,12 +41,12 @@ npx @smartalex/mcp-server
 ## Get Your API Key
 
 1. Log in to your [SmartAlex Dashboard](https://app.getsmartalex.com)
-2. Navigate to **Settings > API Keys**
-3. Click **Generate New Key**
+2. Open the **Developer Portal** from the side navigation
+3. Generate a new API key
 4. Choose your environment:
-   - `sa_live_` , production data
-   - `sa_test_` , staging/test data
-5. Copy the key immediately , it won't be shown again
+   - `sa_live_` — production data
+   - `sa_test_` — staging/test data
+5. Copy the key immediately — it won't be shown again
 
 <Warning>
   Keep your API key secret. Never commit it to version control or share it publicly. Use environment variables instead.
@@ -356,7 +356,7 @@ See the [Tools Reference](/mcp/tools-reference) for the complete list with param
 1. Your AI client spawns the MCP server as a local process
 2. Communication happens over **stdio** (stdin/stdout)
 3. The server authenticates to SmartAlex's API using your API key
-4. All data stays within your SmartAlex tenant , multi-tenant isolation is enforced server-side
+4. All data stays within your SmartAlex workspace — workspace isolation is enforced server-side
 
 ---
 
