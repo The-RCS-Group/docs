@@ -14,7 +14,7 @@ Enterprise-plan customers can negotiate a stricter target (99.95% or 99.99%) wit
 | Scope | Default | Configurable |
 |---|---|---|
 | Per SIP trunk | 10 concurrent calls | Yes, up to 1000 |
-| Per tenant | Plan-based (5 to 500+) | Yes, with plan upgrade |
+| Per workspace | Plan-based (5 to 500+) | Yes, with plan upgrade |
 | Platform global | Scales with infrastructure | Not customer-visible |
 
 When a trunk limit is reached, new inbound INVITEs receive `503 Service Unavailable` with a `Retry-After` header. Your PBX can fall back to its own overflow routing.
@@ -23,7 +23,7 @@ When a trunk limit is reached, new inbound INVITEs receive `503 Service Unavaila
 
 | Endpoint | Rate |
 |---|---|
-| Public API (agents, campaigns, contacts) | 60 requests per second per tenant |
+| Public API (agents, campaigns, contacts) | 60 requests per second per workspace |
 | Webhook delivery | 100 events per second per endpoint |
 | Bulk import (extensions CSV) | 500 rows per call, no throttle between calls |
 
@@ -73,8 +73,8 @@ Total mouth-to-ear from caller dial to hearing the AI: typically 2 to 3 seconds 
 | Severity | Definition | Response time |
 |---|---|---|
 | SEV-1 | Platform-wide voice failure | 15 minutes |
-| SEV-2 | Regional degradation affecting multiple tenants | 30 minutes |
-| SEV-3 | Single-tenant or single-trunk issue | 2 business hours |
+| SEV-2 | Regional degradation affecting multiple customers | 30 minutes |
+| SEV-3 | Single-customer or single-trunk issue | 2 business hours |
 | SEV-4 | Non-production or cosmetic | Next business day |
 
 Status page with live incident updates: `status.getsmartalex.com`.
@@ -91,7 +91,7 @@ Status page with live incident updates: `status.getsmartalex.com`.
 When approaching a limit:
 
 - **Per-trunk concurrent call limit**: self-service, increase in Settings PBX.
-- **Tenant-wide limit**: contact your account manager for a plan adjustment.
+- **Workspace-wide limit**: contact your account manager for a plan adjustment.
 - **API rate limit**: contact support if 60 rps isn't enough; most workloads don't come close.
 
 ## Backup and disaster recovery
@@ -132,7 +132,7 @@ The SLA does not apply to:
 If you believe an SLA credit applies:
 
 1. Email `support@getsmartalex.com` within 30 days of the incident
-2. Include: your tenant ID, affected time window, impact description, any case numbers
+2. Include: your workspace ID, affected time window, impact description, any case numbers
 3. We verify against platform logs and status history
 4. Credits, if applicable, are applied to the next invoice
 

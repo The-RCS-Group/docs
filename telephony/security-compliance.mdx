@@ -36,11 +36,11 @@ Call recordings are stored by default and available via the Call Logs page.
 | Setting | Default | Configurable |
 |---|---|---|
 | Recording on by default | Yes | Per agent |
-| Retention period | 90 days | Per tenant, 7 to 365 days |
+| Retention period | 90 days | Per workspace, 7 to 365 days |
 | Recording format | MP3, 64 kbps | No |
-| Access | Tenant admins and agents with the correct role permission | RBAC gated |
+| Access | Workspace admins and team members with the correct role permission | Role-gated |
 | Deletion on retention expiry | Automatic | No override |
-| Download | Admin users only | RBAC gated |
+| Download | Admin users only | Role-gated |
 
 Per-call suppression is supported. An agent can be configured to skip recording for sensitive calls (e.g., medical or financial), and the caller can be told recording is off.
 
@@ -58,9 +58,9 @@ SIP trunk credentials (username and 24-character random password) can be rotated
 
 ## Access control
 
-All resources in SmartAlex are scoped to a tenant (organisation). Row-level security enforced at the database layer ensures no cross-tenant data access, regardless of application-level bugs.
+All resources in SmartAlex are scoped to a workspace. Database-level enforcement ensures one workspace's data never crosses into another's, regardless of application-level bugs.
 
-Within a tenant, role-based access control gates:
+Within a workspace, role-based access control gates:
 
 - Who can view call recordings and transcripts
 - Who can create, edit, or delete SIP trunks and extensions
@@ -142,7 +142,7 @@ SmartAlex handles the platform layer. The customer is responsible for:
 
 - Keeping their own PBX patched and secure
 - Managing their own staff's access to the SmartAlex dashboard
-- Configuring RBAC correctly for their team
+- Configuring role-based access control correctly for their team
 - Obtaining any call-recording consent required by local law
 - Correctly configuring the AI agent to comply with their industry regulations (e.g., not offering medical or legal advice)
 

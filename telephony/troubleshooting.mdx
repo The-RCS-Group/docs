@@ -23,12 +23,12 @@ Organised by symptom first, SIP response code second. If you know the SIP code, 
     - The DID is not registered to the trunk. Add it under the trunk's DIDs list.
     - Your inbound route doesn't send the DID to the SmartAlex trunk. Update the rule.
     - Agent not linked to the trunk. In Agent Studio → Telephony tab → select the trunk.
-    - Wallet empty (test-mode tenants). Top up in Settings → Billing.
+    - Wallet empty (test-mode workspaces). Top up in Settings → Billing.
   </Accordion>
   <Accordion title="AI answers but hangs up immediately">
-    - Agent has no configured first message AND no system prompt , the AI has nothing to say.
-    - The call exceeded the tenant's max-call-duration (default 300s).
-    - The LiveKit dispatch failed , check the call_records table or contact support.
+    - Agent has no configured first message AND no system prompt — the AI has nothing to say.
+    - The call exceeded the workspace's max-call-duration (default 300s).
+    - Voice runtime dispatch failed — check the call detail page or contact support.
   </Accordion>
   <Accordion title="AI answers but doesn't understand transfers">
     - `agents.sip_trunk_id` not set , link the agent to the trunk in Agent Studio → Telephony.
@@ -56,7 +56,7 @@ Organised by symptom first, SIP response code second. If you know the SIP code, 
     Firewall UDP session timeout is too short. Increase to **at least 1800 seconds** (30 minutes) on the firewall between your PBX and the internet.
   </Accordion>
   <Accordion title="Calls drop at exactly 5 minutes">
-    The tenant's `max_duration` is set to 300 seconds. Increase it in the agent settings if longer calls are expected.
+    The workspace's `max_duration` is set to 300 seconds. Increase it in the agent settings if longer calls are expected.
   </Accordion>
   <Accordion title="Poor voice quality / choppy audio">
     - Packet loss in transit , run a `mtr` or `traceroute` from PBX to `sip.voice.getsmartalex.com` and look for loss or high jitter hops
@@ -161,7 +161,7 @@ openssl s_client -connect sip.voice.getsmartalex.com:5061 -servername sip.voice.
 
 Open a support ticket with:
 
-- Your tenant ID
+- Your workspace ID
 - The SIP trunk ID (visible in Settings → PBX)
 - The call ID of a failing call (from Call Logs)
 - A SIP trace from your PBX covering 30 seconds before and after the failure

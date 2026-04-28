@@ -21,8 +21,8 @@ When a tool call fails, the SmartAlex MCP server returns an error in the tool re
 | 201 | Created | Resource created (contacts, deals, webhooks, campaigns, agents) |
 | 400 | Bad Request | Invalid parameters, missing required fields, or malformed UUID |
 | 401 | Unauthorized | Missing or invalid API key / OAuth token |
-| 403 | Forbidden | Valid auth but insufficient permissions (RBAC) |
-| 404 | Not Found | Resource doesn't exist or belongs to a different tenant |
+| 403 | Forbidden | Valid auth but insufficient permissions for this resource |
+| 404 | Not Found | Resource doesn't exist or belongs to a different workspace |
 | 422 | Validation Error | Request body failed schema validation (e.g. invalid field type or value) |
 | 429 | Too Many Requests | Rate limit exceeded |
 | 500 | Internal Error | Server-side error |
@@ -81,7 +81,7 @@ Failed to list contacts: Authorization required. Check your API key is valid and
 }
 ```
 
-**Cause:** Your user account doesn't have permission for this operation. SmartAlex uses role-based access control (RBAC) , your admin may have restricted access to certain features.
+**Cause:** Your user account doesn't have permission for this operation. SmartAlex uses role-based access control — your admin may have restricted access to certain features.
 
 **Fix:**
 - Ask your workspace admin to grant the required page permission

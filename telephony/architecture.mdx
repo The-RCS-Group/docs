@@ -159,8 +159,8 @@ SmartAlex's media path ends at the moment the REFER is accepted. We're not a man
 Three layers cap concurrent calls:
 
 1. **Per trunk** , configurable, default 10, maximum 1000
-2. **Per tenant** , set on your account, typically matches your plan
-3. **Global platform** , scales with infrastructure and is always higher than any single tenant needs
+2. **Per workspace** — set on your account, typically matches your plan
+3. **Global platform** — scales with infrastructure and is always higher than any single customer needs
 
 When a limit is reached, new SIP INVITEs receive `503 Service Unavailable` with a `Retry-After` header.
 
