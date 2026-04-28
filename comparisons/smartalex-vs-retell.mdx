@@ -40,26 +40,26 @@ Retell's GPT App for ChatGPT allows users to manage voice agents through convers
 | **Campaign Management** | Full outbound campaign system with scheduling, lists, and analytics | Not included |
 | **Outbound Dialing** | Integrated campaign dialer with retry logic and disposition tracking | API-triggered outbound calls |
 | **Inbound Call Handling** | Built-in with routing and agent assignment | Webhook-based routing |
-| **Multi-Tenant Architecture** | Native multi-tenancy with tenant isolation and RBAC | Single-tenant per API key |
+| **Workspace Isolation** | Native workspace separation with role-based permissions | Single account per API key |
 | **White-Label / Embeddable** | Embeddable widgets for websites | Embeddable via SDK |
 | **Real Estate Tools** | LaunchPad: reservation management, buyer portals, developer dashboards | None |
 | **Billing & Payments** | Integrated Stripe billing with wallet system, trials, usage tracking | Pay-per-minute via dashboard |
 | **Analytics Dashboard** | Built-in call analytics, agent performance, campaign metrics, trends | Call logs and basic analytics |
 | **Voice Options** | 50+ voices across multiple providers | Multiple voice providers supported |
-| **AI Models** | GPT-4.1-mini default, configurable per agent | GPT-4, Claude, custom LLMs |
+| **AI Models** | Curated language model stack, configurable per agent | GPT-4, Claude, custom LLMs |
 | **A/B Testing** | Agent mode comparison | Built-in A/B testing framework |
 | **MCP Server** | 28-tool MCP server for AI assistant integration | GPT App for ChatGPT |
 | **Call Recording** | Included with transcription and sentiment analysis | Included with transcription |
 | **PCAP Debugging** | Not available | Available for deep call debugging |
 | **Dynamic Voice Speed** | Configurable per agent (0.6x-1.5x) | Real-time dynamic speed adjustment |
 | **Telephony** | Managed (abstracted, no carrier management needed) | BYO telephony or managed |
-| **Webhook Support** | 67+ webhook event types | Comprehensive webhook system |
+| **Webhook Support** | Wide range of webhook event types | Comprehensive webhook system |
 | **Mobile App** | React Native app (iOS + Android) | No mobile app |
-| **SSO / Enterprise Auth** | Supabase Auth with role-based access | API key authentication |
-| **Compliance** | SOC 2 checklist, geographic permissions, IRSF prevention | SOC 2 compliant |
-| **Messaging Integration** | Telegram bot (71 tools), WhatsApp (planned) | Not included |
-| **Email Integration** | Resend (transactional) + Lemlist (outreach) | Not included |
-| **Security** | FingerprintJS Pro, MaxMind, 16-signal threat scoring | Standard API security |
+| **SSO / Enterprise Auth** | Role-based access with SSO/SAML on Enterprise | API key authentication |
+| **Compliance** | Geographic permissions, fraud prevention, encryption in transit and at rest | SOC 2 compliant |
+| **Messaging Integration** | Telegram bot, WhatsApp Business | Not included |
+| **Email Integration** | Gmail and Outlook for inbound/outbound, dedicated outreach campaigns | Not included |
+| **Security** | Device fingerprinting, geographic verification, multi-signal threat scoring | Standard API security |
 
 ---
 
@@ -109,12 +109,12 @@ For low-volume use (under 500 minutes/month) with an existing CRM and no campaig
 
 ### SmartAlex Voice Engine
 
-SmartAlex uses a multi-provider voice architecture to deliver high-quality, natural-sounding conversations:
+SmartAlex uses a curated voice stack to deliver high-quality, natural-sounding conversations:
 
-- **50+ voices** available across providers, curated for business use
-- **Cartesia Sonic-3** for ultra-low latency voice synthesis with emotion control, speed adjustment (0.6x-1.5x), and volume control (0.5x-2.0x)
-- **Deepgram Nova-3** for speech-to-text with high accuracy across accents and languages
-- **GPT-4.1-mini** as the default LLM, configurable per agent
+- **50+ voices** curated for business use across multiple languages and accents
+- **Ultra-low-latency voice synthesis** with emotion control, speed (0.6x–1.5x), and volume control (0.5x–2.0x)
+- **High-accuracy speech recognition** across accents and languages
+- **Curated language model stack** tuned for natural conversation, with per-agent customisation
 - **Emotion-aware responses** with SSML support for natural prosody
 - **Sub-second latency** for real-time conversational flow
 - **Two creation paths** (Standard URL-based and Advanced wizard) plus Squad Architect for multi-agent designs
@@ -149,9 +149,8 @@ SmartAlex provides multiple integration points designed for both developers and 
 
 - **REST API** for all platform functions (agents, contacts, campaigns, calls, analytics, billing)
 - **MCP Server** with 28 tools for AI assistant integration (Claude, ChatGPT, and other MCP-compatible clients)
-- **Webhook system** with 67+ event types for real-time notifications and event-driven architectures
+- **Webhook system** with a wide range of event types for real-time notifications and event-driven architectures
 - **Embeddable widgets** for adding voice agents to any website with minimal code
-- **Edge Functions** (290+) for extensible backend logic
 - **TypeScript SDK** with full type definitions for type-safe development
 - **React hooks** library for building custom UIs on top of the platform
 
@@ -182,15 +181,15 @@ Retell offers a more developer-centric experience with extensive documentation, 
 
 SmartAlex includes 40+ integrations across categories as part of the platform:
 
-- **Telephony**: Managed infrastructure with geographic permissions, IRSF fraud prevention, and carrier abstraction
+- **Telephony**: Managed carrier infrastructure with geographic permissions and fraud prevention
 - **Payments**: Stripe billing with subscription management, wallet top-up, trial periods, and usage-based billing
 - **CRM**: Built-in CRM with contact import/export, tagging, segmentation, and search
-- **Email**: Resend for transactional email, Lemlist for outreach campaigns with dual account support
-- **Messaging**: Telegram bot with 71 tools for conversational platform management, WhatsApp pipeline (planned)
-- **Real Estate**: Property developer APIs, Dubai Land Department data integration, multi-developer architecture
+- **Email**: Gmail and Outlook for inbound/outbound, plus dedicated outreach campaigns
+- **Messaging**: Telegram bot, WhatsApp Business
+- **Real Estate**: Property data integration, multi-developer support, reservation lifecycle management
 - **Analytics**: Built-in dashboards with filtering, date ranges, and data export
-- **AI Assistants**: MCP server for Claude, GPT, and other AI tools
-- **Security**: FingerprintJS Pro for device fingerprinting, MaxMind GeoIP for geographic verification, 16-signal threat scoring with auto-ban
+- **AI Assistants**: MCP server for Claude, ChatGPT, and other AI tools
+- **Security**: Device fingerprinting, geographic verification, multi-signal threat scoring with automatic blocking
 
 ### Retell AI Integrations
 
@@ -219,14 +218,14 @@ Security requirements vary significantly between business users and developers b
 
 SmartAlex includes enterprise-grade security as a core part of the platform:
 
-- **FingerprintJS Pro** for device fingerprinting and bot detection
-- **MaxMind GeoIP** for geographic verification and fraud prevention
-- **16-signal threat scoring** with automatic blocking of suspicious activity
-- **IRSF prevention** with geographic permissions to prevent international revenue share fraud
-- **SOC 2 compliance checklist** with documented security controls
-- **Role-based access control** with admin, manager, and user roles per tenant
-- **Multi-tenant data isolation** ensuring client data never crosses boundaries
-- **Encrypted secrets management** via Supabase Vault (pgsodium)
+- **Device fingerprinting** and bot detection
+- **Geographic verification** via IP-to-country mapping for fraud prevention
+- **Multi-signal threat scoring** with automatic blocking of suspicious activity
+- **Geographic call permissions** to prevent international revenue share fraud
+- **Documented security controls** with SOC 2-aligned policies
+- **Role-based access control** with Owner, Admin, Member, and Viewer roles per workspace
+- **Workspace-level data isolation** ensuring client data never crosses boundaries
+- **Encrypted secrets management** for credentials and API keys
 - **Webhook signature verification** for secure event processing
 - **Rate limiting** across API endpoints and authentication attempts
 
@@ -326,9 +325,9 @@ If you are currently using Retell AI and considering SmartAlex, here is what the
 2. **Contact data**: Import contacts via CSV into SmartAlex's built-in CRM. Fields like name, phone, email, and custom tags are supported.
 3. **Call history**: Historical call recordings and transcripts from Retell would need to be archived separately. SmartAlex starts fresh with its own call log.
 4. **Telephony numbers**: Phone numbers can be ported or new numbers provisioned through SmartAlex's managed telephony.
-5. **Integrations**: Any custom integrations built with Retell's function calling would need to be rebuilt using SmartAlex's webhook system or edge functions.
+5. **Integrations**: Any custom integrations built with Retell's function calling would need to be rebuilt using SmartAlex's webhook system or REST API.
 
-SmartAlex provides migration assistance for Business and Enterprise plan customers.
+SmartAlex provides migration assistance for Real Estate and Enterprise plan customers.
 
 ### Moving from SmartAlex to Retell AI
 
@@ -346,15 +345,15 @@ SmartAlex supports importing agent configurations and contact lists. While there
 </Accordion>
 
 <Accordion title="Does SmartAlex support custom LLM endpoints like Retell does?">
-SmartAlex uses GPT-4.1-mini as its default LLM and supports configuring different models per agent. While it does not currently support fully custom LLM endpoints via WebSocket (as Retell does), the platform's agent system is designed to work optimally with supported models. For most business use cases, the built-in model options provide excellent performance without the overhead of managing custom LLM infrastructure.
+SmartAlex uses a curated language model stack and supports configuring models per agent. While it does not currently support fully custom LLM endpoints via WebSocket (as Retell does), the platform's agent system is designed to work optimally with the supported models. For most business use cases, the built-in model options provide excellent performance without the overhead of managing custom LLM infrastructure.
 </Accordion>
 
 <Accordion title="How does pricing compare for 1,000 minutes per month?">
-At 1,000 minutes per month, Retell AI would cost approximately $70-$150 depending on configuration (at $0.07-$0.15/min), plus any additional telephony and LLM costs. SmartAlex's Professional plan at $149/month includes CRM, campaign management, analytics, and voice minutes, making it comparable in voice cost while bundling significantly more functionality. The total cost of ownership favors SmartAlex when you factor in the CRM, campaign tools, and analytics you would otherwise need to purchase separately.
+At 1,000 minutes per month, Retell AI would cost approximately $70-$150 depending on configuration (at $0.07-$0.15/min), plus any additional telephony and LLM costs. SmartAlex's Professional plan starts at $99/month with 250 included minutes — overage minutes are charged at $0.08-$0.11/min, and the plan bundles CRM, campaign tools, and analytics that you would otherwise need to purchase separately. The total cost of ownership favors SmartAlex when you factor in the CRM, campaign tools, and analytics you would otherwise need to purchase separately.
 </Accordion>
 
 <Accordion title="Which platform has better call quality and lower latency?">
-Both platforms deliver high-quality voice experiences. SmartAlex uses Cartesia Sonic-3 for synthesis and Deepgram Nova-3 for transcription, achieving sub-second response latency. Retell AI offers similar quality with the added benefit of dynamic voice speed adjustment and PCAP debugging for troubleshooting. In practice, end-user call quality is comparable between the two platforms, with differences mainly in fine-tuning capabilities (Retell) versus ease of configuration (SmartAlex).
+Both platforms deliver high-quality voice experiences. SmartAlex uses a curated low-latency voice synthesis and speech-recognition stack to achieve sub-second response latency. Retell AI offers similar quality with the added benefit of dynamic voice speed adjustment and PCAP debugging for troubleshooting. In practice, end-user call quality is comparable between the two platforms, with differences mainly in fine-tuning capabilities (Retell) versus ease of configuration (SmartAlex).
 </Accordion>
 
 <Accordion title="Can I use SmartAlex just for the API without the platform UI?">

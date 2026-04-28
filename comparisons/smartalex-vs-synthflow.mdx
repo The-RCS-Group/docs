@@ -47,21 +47,21 @@ Synthflow integrates with common business tools through Zapier and Make, providi
 | **Outbound Dialing** | Integrated campaign dialer with list management and disposition tracking | Outbound calling support |
 | **Inbound Calling** | Built-in routing and agent assignment | Inbound call handling |
 | **White-Label** | Embeddable widgets, multi-tenant for agencies | Full white-label for agencies (branded dashboards, custom domains) |
-| **Agency Dashboard** | Multi-tenant with client isolation and per-tenant billing | White-label agency portal with sub-accounts |
+| **Agency Dashboard** | Per-workspace isolation with client billing | White-label agency portal with sub-accounts |
 | **Real Estate Tools** | LaunchPad: reservations (15+ states), buyer portals, developer dashboards, commissions | None |
 | **Billing System** | Integrated Stripe billing with wallet, trials, plan management | Platform billing |
 | **Analytics** | Comprehensive dashboards (calls, agents, campaigns, performance, trends) | Call analytics and reporting |
 | **Voice Options** | 50+ voices with emotion control, speed, and volume adjustment | Multiple voice options |
-| **AI Models** | GPT-4.1-mini default, configurable per agent | GPT-4, Claude support |
+| **AI Models** | Curated language model stack, configurable per agent | GPT-4, Claude support |
 | **MCP Server** | 28-tool MCP server for AI assistant integration | Not available |
-| **API Access** | Full REST API, webhooks (67+ events), edge functions (290+) | API available |
+| **API Access** | Full REST API and webhook events | API available |
 | **Mobile App** | React Native app (iOS + Android) | No native mobile app |
-| **Multi-Tenant** | Native tenant isolation with role-based access control | White-label tenant support |
+| **Workspace Isolation** | Native workspace separation with role-based permissions | White-label tenant support |
 | **Call Recording** | Included with transcription and sentiment analysis | Included with transcription |
-| **Telephony** | Managed infrastructure with IRSF prevention and geographic permissions | Managed telephony |
-| **Security** | SOC 2 checklist, FingerprintJS, MaxMind, IRSF prevention, 16-signal scoring | Standard security |
-| **Messaging** | Telegram bot (71 tools), WhatsApp (planned) | Not available |
-| **Email Integration** | Resend (transactional) + Lemlist (outreach) | Email notifications |
+| **Telephony** | Managed carrier infrastructure with geographic permissions and fraud prevention | Managed telephony |
+| **Security** | Device fingerprinting, geographic verification, multi-signal threat scoring | Standard security |
+| **Messaging** | Telegram bot, WhatsApp Business | Not available |
+| **Email Integration** | Gmail and Outlook for inbound/outbound, plus dedicated outreach | Email notifications |
 | **Leads & Outreach** | 7-tab admin system (pipeline, campaigns, outbox, templates, domains, signals, senders) | Not available |
 | **Media Coverage** | Industry press | TechCrunch featured |
 
@@ -105,7 +105,7 @@ Synthflow has a lower entry point, making it attractive for testing or low-volum
 | Campaign Management | $50-$200/mo (custom or separate tool) | Built-in |
 | Analytics Dashboard | $20-$100/mo (Metabase, Mixpanel) | Built-in |
 | Payment Processing | $25-$50/mo (Stripe setup) | Built-in |
-| Email Outreach | $30-$100/mo (Lemlist, Mailshake) | Built-in |
+| Email Outreach | $30-$100/mo (separate outreach tool) | Built-in |
 | Security Monitoring | $50-$200/mo (various tools) | Built-in |
 | Mobile App | Not available | Built-in |
 | Leads System | $50-$200/mo (various tools) | Built-in |
@@ -120,9 +120,9 @@ For an agency comparing the two, SmartAlex's Real Estate plan ($3,000) includes 
 
 SmartAlex uses a professionally tuned voice stack optimized for business conversations:
 
-- **Speech-to-Text**: Deepgram Nova-3 for high-accuracy, low-latency transcription across accents and languages
-- **LLM**: GPT-4.1-mini as default with per-agent model configuration and system prompt customization
-- **Text-to-Speech**: Cartesia Sonic-3 with emotion strings, speed control (0.6x-1.5x), and volume adjustment (0.5x-2.0x)
+- **Speech-to-Text**: Curated, high-accuracy, low-latency transcription across accents and languages
+- **Language model**: Curated stack with per-agent configuration and system prompt customisation
+- **Text-to-Speech**: Ultra-low-latency synthesis with emotion control, speed (0.6x–1.5x), and volume adjustment (0.5x–2.0x)
 - **50+ voices** curated for business use across multiple accents and languages
 - **SSML support** for natural prosody, emphasis, pauses, and pronunciation control
 - **Sub-second end-to-end latency** for real-time conversation
@@ -158,8 +158,7 @@ SmartAlex provides extensive integration capabilities for teams that want to ext
 
 - **REST API** covering all platform entities (agents, contacts, campaigns, calls, analytics, billing)
 - **MCP Server** with 28 tools for AI assistant integration (Claude, ChatGPT, and other MCP-compatible clients)
-- **Webhook system** with 67+ event types for real-time notifications and event-driven workflows
-- **Edge Functions** (290+) for custom backend logic, third-party integrations, and workflow automation
+- **Webhook system** with a wide range of event types for real-time notifications and event-driven workflows
 - **Embeddable widgets** with customizable appearance for any website
 - **TypeScript SDK** with full type definitions for type-safe development
 - **React component library** for building custom UIs on top of the platform
@@ -180,7 +179,7 @@ Synthflow offers developer-friendly features focused on agent deployment and whi
 
 ### Developer Experience Verdict
 
-SmartAlex has a significantly deeper API and developer ecosystem. The 290+ edge functions, 67+ webhook events, MCP server, and TypeScript SDK provide enterprise-grade extensibility. Synthflow's API is designed for simpler integrations and white-label customization, with Zapier/Make providing no-code connectivity to thousands of apps. If you need to build complex workflows, integrate with AI assistants, or extend platform functionality with custom code, SmartAlex is the stronger choice. If you need basic API access for agent management, white-label setup, and Zapier-based automation, Synthflow covers the essentials without requiring development resources.
+SmartAlex has a significantly deeper API and developer ecosystem. The webhook event system, MCP server, REST API, and TypeScript SDK provide enterprise-grade extensibility. Synthflow's API is designed for simpler integrations and white-label customization, with Zapier/Make providing no-code connectivity to thousands of apps. If you need to build complex workflows, integrate with AI assistants, or extend platform functionality with custom code, SmartAlex is the stronger choice. If you need basic API access for agent management, white-label setup, and Zapier-based automation, Synthflow covers the essentials without requiring development resources.
 
 ---
 
@@ -190,15 +189,14 @@ SmartAlex has a significantly deeper API and developer ecosystem. The 290+ edge 
 
 SmartAlex includes 40+ integrations spanning multiple categories as part of the platform:
 
-- **Telephony**: Managed infrastructure with geographic permissions, IRSF fraud prevention, and carrier abstraction
+- **Telephony**: Managed carrier infrastructure with geographic permissions and fraud prevention
 - **Payments**: Stripe billing with subscriptions, wallet top-ups, trial management, and usage-based billing
-- **Email**: Resend for transactional email, Lemlist for outreach campaigns with dual account support
-- **Messaging**: Telegram bot with 71 tools for conversational agent management, WhatsApp pipeline (planned)
-- **Real Estate**: Property developer APIs, Dubai Land Department data integration, multi-developer support
-- **Security**: FingerprintJS Pro (device fingerprinting), MaxMind GeoIP (geographic verification), 16-signal threat scoring with auto-ban
-- **AI Assistants**: MCP server for Claude, GPT, and other AI assistant integration
-- **Leads & Outreach**: 7-tab admin system with pipeline management, campaign coordination, outbox, templates, domains, signals, and senders
-- **Project Management**: Shortcut integration for development workflow
+- **Email**: Gmail and Outlook for inbound/outbound, plus dedicated outreach campaigns
+- **Messaging**: Telegram bot, WhatsApp Business
+- **Real Estate**: Property data integration, multi-developer support, reservation lifecycle management
+- **Security**: Device fingerprinting, geographic verification, multi-signal threat scoring with automatic blocking
+- **AI Assistants**: MCP server for Claude, ChatGPT, and other AI assistant integration
+- **Leads & Outreach**: Pipeline management, campaign coordination, outbox, templates, sender domains, and signal-based prioritisation
 - **Analytics**: Built-in dashboards with custom filtering, date ranges, trends, and data export
 
 ### Synthflow Integration Ecosystem
@@ -223,18 +221,18 @@ SmartAlex has deeper native integrations because it is a full platform with buil
 
 This is a critical comparison point since both platforms serve agencies, but with fundamentally different approaches.
 
-### SmartAlex Multi-Tenant Model
+### SmartAlex Workspace Model
 
-SmartAlex uses a native multi-tenant architecture designed for agencies and multi-location businesses:
+SmartAlex uses workspace-level isolation designed for agencies and multi-location businesses:
 
-- **Tenant isolation**: Each client operates in a fully isolated environment with their own data, agents, contacts, and campaigns. Data never crosses tenant boundaries.
-- **Role-based access control**: Admin, manager, and user roles with configurable permissions per tenant
-- **Embeddable widgets**: Customizable voice agent widgets that can be embedded on client websites with per-tenant branding
+- **Workspace isolation**: Each client operates in a fully isolated workspace with their own data, agents, contacts, and campaigns. Data never crosses workspace boundaries.
+- **Role-based access control**: Owner, Admin, Member, and Viewer roles with configurable permissions per workspace
+- **Embeddable widgets**: Customizable voice agent widgets that can be embedded on client websites with per-workspace branding
 - **Client-specific billing**: Integrated Stripe billing allows per-client subscription management, wallet top-ups, and trial periods
-- **Centralized management**: Manage all tenants from a single admin dashboard with cross-tenant analytics
-- **CRM per tenant**: Each client gets their own CRM with contacts, tags, and segmentation
-- **Campaign management per tenant**: Each client can run independent outbound campaigns
-- **Analytics per tenant**: Client-level dashboards with performance metrics
+- **Centralized management**: Manage all workspaces from a single admin dashboard with cross-workspace analytics
+- **CRM per workspace**: Each client gets their own CRM with contacts, tags, and segmentation
+- **Campaigns per workspace**: Each client can run independent outbound campaigns
+- **Analytics per workspace**: Client-level dashboards with performance metrics
 
 ### Synthflow White-Label Model
 
@@ -252,9 +250,9 @@ Synthflow offers purpose-built white-label capabilities designed specifically fo
 
 For pure white-label reselling where the primary goal is presenting voice AI under your own brand with custom domains, branded dashboards, and full visual customization, Synthflow has a more polished and purpose-built white-label offering. The agency model is core to Synthflow's design.
 
-SmartAlex's multi-tenant architecture provides deeper per-client functionality (full CRM, campaign management, analytics, billing per tenant) but is oriented more toward businesses managing voice operations across departments, locations, or client accounts. SmartAlex's white-label is functional but not as visually customizable as Synthflow's agency portal.
+SmartAlex's workspace model provides deeper per-client functionality (full CRM, campaign management, analytics, billing per workspace) but is oriented more toward businesses managing voice operations across departments, locations, or client accounts. SmartAlex's white-label is functional but not as visually customizable as Synthflow's agency portal.
 
-**If your primary business model is reselling voice AI to clients under your brand**, Synthflow's white-label is more mature and agency-focused. **If each client needs a full platform experience with CRM, campaigns, and analytics**, SmartAlex's multi-tenancy provides more capability per tenant.
+**If your primary business model is reselling voice AI to clients under your brand**, Synthflow's white-label is more mature and agency-focused. **If each client needs a full platform experience with CRM, campaigns, and analytics**, SmartAlex's workspace isolation provides more capability per client.
 
 ---
 
@@ -277,7 +275,7 @@ SmartAlex's multi-tenant architecture provides deeper per-client functionality (
 | Need | SmartAlex | Synthflow |
 |------|-----------|-----------|
 | White-label branding | Embeddable widgets, multi-tenant | Full white-label (domains, branding, emails) |
-| Client management | Multi-tenant with isolation | Agency portal with sub-accounts |
+| Client management | Per-workspace isolation | Agency portal with sub-accounts |
 | Client billing | Integrated Stripe per tenant | Reseller pricing with markup |
 | Client analytics | Per-tenant dashboards | Per-client reporting |
 | Setup for new clients | Create tenant, configure agent | Create sub-account, assign agent |
@@ -292,8 +290,8 @@ SmartAlex's multi-tenant architecture provides deeper per-client functionality (
 | Contact management | Built-in CRM with segmentation | Basic contacts |
 | Lead scoring | Integrated analytics | Not available |
 | Call analytics | Comprehensive dashboards | Basic reporting |
-| API access | REST API + MCP + 290+ edge functions | Basic API |
-| Security | FingerprintJS, MaxMind, IRSF, 16-signal scoring | Standard |
+| API access | REST API + MCP + extensive webhook events | Basic API |
+| Security | Device fingerprinting, geographic verification, multi-signal threat scoring | Standard |
 
 **Verdict**: SmartAlex is significantly more capable for enterprise sales operations with its campaign management, CRM, and analytics.
 
@@ -317,13 +315,13 @@ SmartAlex's multi-tenant architecture provides deeper per-client functionality (
 - Need a comprehensive platform beyond just voice agents (CRM, campaigns, billing, analytics)
 - Want to run outbound calling campaigns with scheduling, lists, and performance tracking
 - Operate in real estate and need LaunchPad (reservations, buyer portals, developer dashboards)
-- Need deep API integration with 67+ webhooks, 290+ edge functions, and MCP server
+- Need deep API integration with a wide range of webhooks plus MCP server
 - Want integrated billing and payment processing for clients
-- Need enterprise-grade security (FingerprintJS, MaxMind, IRSF prevention, 16-signal scoring)
+- Need enterprise-grade security (device fingerprinting, geographic verification, multi-signal threat scoring, fraud prevention)
 - Want a mobile app for managing agents and calls remotely
 - Need messaging platform integration (Telegram, WhatsApp)
 - Want AI assistant integration via MCP for operational automation
-- Are managing multiple business units or locations with tenant isolation
+- Are managing multiple business units or locations with workspace-level isolation
 - Need a leads and outreach management system alongside voice agents
 
 ### Choose Synthflow If You:
@@ -349,7 +347,7 @@ SmartAlex's multi-tenant architecture provides deeper per-client functionality (
 2. **Contact data**: Export contacts from Synthflow and import via CSV into SmartAlex's built-in CRM with full tagging and segmentation support.
 3. **Client accounts**: Map Synthflow sub-accounts to SmartAlex tenants. Each tenant gets full CRM, campaigns, and analytics.
 4. **Telephony**: Phone numbers may need porting to SmartAlex's managed telephony infrastructure.
-5. **Zapier automations**: Map Zapier workflows to SmartAlex's webhook system (67+ event types) or edge functions for more robust automation.
+5. **Zapier automations**: Map Zapier workflows to SmartAlex's webhook system or REST API for more robust automation.
 6. **White-label branding**: SmartAlex uses embeddable widgets and per-tenant configuration rather than full dashboard rebranding.
 
 SmartAlex provides migration assistance for Business and Enterprise plan customers.
@@ -383,11 +381,11 @@ SmartAlex is the clear winner for real estate. Its LaunchPad product is purpose-
 </Accordion>
 
 <Accordion title="What is an MCP server and why does it matter?">
-MCP (Model Context Protocol) is a standard for connecting AI assistants (like Claude and GPT) to external tools and data sources. SmartAlex's MCP server provides 18 tools that allow AI assistants to manage voice agents, query call data, create contacts, trigger campaigns, and access analytics through natural language. This means you can ask an AI assistant to "show me how my agents performed last week" or "create a new contact and add them to the outbound campaign" and it will execute those actions directly in SmartAlex. No other voice agent platform offers this level of AI assistant integration, making SmartAlex uniquely positioned for teams that use AI tools in their daily workflow.
+MCP (Model Context Protocol) is a standard for connecting AI assistants (like Claude and ChatGPT) to external tools and data sources. SmartAlex's MCP server provides 28 tools that allow AI assistants to manage voice agents, query call data, create contacts, trigger campaigns, and access analytics through natural language. This means you can ask an AI assistant to "show me how my agents performed last week" or "create a new contact and add them to the outbound campaign" and it will execute those actions directly in SmartAlex. No other voice agent platform offers this level of AI assistant integration, making SmartAlex uniquely positioned for teams that use AI tools in their daily workflow.
 </Accordion>
 
 <Accordion title="Can I migrate from Synthflow to SmartAlex?">
-Yes. Contact lists can be exported from Synthflow and imported into SmartAlex via CSV. Agent prompts and flow logic can be recreated in SmartAlex's agent builder. Call recordings and transcripts would need to be archived separately. Zapier automations can be replaced with SmartAlex's 67+ webhook event types or 290+ edge functions. The SmartAlex team provides migration assistance for Business and Enterprise plan customers, including help with agent configuration, contact import, tenant setup, and campaign migration.
+Yes. Contact lists can be exported from Synthflow and imported into SmartAlex via CSV. Agent prompts and flow logic can be recreated in SmartAlex's agent builder. Call recordings and transcripts would need to be archived separately. Zapier automations can be replaced with SmartAlex's webhook event system or REST API. The SmartAlex team provides migration assistance for Real Estate and Enterprise plan customers, including help with agent configuration, contact import, workspace setup, and campaign migration.
 </Accordion>
 
 <Accordion title="Which platform offers better analytics and reporting?">
@@ -399,11 +397,11 @@ Both platforms support multi-client management but with different approaches. Sm
 </Accordion>
 
 <Accordion title="Does SmartAlex have templates like Synthflow does?">
-SmartAlex uses a different approach to templates. Instead of pre-built flow templates, SmartAlex offers four agent modes (demo, standard, advanced, vibe) that serve as configuration presets for different use cases. The demo mode provides quick agent testing, standard mode is optimized for professional business conversations, advanced mode gives full control over all parameters, and vibe mode enables creative and personality-driven interactions. This mode-based system provides a structured starting point that can be customized from there, while Synthflow's templates provide specific use-case starting points (customer service, appointment booking, lead qualification) with drag-and-drop customization.
+SmartAlex uses a different approach to templates. Instead of pre-built flow templates, SmartAlex offers two creation paths: Standard (URL-based auto-build, where the platform crawls your website and configures the agent automatically) and Advanced (a step-by-step wizard with full control over voice, identity, tools, and detailed settings). For multi-agent setups, Squad Architect designs handoffs and routing between specialised agents. Synthflow's templates instead provide specific use-case starting points (customer service, appointment booking, lead qualification) with drag-and-drop customisation.
 </Accordion>
 
 <Accordion title="Which platform has better security features?">
-SmartAlex includes enterprise-grade security features as part of the platform: FingerprintJS Pro for device fingerprinting, MaxMind GeoIP for geographic verification, a 16-signal threat scoring system with automatic blocking, IRSF (International Revenue Share Fraud) prevention with geographic permissions, SOC 2 compliance checklist, and role-based access control per tenant. Synthflow provides standard security measures appropriate for its target audience. For businesses in regulated industries or those handling sensitive customer data, SmartAlex's security suite is significantly more comprehensive.
+SmartAlex includes enterprise-grade security features as part of the platform: device fingerprinting and bot detection, geographic verification via IP-to-country mapping, a multi-signal threat scoring system with automatic blocking, geographic call permissions to prevent international revenue share fraud, documented security controls, and role-based access control per workspace. Synthflow provides standard security measures appropriate for its target audience. For businesses in regulated industries or those handling sensitive customer data, SmartAlex's security suite is significantly more comprehensive.
 </Accordion>
 
 ---

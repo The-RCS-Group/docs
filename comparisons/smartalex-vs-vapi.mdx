@@ -21,7 +21,7 @@ SmartAlex is an end-to-end AI voice agent platform designed for businesses that 
 
 SmartAlex also includes LaunchPad, a purpose-built product for real estate developers and agencies that provides reservation management with 15+ status states, buyer portals with document management, developer dashboards, and commission tracking.
 
-The platform is built on a multi-tenant architecture, allowing agencies, franchises, and multi-location businesses to manage separate client environments from a single account. SmartAlex also provides an MCP (Model Context Protocol) server with 18 tools, enabling AI assistants to interact with the platform through natural language commands.
+The platform is built on a multi-tenant architecture, allowing agencies, franchises, and multi-location businesses to manage separate client environments from a single account. SmartAlex also provides an MCP (Model Context Protocol) server with 28 tools, enabling AI assistants to interact with the platform through natural language commands.
 
 ### What Is VAPI?
 
@@ -45,27 +45,27 @@ With 175+ pages of documentation, VAPI provides one of the most comprehensive de
 | **Campaign Management** | Full outbound campaigns with scheduling, lists, retry logic, analytics | Not included |
 | **Outbound Calling** | Integrated campaign dialer with disposition tracking | API-triggered outbound |
 | **Inbound Calling** | Built-in routing and agent assignment | Webhook-based configuration |
-| **Multi-Tenancy** | Native tenant isolation with role-based access | Single API key per account |
+| **Workspace Isolation** | Native workspace separation with role-based permissions | Single API key per account |
 | **White-Label Widgets** | Embeddable voice widgets for websites | Embeddable via Web SDK |
 | **Real Estate Tools** | LaunchPad: reservations, buyer portals, developer dashboards, commissions | None |
 | **Billing System** | Integrated Stripe billing with wallet, trials, and plan management | Pay-per-minute billing |
 | **Analytics** | Built-in dashboards for calls, agents, campaigns, performance, and trends | Call analytics and logs |
-| **Voice Options** | 50+ voices, Cartesia Sonic-3, emotion control | Multiple providers, highly configurable |
-| **AI Models** | GPT-4.1-mini default, configurable | Any LLM (OpenAI, Anthropic, Groq, custom) |
-| **STT Engine** | Deepgram Nova-3 | Deepgram, Azure, Google, Whisper, custom |
-| **TTS Engine** | Cartesia Sonic-3 with SSML | ElevenLabs, Play.ht, Azure, Cartesia, custom |
+| **Voice Options** | 50+ curated voices with emotion control | Multiple providers, highly configurable |
+| **AI Models** | Curated language model stack, configurable per agent | Any LLM (OpenAI, Anthropic, Groq, custom) |
+| **Speech-to-Text** | Curated, high-accuracy across accents | Deepgram, Azure, Google, Whisper, custom |
+| **Text-to-Speech** | Ultra-low-latency synthesis with SSML support | ElevenLabs, Play.ht, Azure, Cartesia, custom |
 | **Function Calling** | Agent tools system (9 built-in tool types) | Unlimited custom function calling |
 | **MCP Server** | 28-tool MCP server for AI assistants | Not available |
 | **Squads / Multi-Agent** | Squad-based agent routing | Squad and transfer support |
 | **Call Recording** | Included with transcription and sentiment analysis | Included with transcription |
 | **Documentation** | Platform docs + API reference | 175+ pages of detailed documentation |
-| **Webhook Events** | 67+ event types | Comprehensive server-side events |
+| **Webhook Events** | Wide range of event types | Comprehensive server-side events |
 | **Mobile App** | React Native (iOS + Android) | No mobile app |
-| **Telephony** | Managed infrastructure | BYO or managed Twilio/Vonage/SIP |
-| **Enterprise Auth** | Role-based access, Supabase Auth | API key, OAuth available |
-| **Messaging** | Telegram bot (71 tools), WhatsApp (planned) | Not available |
-| **Email** | Resend (transactional) + Lemlist (outreach) | Not included |
-| **Security** | FingerprintJS Pro, MaxMind, IRSF prevention, 16-signal scoring | Standard API security |
+| **Telephony** | Managed infrastructure | BYO or managed carrier/SIP |
+| **Enterprise Auth** | Role-based access with SSO/SAML on Enterprise | API key, OAuth available |
+| **Messaging** | Telegram bot, WhatsApp Business | Not available |
+| **Email** | Gmail and Outlook for inbound/outbound, plus dedicated outreach | Not included |
+| **Security** | Device fingerprinting, geographic verification, multi-signal threat scoring | Standard API security |
 
 ---
 
@@ -123,9 +123,9 @@ VAPI's per-minute model can be economical for low-volume or variable usage with 
 
 SmartAlex uses a curated voice stack optimized for business conversations:
 
-- **STT**: Deepgram Nova-3 for high-accuracy transcription with low latency and strong performance across accents
-- **LLM**: GPT-4.1-mini as default, configurable per agent with system prompt customization and context window management
-- **TTS**: Cartesia Sonic-3 with emotion control (string-based), speed adjustment (0.6x-1.5x), and volume control (0.5x-2.0x)
+- **Speech-to-Text**: Curated, high-accuracy transcription with low latency and strong performance across accents
+- **Language model**: Curated stack tuned for natural conversation, configurable per agent with system prompt customisation and context window management
+- **Text-to-Speech**: Ultra-low-latency synthesis with emotion control, speed adjustment (0.6x–1.5x), and volume control (0.5x–2.0x)
 - **50+ voices** pre-configured and ready to use across multiple languages and accents
 - **SSML support** for fine-grained prosody control including emphasis, pauses, and pronunciation
 - **Sub-second latency** end-to-end for natural conversational flow
@@ -161,12 +161,10 @@ SmartAlex provides platform-level APIs and integration tools:
 
 - **REST API** covering all platform entities (agents, contacts, campaigns, calls, analytics, billing)
 - **MCP Server** with 28 tools for integration with AI assistants like Claude and ChatGPT
-- **Edge Functions** (290+) providing extensible backend logic with Deno runtime
 - **Embeddable Widgets** for adding voice agents to any website with minimal code
-- **Webhook System** with 67+ event types for real-time event processing and automation
-- **TypeScript types** package (`@smartalex/types`) for type-safe development
-- **React hooks** library (`@smartalex/api`) for building custom UIs on top of the platform
-- **Shared utilities** (`@smartalex/utils`) for formatting, validation, and common operations
+- **Webhook System** with a wide range of event types for real-time event processing and automation
+- **TypeScript types** for type-safe development
+- **React hooks** library for building custom UIs on top of the platform
 
 The MCP server enables AI-powered operations. Teams using Claude, GPT, or other MCP-compatible assistants can manage their SmartAlex deployment through natural language:
 - "Create a new agent for appointment booking with a professional female voice"
@@ -200,14 +198,13 @@ VAPI has a more mature developer experience with comprehensive SDKs across five 
 
 SmartAlex includes 40+ integrations as part of the platform:
 
-- **Telephony**: Managed infrastructure with geographic permissions, IRSF prevention, and carrier abstraction
+- **Telephony**: Managed carrier infrastructure with geographic permissions and fraud prevention
 - **Payments**: Stripe with subscription billing, wallet top-up, trial management, and usage-based billing
-- **Email**: Resend for transactional email, Lemlist for outreach campaigns
-- **Messaging**: Telegram bot with 71 tools for conversational platform management, WhatsApp pipeline (planned)
+- **Email**: Gmail and Outlook for inbound/outbound, plus dedicated outreach campaigns
+- **Messaging**: Telegram bot for conversational platform management, plus WhatsApp Business
 - **Real Estate**: Property developer APIs, Dubai Land Department data integration, multi-developer architecture
-- **Security**: FingerprintJS Pro (device fingerprinting), MaxMind GeoIP (geographic verification), 16-signal threat scoring
+- **Security**: Device fingerprinting, geographic verification via IP-to-country mapping, multi-signal threat scoring
 - **AI Assistants**: MCP server compatible with Claude, GPT, and other MCP clients
-- **Project Management**: Shortcut integration for development workflow
 - **Analytics**: Built-in dashboards with custom filtering, date ranges, and data export
 - **Leads & Outreach**: 7-tab admin system with pipeline management, campaign coordination, and template management
 
@@ -262,7 +259,7 @@ SmartAlex has more out-of-the-box integrations because it is a full platform wit
 |-----------|-----------|------|
 | Calendar integration | Via agent tools | Via function calling |
 | Contact creation | Auto-create in CRM | BYO CRM |
-| Confirmation | Email via Resend | Custom email integration |
+| Confirmation | Email via Gmail/Outlook | Custom email integration |
 | Follow-up | Campaign for reminders | Custom reminder logic |
 
 ### Real Estate
@@ -282,14 +279,14 @@ SmartAlex has more out-of-the-box integrations because it is a full platform wit
 
 SmartAlex includes enterprise-grade security as part of the platform:
 
-- **FingerprintJS Pro** for device fingerprinting and bot detection
-- **MaxMind GeoIP** for geographic verification
-- **16-signal threat scoring** with automatic blocking
-- **IRSF prevention** with geographic permissions
-- **SOC 2 compliance checklist** with documented controls
-- **Role-based access control** per tenant
-- **Multi-tenant data isolation** with row-level security
-- **Encrypted secrets management** via Vault
+- **Device fingerprinting** and bot detection
+- **Geographic verification** via IP-to-country mapping
+- **Multi-signal threat scoring** with automatic blocking
+- **Geographic call permissions** to prevent international revenue share fraud
+- **Documented security controls** with SOC 2-aligned policies
+- **Role-based access control** per workspace (Owner / Admin / Member / Viewer)
+- **Workspace-level data isolation** with row-level security
+- **Encrypted secrets management** for credentials and API keys
 
 ### VAPI Security
 
@@ -321,7 +318,7 @@ SmartAlex provides more comprehensive built-in security with device fingerprinti
 - Need multi-tenant capabilities to serve multiple clients or departments
 - Want MCP integration for AI assistant workflows
 - Need billing and payment processing built into the platform
-- Want built-in security monitoring (device fingerprinting, threat scoring, IRSF prevention)
+- Want built-in security monitoring (device fingerprinting, threat scoring, geographic call permissions to prevent international fraud)
 
 ### Choose VAPI If You:
 
@@ -344,11 +341,11 @@ SmartAlex provides more comprehensive built-in security with device fingerprinti
 ### Moving from VAPI to SmartAlex
 
 1. **Agent configurations**: Recreate agent prompts and system instructions in SmartAlex's agent builder. The 4 modes provide accelerated setup for common use cases.
-2. **Function calling / Tools**: Map VAPI function calling configurations to SmartAlex's 9 built-in tool types. Custom tools may need adaptation to SmartAlex's edge function architecture.
+2. **Function calling / Tools**: Map VAPI function calling configurations to SmartAlex's built-in agent tools (transfer, calendar, lead capture, SMS, email, custom HTTP via Power Tools). Custom integrations may need to be rebuilt against SmartAlex's REST API or webhook system.
 3. **Contact data**: Import contacts via CSV into SmartAlex's built-in CRM.
 4. **Telephony**: SmartAlex manages telephony infrastructure, so you do not need to maintain your own Twilio/Vonage account (though phone numbers may need porting).
 5. **Analytics**: SmartAlex provides built-in analytics, replacing any custom dashboards you may have built.
-6. **Webhooks**: Map VAPI webhook handlers to SmartAlex's 67+ webhook event types.
+6. **Webhooks**: Map VAPI webhook handlers to SmartAlex's webhook event system.
 
 ### Moving from SmartAlex to VAPI
 
