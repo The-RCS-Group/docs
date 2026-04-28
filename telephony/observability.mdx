@@ -67,11 +67,11 @@ Every payload is JSON:
 ```json
 {
   "event": "call.ended",
+  "tenant_id": "YOUR_WORKSPACE_ID",
   "timestamp": "2026-04-22T10:34:22Z",
-  "tenant_id": "YOUR_TENANT_ID",
-  "call_id": "CALL_UUID",
   "data": {
-    "agent_id": "CALL_UUID",
+    "id": "CALL_UUID",
+    "agent_id": "AGENT_UUID",
     "agent_name": "Sarah",
     "from": "+27821234567",
     "to": "+27872500100",

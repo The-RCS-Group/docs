@@ -31,10 +31,10 @@ Organised by symptom first, SIP response code second. If you know the SIP code, 
     - Voice runtime dispatch failed — check the call detail page or contact support.
   </Accordion>
   <Accordion title="AI answers but doesn't understand transfers">
-    - `agents.sip_trunk_id` not set , link the agent to the trunk in Agent Studio → Telephony.
-    - Extensions not populated , add them in Settings → PBX.
-    - The extension has no aliases and the caller isn't using the exact display name , add aliases via CSV upload.
-    - The trunk is in `suspended` status , reactivate it.
+    - The agent isn't linked to the SIP trunk — set this in Agent Studio → Telephony.
+    - Extensions not populated — add them in Settings → PBX.
+    - The extension has no aliases and the caller isn't using the exact display name — add aliases via CSV upload.
+    - The trunk is suspended — reactivate it.
   </Accordion>
   <Accordion title="Transfer fires but extension doesn't ring">
     - Target extension doesn't exist on the PBX , verify in the PBX admin console.
@@ -83,12 +83,12 @@ Organised by symptom first, SIP response code second. If you know the SIP code, 
   </Accordion>
   <Accordion title="403 Forbidden">
     PBX authenticated but is not authorised for this action. Causes:
-    - IP allowlist mismatch (if using IP auth) , verify your public IP is listed
-    - Trunk suspended , check trunk status in Settings → PBX
-    - Tenant account in read-only mode
+    - IP allowlist mismatch (if using IP auth) — verify your public IP is listed
+    - Trunk suspended — check trunk status in Settings → PBX
+    - Account in read-only mode
   </Accordion>
   <Accordion title="404 Not Found">
-    The DID being dialled is not registered to any trunk. Add the DID to the trunk's numbers list (or have Support add it to the LiveKit inbound trunk).
+    The DID being dialled is not registered to any trunk. Add the DID to the trunk's numbers list, or contact support to register it on the inbound side.
   </Accordion>
   <Accordion title="408 Request Timeout">
     PBX didn't respond in time. Most often a network/firewall issue. Check:
@@ -141,11 +141,7 @@ From any machine with `dig`:
 dig +short sip.voice.getsmartalex.com
 ```
 
-Expected output (subject to change as we scale):
-```
-voice3-dfbivrhc.sip.livekit.cloud.
-(two IPs typical)
-```
+If the lookup succeeds, you'll see one or more A records pointing to SmartAlex SIP infrastructure. If it fails, your DNS is the issue — check upstream resolvers.
 
 Test reachability:
 

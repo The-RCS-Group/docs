@@ -95,19 +95,19 @@ for (const contact of contacts) {
 
 ```javascript
 app.post('/webhooks/smartalex', (req, res) => {
-  const event = req.body;
+  const payload = req.body;
 
-  if (event.type === 'call.completed') {
-    const call = event.data.call;
+  if (payload.event === 'call.completed') {
+    const call = payload.data;
 
     updateCrmRecord(call.contact_id, {
-      lastCallDate: call.ended_at,
-      lastCallOutcome: call.status,
+      lastCallDate: call.end_timestamp,
+      lastCallOutcome: call.call_status,
       sentiment: call.sentiment
     });
 
     if (call.sentiment === 'negative') {
-      sendSlackAlert(`Negative call with ${call.phone_number}`);
+      sendSlackAlert(`Negative call (${call.id})`);
     }
   }
 
